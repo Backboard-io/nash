@@ -19,11 +19,12 @@ export type ConversationListParams = {
   sortDirection?: 'asc' | 'desc';
   tags?: string[];
   search?: string;
+  folderId?: string;
 };
 
 export type MinimalConversation = Pick<
   s.TConversation,
-  'conversationId' | 'endpoint' | 'title' | 'createdAt' | 'updatedAt' | 'user'
+  'conversationId' | 'endpoint' | 'title' | 'createdAt' | 'updatedAt' | 'user' | 'folderId'
 >;
 
 export type ConversationListResponse = {
@@ -100,6 +101,27 @@ export type AllPromptGroupsFilterRequest = {
 export type AllPromptGroupsResponse = t.TPromptGroup[];
 
 export type ConversationTagsResponse = s.TConversationTag[];
+
+/* Folders */
+export type TFolder = {
+  folderId: string;
+  name: string;
+  assistantId: string;
+  sharedMemory: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type FoldersResponse = TFolder[];
+
+export type CreateFolderRequest = {
+  name: string;
+  sharedMemory: boolean;
+};
+
+export type MoveConvoToFolderRequest = {
+  folderId: string | null;
+};
 
 /* MCP Types */
 export type MCPTool = {

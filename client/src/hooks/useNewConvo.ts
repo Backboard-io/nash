@@ -51,6 +51,7 @@ const useNewConvo = (index = 0) => {
   const { setConversation } = store.useCreateConversationAtom(index);
   const [files, setFiles] = useRecoilState(store.filesByIndex(index));
   const saveBadgesState = useRecoilValue<boolean>(store.saveBadgesState);
+  const activeFolderId = useRecoilValue(store.activeFolderId);
   const clearAllLatestMessages = store.useClearLatestMessages(`useNewConvo ${index}`);
   const setSubmission = useSetRecoilState<TSubmission | null>(store.submissionByIndex(index));
   const { data: endpointsConfig = {} as TEndpointsConfig } = useGetEndpointsQuery();
@@ -289,6 +290,8 @@ const useNewConvo = (index = 0) => {
           ? { endpoint: _template.endpoint }
           : _template;
 
+      const templateFolderId = (template as { folderId?: string | null }).folderId;
+      const resolvedFolderId = templateFolderId !== undefined ? templateFolderId : activeFolderId;
       const conversation = {
         conversationId: Constants.NEW_CONVO as string,
         title: 'New Chat',
@@ -296,6 +299,7 @@ const useNewConvo = (index = 0) => {
         ...template,
         createdAt: '',
         updatedAt: '',
+        ...(resolvedFolderId ? { folderId: resolvedFolderId } : {}),
       };
 
       let preset = _preset;
@@ -362,6 +366,7 @@ const useNewConvo = (index = 0) => {
       resetBadges,
       startupConfig,
       saveBadgesState,
+      activeFolderId,
       pauseGlobalAudio,
       switchToConversation,
       applyModelSpecEffects,

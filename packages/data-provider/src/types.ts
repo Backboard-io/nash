@@ -114,6 +114,7 @@ export type TPayload = Partial<TMessage> &
     editedContent?: TEditedContent | null;
     /** Added conversation for multi-convo feature */
     addedConvo?: TConversation;
+    folderId?: string;
   };
 
 export type TEditedContent =

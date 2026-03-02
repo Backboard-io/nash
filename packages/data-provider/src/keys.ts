@@ -64,6 +64,8 @@ export enum QueryKeys {
   activeJobs = 'activeJobs',
   /* Agent API Keys */
   agentApiKeys = 'agentApiKeys',
+  /* Folders */
+  folders = 'folders',
 }
 
 // Dynamic query keys that require parameters
@@ -96,4 +98,7 @@ export enum MutationKeys {
   enableTwoFactor = 'enableTwoFactor',
   verifyTwoFactor = 'verifyTwoFactor',
   updateMemoryPreferences = 'updateMemoryPreferences',
+  createFolder = 'createFolder',
+  deleteFolder = 'deleteFolder',
+  moveConvoToFolder = 'moveConvoToFolder',
 }

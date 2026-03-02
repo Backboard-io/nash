@@ -1,9 +1,9 @@
-import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '@librechat/data-schemas';
 import { BackboardClient } from './client';
 import type { Request, Response } from 'express';
 import type {
+  BackboardMemory,
   OpenAIChatMessage,
   OpenAIChatCompletionRequest,
   OpenAIChatCompletionChunk,
@@ -12,9 +12,6 @@ import type {
 
 let cachedClient: BackboardClient | null = null;
 let cachedAssistantId: string | null = null;
-
-/** Maps a conversation fingerprint to a Backboard threadId for thread reuse */
-const threadCache = new Map<string, string>();
 
 function getClient(): BackboardClient {
   if (cachedClient) {
@@ -44,7 +41,8 @@ async function getOrCreateAssistant(client: BackboardClient): Promise<string> {
   }
 
   const assistants = await client.listAssistants();
-  const existing = assistants.find((a) => a.name === 'LibreChat');
+  const appName = process.env.APP_TITLE ?? 'Nash';
+  const existing = assistants.find((a) => a.name === appName || a.name === 'LibreChat');
   if (existing) {
     cachedAssistantId = existing.assistant_id;
     logger.info(`[Backboard] Using existing assistant: ${cachedAssistantId}`);
@@ -52,39 +50,20 @@ async function getOrCreateAssistant(client: BackboardClient): Promise<string> {
   }
 
   const created = await client.createAssistant(
-    'LibreChat',
-    'LibreChat conversational assistant powered by Backboard',
+    appName,
+    `${appName} conversational assistant powered by Backboard`,
   );
   cachedAssistantId = created.assistant_id;
   logger.info(`[Backboard] Created assistant: ${cachedAssistantId}`);
   return cachedAssistantId;
 }
 
-/**
- * Builds a deterministic fingerprint from the conversation's first user message
- * and the user ID, used to map conversations to persistent Backboard threads.
- */
-function conversationFingerprint(messages: OpenAIChatMessage[], userId?: string): string {
-  const firstUserMsg = messages.find((m) => m.role === 'user');
-  const seed = `${userId ?? 'anon'}::${firstUserMsg?.content ?? ''}`;
-  return crypto.createHash('sha256').update(seed).digest('hex').slice(0, 24);
-}
-
-async function getOrCreateThread(
+async function createThread(
   client: BackboardClient,
   assistantId: string,
-  messages: OpenAIChatMessage[],
-  userId?: string,
-): Promise<{ threadId: string; isExisting: boolean }> {
-  const fp = conversationFingerprint(messages, userId);
-  const cached = threadCache.get(fp);
-  if (cached) {
-    return { threadId: cached, isExisting: true };
-  }
-
+): Promise<string> {
   const thread = await client.createThread(assistantId);
-  threadCache.set(fp, thread.thread_id);
-  return { threadId: thread.thread_id, isExisting: false };
+  return thread.thread_id;
 }
 
 function buildPromptFromMessages(messages: OpenAIChatMessage[]): string {
@@ -128,21 +107,75 @@ function buildPromptFromMessages(messages: OpenAIChatMessage[]): string {
   return parts.join('\n\n');
 }
 
-function extractLatestUserMessage(messages: OpenAIChatMessage[]): string {
-  for (let i = messages.length - 1; i >= 0; i--) {
-    if (messages[i].role === 'user' && messages[i].content) {
-      return messages[i].content as string;
-    }
-  }
-  return buildPromptFromMessages(messages);
-}
-
 function parseModelSpec(model: string): { provider?: string; modelName: string } {
   if (model.includes('/')) {
     const [provider, ...rest] = model.split('/');
     return { provider, modelName: rest.join('/') };
   }
   return { modelName: model };
+}
+
+const FOLDER_CONTEXT_TYPE = 'folder_thread_context';
+const MAX_FOLDER_CONTEXT_CHARS = 8000;
+
+async function fetchFolderContext(
+  client: BackboardClient,
+  assistantId: string,
+): Promise<string> {
+  try {
+    const response = await client.getMemories(assistantId);
+    const contextMemories = response.memories.filter((m: BackboardMemory) => {
+      const meta = (m.metadata ?? {}) as Record<string, unknown>;
+      return meta.type === FOLDER_CONTEXT_TYPE;
+    });
+
+    if (contextMemories.length === 0) {
+      return '';
+    }
+
+    contextMemories.sort((a: BackboardMemory, b: BackboardMemory) => {
+      const aTime = a.created_at ?? '';
+      const bTime = b.created_at ?? '';
+      return aTime.localeCompare(bTime);
+    });
+
+    let totalChars = 0;
+    const selected: string[] = [];
+    for (let i = contextMemories.length - 1; i >= 0; i--) {
+      const content = contextMemories[i].content;
+      if (totalChars + content.length > MAX_FOLDER_CONTEXT_CHARS) {
+        break;
+      }
+      selected.unshift(content);
+      totalChars += content.length;
+    }
+
+    return selected.join('\n---\n');
+  } catch (err) {
+    logger.warn('[Backboard Proxy] Failed to fetch folder context:', err);
+    return '';
+  }
+}
+
+function saveFolderContext(
+  client: BackboardClient,
+  assistantId: string,
+  userPrompt: string,
+  assistantResponse: string,
+): void {
+  const trimmedPrompt = userPrompt.length > 1000 ? userPrompt.slice(0, 1000) + '…' : userPrompt;
+  const trimmedResponse = assistantResponse.length > 1000
+    ? assistantResponse.slice(0, 1000) + '…'
+    : assistantResponse;
+
+  const content = `User: ${trimmedPrompt}\nAssistant: ${trimmedResponse}`;
+
+  client.addMemory(assistantId, content, {
+    type: FOLDER_CONTEXT_TYPE,
+    savedAt: new Date().toISOString(),
+  }).catch((err: unknown) => {
+    logger.warn('[Backboard Proxy] Failed to save folder context:', err);
+  });
 }
 
 export async function handleChatCompletions(req: Request, res: Response): Promise<void> {
@@ -155,20 +188,51 @@ export async function handleChatCompletions(req: Request, res: Response): Promis
       return;
     }
 
-    const client = getClient();
-    const assistantId = await getOrCreateAssistant(client);
-    const userId = body.user as string | undefined;
-    const { threadId, isExisting } = await getOrCreateThread(client, assistantId, messages, userId);
-    const { provider, modelName } = parseModelSpec(model ?? 'gpt-4o');
+    const resolvedModel = model ?? 'gpt-4o';
+    const { provider, modelName } = parseModelSpec(resolvedModel);
+    logger.info(
+      `[Backboard Proxy] model from request: "${model ?? '(none)'}" → provider: "${provider ?? '(none)'}", modelName: "${modelName}"${!model ? ' (FALLBACK to gpt-4o)' : ''}`,
+    );
 
-    const prompt = isExisting
-      ? extractLatestUserMessage(messages)
-      : buildPromptFromMessages(messages);
+    const client = getClient();
+    const overrideAssistantId = req.headers['x-backboard-assistant-id'] as string | undefined;
+    const assistantId = overrideAssistantId ?? await getOrCreateAssistant(client);
+    const threadId = await createThread(client, assistantId);
+
+    let folderContext = '';
+    if (overrideAssistantId) {
+      folderContext = await fetchFolderContext(client, overrideAssistantId);
+    }
+
+    const appName = process.env.APP_TITLE ?? 'Nash';
+    let prompt = buildPromptFromMessages(messages);
+
+    const identityPrefix = `[System] You are ${appName}, an AI assistant. Never refer to yourself as LibreChat. Your name is ${appName}.\n\n`;
+    prompt = identityPrefix + prompt;
+
+    if (folderContext) {
+      prompt = `[Folder Context — prior conversations in this folder]\n${folderContext}\n\n${prompt}`;
+      logger.info(`[Backboard Proxy] Injected ${folderContext.length} chars of folder context`);
+    }
+
+    const isFolderChat = !!overrideAssistantId;
+    const memoryMode = isFolderChat ? 'Off' : 'Auto';
+
+    const onComplete = isFolderChat
+      ? (response: string) => {
+        const lastUserMsg = messages.filter((m) => m.role === 'user').pop();
+        saveFolderContext(client, overrideAssistantId, lastUserMsg?.content ?? '', response);
+      }
+      : undefined;
+
+    logger.info(
+      `[Backboard Proxy] new thread ${threadId}, assistant=${assistantId}${isFolderChat ? ' (folder override)' : ''}, memory=${memoryMode}, ${messages.length} messages, stream=${String(stream)}`,
+    );
 
     if (stream) {
-      await handleStreamingResponse(res, client, threadId, prompt, modelName, provider);
+      await handleStreamingResponse(res, client, threadId, prompt, modelName, provider, onComplete, memoryMode);
     } else {
-      await handleNonStreamingResponse(res, client, threadId, prompt, model, modelName, provider);
+      await handleNonStreamingResponse(res, client, threadId, prompt, resolvedModel, modelName, provider, onComplete, memoryMode);
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Internal server error';
@@ -179,6 +243,9 @@ export async function handleChatCompletions(req: Request, res: Response): Promis
   }
 }
 
+/** Milliseconds of silence after last content token before closing client stream */
+const STREAM_IDLE_TIMEOUT_MS = 1500;
+
 async function handleStreamingResponse(
   res: Response,
   client: BackboardClient,
@@ -186,6 +253,8 @@ async function handleStreamingResponse(
   prompt: string,
   modelName: string,
   provider?: string,
+  onComplete?: (response: string) => void,
+  memoryMode: string = 'Auto',
 ): Promise<void> {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
@@ -204,54 +273,60 @@ async function handleStreamingResponse(
   };
   res.write(`data: ${JSON.stringify(roleChunk)}\n\n`);
 
-  let totalInputTokens = 0;
-  let totalOutputTokens = 0;
+  const responseParts: string[] = [];
+  let streamClosed = false;
+
+  const closeClientStream = () => {
+    if (streamClosed || res.writableEnded) {
+      return;
+    }
+    streamClosed = true;
+    const stopChunk: OpenAIChatCompletionChunk = {
+      id: completionId,
+      object: 'chat.completion.chunk',
+      created,
+      model: modelName,
+      choices: [{ index: 0, delta: {}, finish_reason: 'stop' }],
+    };
+    res.write(`data: ${JSON.stringify(stopChunk)}\n\n`);
+    res.write('data: [DONE]\n\n');
+    res.end();
+  };
+
+  let idleTimer: ReturnType<typeof setTimeout> | null = null;
 
   for await (const event of client.streamMessage(threadId, prompt, {
     llmProvider: provider,
     modelName,
-    memory: 'Auto',
+    memory: memoryMode,
   })) {
-    if (res.writableEnded) {
-      break;
-    }
-
     if (event.type === 'content_streaming' && event.content) {
-      const chunk: OpenAIChatCompletionChunk = {
-        id: completionId,
-        object: 'chat.completion.chunk',
-        created,
-        model: modelName,
-        choices: [{ index: 0, delta: { content: event.content }, finish_reason: null }],
-      };
-      res.write(`data: ${JSON.stringify(chunk)}\n\n`);
-    }
-
-    if (event.type === 'message_complete' || event.type === 'run_ended') {
-      if (event.input_tokens) {
-        totalInputTokens = event.input_tokens;
+      if (idleTimer) {
+        clearTimeout(idleTimer);
       }
-      if (event.output_tokens) {
-        totalOutputTokens = event.output_tokens;
+      responseParts.push(event.content);
+      if (!streamClosed) {
+        const chunk: OpenAIChatCompletionChunk = {
+          id: completionId,
+          object: 'chat.completion.chunk',
+          created,
+          model: modelName,
+          choices: [{ index: 0, delta: { content: event.content }, finish_reason: null }],
+        };
+        res.write(`data: ${JSON.stringify(chunk)}\n\n`);
       }
+      idleTimer = setTimeout(closeClientStream, STREAM_IDLE_TIMEOUT_MS);
     }
   }
 
-  const stopChunk: OpenAIChatCompletionChunk = {
-    id: completionId,
-    object: 'chat.completion.chunk',
-    created,
-    model: modelName,
-    choices: [{ index: 0, delta: {}, finish_reason: 'stop' }],
-    usage: {
-      prompt_tokens: totalInputTokens,
-      completion_tokens: totalOutputTokens,
-      total_tokens: totalInputTokens + totalOutputTokens,
-    },
-  };
-  res.write(`data: ${JSON.stringify(stopChunk)}\n\n`);
-  res.write('data: [DONE]\n\n');
-  res.end();
+  if (idleTimer) {
+    clearTimeout(idleTimer);
+  }
+  closeClientStream();
+
+  if (onComplete) {
+    onComplete(responseParts.join(''));
+  }
 }
 
 async function handleNonStreamingResponse(
@@ -262,49 +337,59 @@ async function handleNonStreamingResponse(
   model: string,
   modelName: string,
   provider?: string,
+  onComplete?: (response: string) => void,
+  memoryMode: string = 'Auto',
 ): Promise<void> {
   const contentParts: string[] = [];
-  let totalInputTokens = 0;
-  let totalOutputTokens = 0;
+  let responseSent = false;
+
+  const sendResponse = () => {
+    if (responseSent) {
+      return;
+    }
+    responseSent = true;
+    const fullResponse = contentParts.join('');
+    const response: OpenAIChatCompletionResponse = {
+      id: `chatcmpl-bb-${uuidv4().slice(0, 12)}`,
+      object: 'chat.completion',
+      created: Math.floor(Date.now() / 1000),
+      model: model ?? modelName,
+      choices: [
+        {
+          index: 0,
+          message: { role: 'assistant', content: fullResponse },
+          finish_reason: 'stop',
+        },
+      ],
+      usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+    };
+    res.json(response);
+  };
+
+  let idleTimer: ReturnType<typeof setTimeout> | null = null;
 
   for await (const event of client.streamMessage(threadId, prompt, {
     llmProvider: provider,
     modelName,
-    memory: 'Auto',
+    memory: memoryMode,
   })) {
     if (event.type === 'content_streaming' && event.content) {
+      if (idleTimer) {
+        clearTimeout(idleTimer);
+      }
       contentParts.push(event.content);
-    }
-    if (event.type === 'message_complete' || event.type === 'run_ended') {
-      if (event.input_tokens) {
-        totalInputTokens = event.input_tokens;
-      }
-      if (event.output_tokens) {
-        totalOutputTokens = event.output_tokens;
-      }
+      idleTimer = setTimeout(sendResponse, STREAM_IDLE_TIMEOUT_MS);
     }
   }
 
-  const response: OpenAIChatCompletionResponse = {
-    id: `chatcmpl-bb-${uuidv4().slice(0, 12)}`,
-    object: 'chat.completion',
-    created: Math.floor(Date.now() / 1000),
-    model: model ?? modelName,
-    choices: [
-      {
-        index: 0,
-        message: { role: 'assistant', content: contentParts.join('') },
-        finish_reason: 'stop',
-      },
-    ],
-    usage: {
-      prompt_tokens: totalInputTokens,
-      completion_tokens: totalOutputTokens,
-      total_tokens: totalInputTokens + totalOutputTokens,
-    },
-  };
+  if (idleTimer) {
+    clearTimeout(idleTimer);
+  }
+  sendResponse();
 
-  res.json(response);
+  if (onComplete) {
+    onComplete(contentParts.join(''));
+  }
 }
 
 let cachedModels: { id: string; object: string; created: number; owned_by: string }[] | null = null;

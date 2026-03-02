@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import { QueryKeys } from 'librechat-data-provider';
 import { useQueryClient } from '@tanstack/react-query';
 import { TooltipAnchor, NewChatIcon, MobileSidebar, Sidebar, Button } from '@librechat/client';
@@ -22,6 +23,7 @@ export default function NewChat({
   headerButtons?: React.ReactNode;
 }) {
   const queryClient = useQueryClient();
+  const setActiveFolderId = useSetRecoilState(store.activeFolderId);
   /** Note: this component needs an explicit index passed if using more than one */
   const { newConversation: newConvo } = useNewConvo(index);
   const localize = useLocalize();
@@ -37,20 +39,20 @@ export default function NewChat({
 
   const clickHandler: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
     (e) => {
-      // Let browser handle modified/non-left clicks (new tab, context menu, etc.)
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
         return;
       }
 
       e.preventDefault();
+      setActiveFolderId(null);
       clearMessagesCache(queryClient, conversation?.conversationId);
       queryClient.invalidateQueries([QueryKeys.messages]);
-      newConvo();
+      newConvo({ template: { folderId: null } });
       if (isSmallScreen) {
         toggleNav();
       }
     },
-    [queryClient, conversation, newConvo, toggleNav, isSmallScreen],
+    [queryClient, conversation, newConvo, toggleNav, isSmallScreen, setActiveFolderId],
   );
 
   return (

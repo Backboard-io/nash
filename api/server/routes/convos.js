@@ -40,6 +40,8 @@ router.get('/', async (req, res) => {
     tags = Array.isArray(req.query.tags) ? req.query.tags : [req.query.tags];
   }
 
+  const folderId = req.query.folderId || undefined;
+
   try {
     const result = await getConvosByCursor(req.user.id, {
       cursor,
@@ -49,6 +51,7 @@ router.get('/', async (req, res) => {
       search,
       sortBy,
       sortDirection,
+      folderId,
     });
     res.status(200).json(result);
   } catch (error) {
@@ -277,6 +280,23 @@ router.post('/fork', forkIpLimiter, forkUserLimiter, async (req, res) => {
   } catch (error) {
     logger.error('Error forking conversation:', error);
     res.status(500).send('Error forking conversation');
+  }
+});
+
+router.put('/:conversationId/folder', async (req, res) => {
+  const { conversationId } = req.params;
+  const { folderId } = req.body;
+
+  try {
+    const dbResponse = await saveConvo(
+      req,
+      { conversationId, folderId: folderId ?? null },
+      { context: `PUT /api/convos/${conversationId}/folder` },
+    );
+    res.status(200).json(dbResponse);
+  } catch (error) {
+    logger.error('Error moving conversation to folder', error);
+    res.status(500).json({ error: 'Error moving conversation to folder' });
   }
 });
 

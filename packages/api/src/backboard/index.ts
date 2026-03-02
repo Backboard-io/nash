@@ -47,6 +47,12 @@ export {
   deleteBackboardDocument,
 } from './documents';
 export {
+  listFoldersBB,
+  createFolderBB,
+  deleteFolderBB,
+  getFolderBB,
+} from './folders';
+export {
   searchConversationBB,
   getConvoBB,
   getConvoFilesBB,

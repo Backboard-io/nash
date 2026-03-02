@@ -157,6 +157,7 @@ const startServer = async () => {
   app.use('/api/permissions', routes.accessPermissions);
 
   app.use('/api/tags', routes.tags);
+  app.use('/api/folders', routes.folders);
   app.use('/api/mcp', routes.mcp);
   app.use('/api/backboard/v1', routes.backboard);
 

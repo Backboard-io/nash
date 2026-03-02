@@ -15,7 +15,7 @@ export default function createPayload(submission: t.TSubmission) {
     ephemeralAgent,
     endpointOption,
   } = submission;
-  const { conversationId } = s.tConvoUpdateSchema.parse(conversation);
+  const { conversationId, folderId } = s.tConvoUpdateSchema.parse(conversation);
   const { endpoint: _e, endpointType } = endpointOption as {
     endpoint: s.EModelEndpoint;
     endpointType?: s.EModelEndpoint;
@@ -40,6 +40,7 @@ export default function createPayload(submission: t.TSubmission) {
     conversationId,
     isContinued: !!(isEdited && isContinued),
     ephemeralAgent: s.isAssistantsEndpoint(endpoint) ? undefined : ephemeralAgent,
+    ...(folderId ? { folderId } : {}),
   };
 
   return { server, payload };

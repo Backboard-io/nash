@@ -25,6 +25,7 @@ import {
 } from '~/hooks';
 import { useConversationsInfiniteQuery, useTitleGeneration } from '~/data-provider';
 import { Conversations } from '~/components/Conversations';
+import { FoldersList } from './Folders';
 import SearchBar from './SearchBar';
 import NewChat from './NewChat';
 import { cn } from '~/utils';
@@ -90,12 +91,14 @@ const Nav = memo(
     });
 
     const search = useRecoilValue(store.search);
+    const activeFolderId = useRecoilValue(store.activeFolderId);
 
     const { data, fetchNextPage, isFetchingNextPage, isLoading, isFetching, refetch } =
       useConversationsInfiniteQuery(
         {
           tags: tags.length === 0 ? undefined : tags,
           search: search.debouncedQuery || undefined,
+          folderId: 'none',
         },
         {
           enabled: isAuthenticated,
@@ -233,6 +236,7 @@ const Nav = memo(
               headerButtons={headerButtons}
               isSmallScreen={isSmallScreen}
             />
+            <FoldersList />
             <div className="flex min-h-0 flex-grow flex-col overflow-hidden">
               <Conversations
                 conversations={conversations}

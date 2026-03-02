@@ -126,6 +126,16 @@ export const forkConversation = () => `${conversationsRoot}/fork`;
 
 export const duplicateConversation = () => `${conversationsRoot}/duplicate`;
 
+export const foldersRoot = `${BASE_URL}/api/folders`;
+
+export const folders = () => foldersRoot;
+
+export const folderById = (folderId: string) =>
+  `${foldersRoot}/${encodeURIComponent(folderId)}`;
+
+export const moveConvoToFolder = (conversationId: string) =>
+  `${conversationsRoot}/${encodeURIComponent(conversationId)}/folder`;
+
 export const search = (q: string, cursor?: string | null) =>
   `${BASE_URL}/api/search?q=${q}${cursor ? `&cursor=${cursor}` : ''}`;
 

@@ -5,11 +5,13 @@ import {
   FetchTokenConfig,
   extractEnvVariable,
 } from 'librechat-data-provider';
+import { logger } from '@librechat/data-schemas';
 import type { TEndpoint } from 'librechat-data-provider';
 import type { AppConfig } from '@librechat/data-schemas';
 import type { BaseInitializeParams, InitializeResultBase, EndpointTokenConfig } from '~/types';
 import { getOpenAIConfig } from '~/endpoints/openai/config';
 import { getCustomEndpointConfig } from '~/app/config';
+import { getFolderBB } from '~/backboard/folders';
 import { fetchModels } from '~/endpoints/models';
 import { isUserProvided, checkUserKeyExpiry } from '~/utils';
 import { standardCache } from '~/cache';
@@ -157,6 +159,25 @@ export async function initializeCustom({
     proxy: PROXY ?? null,
     ...customOptions,
   };
+
+  const folderId = req.body?.folderId as string | undefined;
+  if (folderId && userId) {
+    try {
+      const folder = await getFolderBB(userId, folderId);
+      if (folder?.assistantId) {
+        const existingHeaders = (clientOptions.headers ?? {}) as Record<string, string>;
+        clientOptions.headers = {
+          ...existingHeaders,
+          'x-backboard-assistant-id': folder.assistantId,
+        };
+        logger.info(
+          `[Custom Init] Folder "${folder.name}" → assistant ${folder.assistantId}`,
+        );
+      }
+    } catch (err) {
+      logger.warn('[Custom Init] Failed to look up folder assistant:', err);
+    }
+  }
 
   const modelOptions = { ...(model_parameters ?? {}), user: userId };
   const finalClientOptions = {

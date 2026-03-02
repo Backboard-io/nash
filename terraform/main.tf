@@ -39,6 +39,8 @@ locals {
       LOGIN_WINDOW=1
       LOGIN_MAX=50
       ALLOW_UNVERIFIED_EMAIL_LOGIN=true
+      SESSION_EXPIRY=1209600000
+      REFRESH_TOKEN_EXPIRY=1209600000
     },
     var.domain_client != "" ? { DOMAIN_CLIENT = var.domain_client } : {},
     var.domain_server != "" ? { DOMAIN_SERVER = var.domain_server } : {},

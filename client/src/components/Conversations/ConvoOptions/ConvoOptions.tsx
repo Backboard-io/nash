@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { QueryKeys } from 'librechat-data-provider';
 import { useQueryClient } from '@tanstack/react-query';
 import { DropdownPopup, Spinner, useToastContext } from '@librechat/client';
-import { Ellipsis, Share2, CopyPlus, Archive, Pen, Trash } from 'lucide-react';
+import { Ellipsis, Share2, CopyPlus, Archive, Pen, Trash, FolderInput, FolderMinus } from 'lucide-react';
 import type { MouseEvent } from 'react';
 import type { TMessage } from 'librechat-data-provider';
 import {
@@ -12,6 +12,8 @@ import {
   useDeleteConversationMutation,
   useGetStartupConfig,
   useArchiveConvoMutation,
+  useFoldersQuery,
+  useMoveConvoToFolderMutation,
 } from '~/data-provider';
 import { useLocalize, useNavigateToConvo, useNewConvo } from '~/hooks';
 import { NotificationSeverity } from '~/common';
@@ -104,6 +106,14 @@ function ConvoOptions({
     },
   });
 
+  const { data: folders } = useFoldersQuery();
+  const moveToFolderMutation = useMoveConvoToFolderMutation({
+    onSuccess: () => {
+      showToast({ message: 'Conversation moved', status: 'success' });
+      setIsPopoverActive(false);
+    },
+  });
+
   const isDuplicateLoading = duplicateConversation.isLoading;
   const isArchiveLoading = archiveConvoMutation.isLoading;
   const isDeleteLoading = deleteMutation.isLoading;
@@ -183,6 +193,31 @@ function ConvoOptions({
     });
   }, [conversationId, duplicateConversation]);
 
+  const folderItems = useMemo(() => {
+    if (!folders?.length) {
+      return [];
+    }
+    const items = folders.map((folder) => ({
+      label: folder.name,
+      onClick: () => {
+        if (conversationId) {
+          moveToFolderMutation.mutate({ conversationId, folderId: folder.folderId });
+        }
+      },
+      icon: <FolderInput className="icon-sm mr-2 text-text-primary" aria-hidden="true" />,
+    }));
+    items.push({
+      label: localize('com_folder_remove'),
+      onClick: () => {
+        if (conversationId) {
+          moveToFolderMutation.mutate({ conversationId, folderId: null });
+        }
+      },
+      icon: <FolderMinus className="icon-sm mr-2 text-text-primary" aria-hidden="true" />,
+    });
+    return items;
+  }, [folders, conversationId, moveToFolderMutation, localize]);
+
   const dropdownItems = useMemo(
     () => [
       {
@@ -212,6 +247,16 @@ function ConvoOptions({
           <CopyPlus className="icon-sm mr-2 text-text-primary" aria-hidden="true" />
         ),
       },
+      ...(folderItems.length > 0
+        ? [
+          {
+            label: localize('com_folder_move_to'),
+            onClick: () => {},
+            icon: <FolderInput className="icon-sm mr-2 text-text-primary" aria-hidden="true" />,
+            subItems: folderItems,
+          },
+        ]
+        : []),
       {
         label: localize('com_ui_archive'),
         onClick: handleArchiveClick,
@@ -240,6 +285,7 @@ function ConvoOptions({
       startupConfig,
       renameHandler,
       deleteHandler,
+      folderItems,
       isArchiveLoading,
       isDuplicateLoading,
       handleArchiveClick,

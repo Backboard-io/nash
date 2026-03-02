@@ -21,6 +21,7 @@ const roles = require('./roles');
 const oauth = require('./oauth');
 const files = require('./files');
 const share = require('./share');
+const folders = require('./folders');
 const tags = require('./tags');
 const auth = require('./auth');
 const keys = require('./keys');
@@ -43,6 +44,7 @@ module.exports = {
   banner,
   agents,
   convos,
+  folders,
   search,
   config,
   models,

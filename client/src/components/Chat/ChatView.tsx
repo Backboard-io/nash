@@ -11,6 +11,7 @@ import { useAddedResponse, useResumeOnLoad, useAdaptiveSSE, useChatHelpers } fro
 import ConversationStarters from './Input/ConversationStarters';
 import { useGetMessagesByConvoId } from '~/data-provider';
 import MessagesView from './Messages/MessagesView';
+import FolderThreadsView from './FolderThreadsView';
 import Presentation from './Presentation';
 import ChatForm from './Input/ChatForm';
 import Landing from './Landing';
@@ -33,6 +34,7 @@ function ChatView({ index = 0 }: { index?: number }) {
   const { conversationId } = useParams();
   const rootSubmission = useRecoilValue(store.submissionByIndex(index));
   const centerFormOnLanding = useRecoilValue(store.centerFormOnLanding);
+  const activeFolderId = useRecoilValue(store.activeFolderId);
 
   const fileMap = useFileMapContext();
 
@@ -52,8 +54,6 @@ function ChatView({ index = 0 }: { index?: number }) {
 
   useAdaptiveSSE(rootSubmission, chatHelpers, false, index);
 
-  // Auto-resume if navigating back to conversation with active job
-  // Wait for messages to load before resuming to avoid race condition
   useResumeOnLoad(conversationId, chatHelpers.getMessages, index, !isLoading);
 
   const methods = useForm<ChatFormValues>({
@@ -65,6 +65,7 @@ function ChatView({ index = 0 }: { index?: number }) {
     (!messagesTree || messagesTree.length === 0) &&
     (conversationId === Constants.NEW_CONVO || !conversationId);
   const isNavigating = (!messagesTree || messagesTree.length === 0) && conversationId != null;
+  const isFolderView = isLandingPage && !!activeFolderId;
 
   if (isLoading && conversationId !== Constants.NEW_CONVO) {
     content = <LoadingSpinner />;
@@ -72,9 +73,13 @@ function ChatView({ index = 0 }: { index?: number }) {
     content = <LoadingSpinner />;
   } else if (!isLandingPage) {
     content = <MessagesView messagesTree={messagesTree} />;
+  } else if (isFolderView) {
+    content = <FolderThreadsView folderId={activeFolderId} index={index} />;
   } else {
     content = <Landing centerFormOnLanding={centerFormOnLanding} />;
   }
+
+  const isNormalLanding = isLandingPage && !isFolderView;
 
   return (
     <ChatFormProvider {...methods}>
@@ -87,23 +92,25 @@ function ChatView({ index = 0 }: { index?: number }) {
                 <div
                   className={cn(
                     'flex flex-col',
-                    isLandingPage
+                    isNormalLanding
                       ? 'flex-1 items-center justify-end sm:justify-center'
                       : 'h-full overflow-y-auto',
                   )}
                 >
                   {content}
-                  <div
-                    className={cn(
-                      'w-full',
-                      isLandingPage && 'max-w-3xl transition-all duration-200 xl:max-w-4xl',
-                    )}
-                  >
-                    <ChatForm index={index} />
-                    {isLandingPage ? <ConversationStarters /> : <Footer />}
-                  </div>
+                  {!isFolderView && (
+                    <div
+                      className={cn(
+                        'w-full',
+                        isNormalLanding && 'max-w-3xl transition-all duration-200 xl:max-w-4xl',
+                      )}
+                    >
+                      <ChatForm index={index} />
+                      {isNormalLanding ? <ConversationStarters /> : <Footer />}
+                    </div>
+                  )}
                 </div>
-                {isLandingPage && <Footer />}
+                {isNormalLanding && <Footer />}
               </>
             </div>
           </Presentation>

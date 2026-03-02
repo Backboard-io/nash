@@ -143,6 +143,7 @@ export async function getConvosByCursorBB(
     isArchived = false,
     tags,
     search,
+    folderId,
     sortBy = 'updatedAt',
     sortDirection = 'desc',
   }: {
@@ -151,6 +152,7 @@ export async function getConvosByCursorBB(
     isArchived?: boolean;
     tags?: string[];
     search?: string;
+    folderId?: string;
     sortBy?: string;
     sortDirection?: string;
   } = {},
@@ -163,6 +165,12 @@ export async function getConvosByCursorBB(
     convos = convos.filter((c) => c.isArchived === true);
   } else {
     convos = convos.filter((c) => !c.isArchived);
+  }
+
+  if (folderId === 'none') {
+    convos = convos.filter((c) => !c.folderId);
+  } else if (folderId) {
+    convos = convos.filter((c) => c.folderId === folderId);
   }
 
   if (Array.isArray(tags) && tags.length > 0) {
@@ -218,6 +226,7 @@ export async function getConvosByCursorBB(
     'assistant_id',
     'spec',
     'iconURL',
+    'folderId',
   ];
 
   let nextCursor: string | null = null;

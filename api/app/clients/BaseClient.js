@@ -981,11 +981,13 @@ class BaseClient {
       return { message: savedMessage };
     }
 
+    const requestFolderId = this.options?.req?.body?.folderId;
     const fieldsToKeep = {
       conversationId: message.conversationId,
       endpoint: this.options.endpoint,
       endpointType: this.options.endpointType,
       ...endpointOptions,
+      ...(requestFolderId ? { folderId: requestFolderId } : {}),
     };
 
     const existingConvo =

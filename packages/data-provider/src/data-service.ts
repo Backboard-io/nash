@@ -745,6 +745,27 @@ export function archiveConversation(
   return request.post(endpoints.archiveConversation(), { arg: payload });
 }
 
+/* folders */
+
+export const listFolders = (): Promise<q.FoldersResponse> => {
+  return request.get(endpoints.folders());
+};
+
+export function createFolder(payload: q.CreateFolderRequest): Promise<q.TFolder> {
+  return request.post(endpoints.folders(), payload);
+}
+
+export function deleteFolder(folderId: string): Promise<void> {
+  return request.delete(endpoints.folderById(folderId));
+}
+
+export function moveConvoToFolder(
+  conversationId: string,
+  payload: q.MoveConvoToFolderRequest,
+): Promise<void> {
+  return request.put(endpoints.moveConvoToFolder(conversationId), payload);
+}
+
 export function genTitle(payload: m.TGenTitleRequest): Promise<m.TGenTitleResponse> {
   return request.get(endpoints.genTitle(payload.conversationId));
 }

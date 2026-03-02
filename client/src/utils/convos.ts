@@ -322,6 +322,16 @@ export function addConvoToAllQueries(queryClient: QueryClient, newConvo: TConver
     .findAll([QueryKeys.allConversations], { exact: false });
 
   for (const query of queries) {
+    const params = query.queryKey[1] as { folderId?: string } | undefined;
+    const queryFolderId = params?.folderId;
+
+    if (queryFolderId === 'none' && newConvo.folderId) {
+      continue;
+    }
+    if (queryFolderId && queryFolderId !== 'none' && newConvo.folderId !== queryFolderId) {
+      continue;
+    }
+
     queryClient.setQueryData<InfiniteData<ConversationCursorData>>(query.queryKey, (oldData) => {
       if (!oldData) {
         return oldData;
