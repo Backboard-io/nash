@@ -80,6 +80,30 @@ Open source, actively developed, and built for anyone who values control over th
 
 ---
 
+## Development
+
+### `start.sh` — Local Dev Server
+
+Stops any running servers, clears caches, builds all packages, then starts the backend (port 3080) and frontend dev server (port 3090).
+
+```bash
+./start.sh
+```
+
+### `build.sh` — Production Build & Deploy
+
+Full pipeline: Terraform apply, ECR login, Docker build/tag/push, and App Runner deployment.
+
+```bash
+./build.sh              # defaults to dev-latest
+./build.sh staging      # tags as staging-latest
+./build.sh prod v1.2.3  # tags as prod-v1.2.3
+```
+
+Set `SKIP_TERRAFORM=1` to skip the Terraform step.
+
+---
+
 ## Resources
 
 - **Website:** [nash.backboard.io](https://nash.backboard.io)
