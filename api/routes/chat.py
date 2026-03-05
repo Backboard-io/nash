@@ -305,7 +305,7 @@ def _run_stream_background(stream_id: str, user_id: str, payload: dict):
             except Exception:
                 logger.exception("Failed to resolve bb_assistant_id for agent_id=%s", agent_id)
 
-        thread_owner_id = agent_bb_assistant_id or config_assistant_id
+        thread_owner_id = agent_bb_assistant_id or assistant_id
         thread_id, conversation_id, is_new = get_or_create_thread(thread_owner_id, conversation_id)
         stream_state["conversationId"] = conversation_id
     except Exception as e:
@@ -370,6 +370,13 @@ def _run_stream_background(stream_id: str, user_id: str, payload: dict):
             )
             mem_toggle = ephemeral_agent.get("memory", "Off") if isinstance(ephemeral_agent, dict) else "Off"
             bb_memory = {"Auto": "Auto", "On": "Readonly", "Off": "off"}.get(mem_toggle, "off")
+            logger.warning(
+                "[chat] MEMORY DEBUG: payload.memory=%r ephemeral_agent.memory=%r -> mem_toggle=%r -> bb_memory=%r",
+                payload.get("memory"),
+                ephemeral_agent.get("memory") if isinstance(ephemeral_agent, dict) else None,
+                mem_toggle,
+                bb_memory,
+            )
             logger.warning("[chat] stream: calling add_message(thread_id=%s, stream=True, memory=%s) ...", thread_id, bb_memory)
             stream_response = await client.add_message(
                 thread_id=thread_id,
@@ -485,7 +492,7 @@ def _run_stream_background(stream_id: str, user_id: str, payload: dict):
         elif len(full_text) > 60:
             title += "..."
 
-        await _save_conversation_meta(config_assistant_id, conversation_id, {
+        await _save_conversation_meta(assistant_id, conversation_id, {
             "title": title,
             "endpoint": endpoint,
             "model": model,

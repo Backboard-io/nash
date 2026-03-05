@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 
 from api.middleware.jwt_auth import require_jwt
-from api.services.user_service import get_user_assistant_id, get_user_config_assistant_id
+from api.services.user_service import get_user_assistant_id
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
 from api.services.conversation_service import (
@@ -17,7 +17,7 @@ conversations_bp = Blueprint("conversations", __name__)
 @conversations_bp.route("/api/convos", methods=["GET"])
 @require_jwt
 def get_conversations():
-    assistant_id = get_user_config_assistant_id(g.user_id)
+    assistant_id = get_user_assistant_id(g.user_id)
     convos = list_conversations(assistant_id)
 
     is_archived = request.args.get("isArchived", "false").lower() == "true"
@@ -59,7 +59,7 @@ def get_conversations():
 @conversations_bp.route("/api/convos/<conversation_id>", methods=["GET"])
 @require_jwt
 def get_conversation(conversation_id):
-    assistant_id = get_user_config_assistant_id(g.user_id)
+    assistant_id = get_user_assistant_id(g.user_id)
     convos = list_conversations(assistant_id)
     for c in convos:
         if c.get("conversationId") == conversation_id:
@@ -76,7 +76,7 @@ def update_conversation():
     if not conversation_id:
         return jsonify({"error": "conversationId required"}), 400
 
-    assistant_id = get_user_config_assistant_id(g.user_id)
+    assistant_id = get_user_assistant_id(g.user_id)
     convos = list_conversations(assistant_id)
     existing = None
     for c in convos:
@@ -105,7 +105,7 @@ def archive_conversation():
     if not conversation_id:
         return jsonify({"error": "conversationId required"}), 400
 
-    assistant_id = get_user_config_assistant_id(g.user_id)
+    assistant_id = get_user_assistant_id(g.user_id)
     convos = list_conversations(assistant_id)
     for c in convos:
         if c.get("conversationId") == conversation_id:
@@ -124,7 +124,7 @@ def delete_conversation():
     if not conversation_id:
         return jsonify({"error": "conversationId required"}), 400
 
-    assistant_id = get_user_config_assistant_id(g.user_id)
+    assistant_id = get_user_assistant_id(g.user_id)
     delete_conversation_meta(assistant_id, conversation_id)
     return jsonify({"message": "Deleted"})
 
@@ -132,9 +132,8 @@ def delete_conversation():
 @conversations_bp.route("/api/convos/gen_title/<conversation_id>", methods=["GET"])
 @require_jwt
 def gen_title(conversation_id):
-    config_id = get_user_config_assistant_id(g.user_id)
-    chat_id = get_user_assistant_id(g.user_id)
-    thread_id = get_thread_id_for_conversation(conversation_id, assistant_id=config_id)
+    assistant_id = get_user_assistant_id(g.user_id)
+    thread_id = get_thread_id_for_conversation(conversation_id, assistant_id=assistant_id)
     if not thread_id:
         return jsonify({"title": "New Chat"})
 
@@ -151,7 +150,7 @@ def gen_title(conversation_id):
             elif m.role == "assistant" and not first_assistant:
                 first_assistant = (m.content or "")[:200]
         snippet = first_user or first_assistant or "New Chat"
-        title_thread = await client.create_thread(chat_id)
+        title_thread = await client.create_thread(assistant_id)
         resp = await client.add_message(
             thread_id=title_thread.thread_id,
             content=f"Generate a concise title (max 6 words) for a conversation that starts with: \"{snippet}\". Reply with ONLY the title, no quotes.",
@@ -165,7 +164,7 @@ def gen_title(conversation_id):
         title = None
 
     if title and title != "New Chat":
-        save_conversation_meta(config_id, conversation_id, {"title": title})
+        save_conversation_meta(assistant_id, conversation_id, {"title": title})
     elif not title:
         title = "New Chat"
 
@@ -189,7 +188,7 @@ def duplicate_conversation():
 def move_to_folder(conversation_id):
     data = request.get_json() or {}
     folder_id = data.get("folderId")
-    assistant_id = get_user_config_assistant_id(g.user_id)
+    assistant_id = get_user_assistant_id(g.user_id)
     convos = list_conversations(assistant_id)
     for c in convos:
         if c.get("conversationId") == conversation_id:

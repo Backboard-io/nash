@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify, g
 from api.middleware.jwt_auth import require_jwt
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
-from api.services.user_service import get_user_config_assistant_id
+from api.services.user_service import get_user_assistant_id
 from api.services.conversation_service import get_thread_id_for_conversation, list_conversations
 
 messages_bp = Blueprint("messages", __name__)
@@ -17,7 +17,7 @@ def search_messages():
     if not search_query:
         return jsonify({"messages": [], "nextCursor": None})
 
-    assistant_id = get_user_config_assistant_id(g.user_id)
+    assistant_id = get_user_assistant_id(g.user_id)
     convos = list_conversations(assistant_id)
 
     matched_messages = []
@@ -63,7 +63,7 @@ def search_messages():
 @messages_bp.route("/api/messages/<conversation_id>", methods=["GET"])
 @require_jwt
 def get_messages(conversation_id):
-    assistant_id = get_user_config_assistant_id(g.user_id)
+    assistant_id = get_user_assistant_id(g.user_id)
     thread_id = get_thread_id_for_conversation(conversation_id, assistant_id=assistant_id)
     if not thread_id:
         return jsonify([])
