@@ -4,9 +4,60 @@ from api.middleware.jwt_auth import require_jwt
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
 from api.services.user_service import get_user_config_assistant_id
-from api.services.conversation_service import get_thread_id_for_conversation
+from api.services.conversation_service import get_thread_id_for_conversation, list_conversations
 
 messages_bp = Blueprint("messages", __name__)
+
+
+@messages_bp.route("/api/messages", methods=["GET"])
+@require_jwt
+def search_messages():
+    """Search messages across all conversations by text content."""
+    search_query = (request.args.get("search") or "").lower().strip()
+    if not search_query:
+        return jsonify({"messages": [], "nextCursor": None})
+
+    assistant_id = get_user_config_assistant_id(g.user_id)
+    convos = list_conversations(assistant_id)
+
+    matched_messages = []
+    for convo in convos:
+        conversation_id = convo.get("conversationId", "")
+        if not conversation_id:
+            continue
+
+        thread_id = get_thread_id_for_conversation(conversation_id, assistant_id=assistant_id)
+        if not thread_id:
+            continue
+
+        async def _fetch(tid=thread_id):
+            client = get_client()
+            thread = await client.get_thread(tid)
+            return thread.messages
+
+        try:
+            bb_messages = run_async(_fetch())
+        except Exception:
+            continue
+
+        for m in bb_messages:
+            text = m.content or ""
+            if search_query in text.lower():
+                matched_messages.append({
+                    "messageId": str(m.message_id),
+                    "conversationId": conversation_id,
+                    "parentMessageId": "00000000-0000-0000-0000-000000000000",
+                    "text": text,
+                    "title": convo.get("title", "New Chat"),
+                    "sender": "User" if m.role == "user" else "Nash",
+                    "isCreatedByUser": m.role == "user",
+                    "endpoint": "agents",
+                    "createdAt": m.created_at.isoformat() if m.created_at else "",
+                    "updatedAt": m.created_at.isoformat() if m.created_at else "",
+                    "error": False,
+                })
+
+    return jsonify({"messages": matched_messages, "nextCursor": None})
 
 
 @messages_bp.route("/api/messages/<conversation_id>", methods=["GET"])

@@ -282,7 +282,9 @@ def refresh():
     except Exception:
         return jsonify({"token": "", "user": None})
 
-    user_id = payload["sub"]
+    user_id = payload.get("sub")
+    if not user_id:
+        return jsonify({"token": "", "user": None})
     new_access_token = create_access_token(user_id)
     new_refresh_token = create_refresh_token(user_id)
 
