@@ -551,7 +551,7 @@ export default function AgentPanel() {
                 type="button"
                 onClick={() => setShowBuilderModal(true)}
                 className="rounded-md p-1.5 text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
-                aria-label="Open agent builder in modal"
+                aria-label="Open persona builder in modal"
                 title="Expand editor"
               >
                 <Maximize2 className="h-4 w-4" />
