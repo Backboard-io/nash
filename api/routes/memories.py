@@ -67,11 +67,9 @@ def create_memory():
 
     result = run_async(_save())
     return jsonify({
-        "key": str(result.id),
+        "key": str(result.get("id") or result.get("memory_id", "")),
         "value": value,
-        "updated_at": getattr(result, "updated_at", None)
-            or getattr(result, "created_at", None)
-            or "",
+        "updated_at": result.get("updated_at") or result.get("created_at") or "",
         "tokenCount": len(value.split()),
     })
 

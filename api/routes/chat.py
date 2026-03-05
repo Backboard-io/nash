@@ -368,11 +368,14 @@ def _run_stream_background(stream_id: str, user_id: str, payload: dict):
                 user_message_id=user_message_id,
                 chat_assistant_id=assistant_id,
             )
-            logger.warning("[chat] stream: calling add_message(thread_id=%s, stream=True) ...", thread_id)
+            mem_toggle = ephemeral_agent.get("memory", "Off") if isinstance(ephemeral_agent, dict) else "Off"
+            bb_memory = {"Auto": "Auto", "On": "Readonly", "Off": "off"}.get(mem_toggle, "off")
+            logger.warning("[chat] stream: calling add_message(thread_id=%s, stream=True, memory=%s) ...", thread_id, bb_memory)
             stream_response = await client.add_message(
                 thread_id=thread_id,
                 content=user_text,
                 stream=True,
+                memory=bb_memory,
             )
             logger.warning("[chat] stream: add_message returned, consuming stream ...")
             stream_started = time.monotonic()
