@@ -171,7 +171,10 @@ def create_user(
             content=json.dumps({k: v for k, v in user_data.items() if not k.startswith("_")}),
             metadata={"type": "user", "email": email, "user_id": user_data["id"]},
         )
-        user_data["_memory_id"] = result.id
+        memory_id = result.get("id") or result.get("memory_id")
+        if not memory_id:
+            raise ValueError("Backboard add_memory response missing memory id")
+        user_data["_memory_id"] = str(memory_id)
         return result
 
     run_async(_save())

@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.4.5",
+    "title": "v2.4.5",
+    "publishedAt": "2026-03-06T21:01:09Z",
+    "body": "**Bugfix release**\n\n- **Google OAuth signup:** Fix Backboard user-memory creation in `create_user()` to handle dict-shaped `add_memory()` responses instead of assuming an object with `.id`.\n- **Auth stability:** Prevent new social sign-ins from crashing after a successful Backboard `201 Created` when the user record is first persisted."
+  },
+  {
     "tagName": "v2.4.4",
     "title": "v2.4.4",
     "publishedAt": "2026-03-06T20:51:32Z",
