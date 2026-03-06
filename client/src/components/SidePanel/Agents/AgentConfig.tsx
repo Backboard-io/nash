@@ -202,7 +202,7 @@ export default function AgentConfig() {
                   id="name"
                   type="text"
                   placeholder={localize('com_agents_name_placeholder')}
-                  aria-label="Agent name"
+                  aria-label="Persona name"
                 />
                 <div
                   className={cn(
@@ -214,15 +214,6 @@ export default function AgentConfig() {
                   {errors.name ? errors.name.message : ' '}
                 </div>
               </>
-            )}
-          />
-          <Controller
-            name="id"
-            control={control}
-            render={({ field }) => (
-              <p className="h-3 text-xs italic text-text-secondary" aria-live="polite">
-                {field.value}
-              </p>
             )}
           />
         </div>
@@ -243,7 +234,7 @@ export default function AgentConfig() {
                 id="description"
                 type="text"
                 placeholder={localize('com_agents_description_placeholder')}
-                aria-label="Agent description"
+                aria-label="Persona description"
               />
             )}
           />

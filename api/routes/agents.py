@@ -7,7 +7,7 @@ from flask import Blueprint, request, jsonify, g
 from api.middleware.jwt_auth import require_jwt
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
-from api.services.user_service import get_user_config_assistant_id
+from api.services.user_service import get_user_config_assistant_id, get_all_users
 
 logger = logging.getLogger(__name__)
 
@@ -110,11 +110,40 @@ def create_agent():
 @agents_bp.route("/api/agents/<agent_id>/expanded", methods=["GET"])
 @require_jwt
 def get_agent(agent_id):
+    # Check current user's agents first
     assistant_id = get_user_config_assistant_id(g.user_id)
     agents = run_async(_list_agents(assistant_id))
     for a in agents:
         if a.get("id") == agent_id:
             return jsonify({k: v for k, v in a.items() if k != "_memory_id"})
+
+    # Not found in own agents — search public agents from other users
+    async def _find_public_agent():
+        client = get_client()
+        all_users = get_all_users()
+        for user in all_users:
+            aid = user.get("bbConfigAssistantId") or user.get("bbAssistantId")
+            if not aid or aid == assistant_id:
+                continue
+            try:
+                response = await client.get_memories(aid)
+                for m in response.memories:
+                    meta = m.metadata or {}
+                    if meta.get("type") != "agent":
+                        continue
+                    try:
+                        a = json.loads(m.content)
+                        if a.get("id") == agent_id and a.get("isPublic"):
+                            return {k: v for k, v in a.items() if not k.startswith("_memory")}
+                    except json.JSONDecodeError:
+                        continue
+            except Exception:
+                continue
+        return None
+
+    public_agent = run_async(_find_public_agent())
+    if public_agent:
+        return jsonify(public_agent)
     return jsonify({"error": "Not found"}), 404
 
 

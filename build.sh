@@ -68,11 +68,13 @@ aws ecr get-login-password --region "${AWS_REGION}" | docker login --username AW
 docker push "${ECR_URL}/${APP_NAME}:${IMAGE_TAG}"
 echo "  Pushed ${ECR_URL}/${APP_NAME}:${IMAGE_TAG}"
 
+if [[ "${SKIP_TERRAFORM:-0}" != "1" ]]; then
 # ── 6. Terraform apply (full) ──────────────────────────────────────────
 echo "[6/${STEPS}] Running terraform apply (env: ${ENV})..."
-terraform -chdir="${TF_DIR}" init -input=false
-terraform -chdir="${TF_DIR}" apply -auto-approve
-echo ""
+  terraform -chdir="${TF_DIR}" init -input=false
+  terraform -chdir="${TF_DIR}" apply -auto-approve
+  echo ""
+fi
 
 # ── 7-8. Deploy to App Runner ──────────────────────────────────────────
 SERVICE_NAME="${APP_NAME}-${ENV}"

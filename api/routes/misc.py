@@ -607,9 +607,64 @@ def resource_effective_permissions(resource_type, resource_id):
 @misc_bp.route("/api/permissions/<resource_type>/<resource_id>", methods=["GET", "PUT"])
 @require_jwt
 def resource_permissions(resource_type, resource_id):
-    if request.method == "PUT":
-        return jsonify(request.get_json() or {})
-    return jsonify({})
+    if resource_type.lower() != "agent":
+        if request.method == "PUT":
+            return jsonify(request.get_json() or {})
+        return jsonify({"principals": [], "public": False})
+
+    assistant_id = get_user_config_assistant_id(g.user_id)
+
+    async def _find_agent():
+        client = get_client()
+        response = await client.get_memories(assistant_id)
+        for m in response.memories:
+            meta = m.metadata or {}
+            if meta.get("type") != "agent":
+                continue
+            try:
+                a = json.loads(m.content)
+                if a.get("id") == resource_id or str(m.id) == resource_id:
+                    return a, m.id
+            except json.JSONDecodeError:
+                continue
+        return None, None
+
+    agent_data, memory_id = run_async(_find_agent())
+
+    if request.method == "GET":
+        if not agent_data:
+            return jsonify({"principals": [], "public": False})
+        return jsonify({
+            "principals": agent_data.get("_permissions", {}).get("principals", []),
+            "public": agent_data.get("_permissions", {}).get("public", False),
+            "publicAccessRoleId": agent_data.get("_permissions", {}).get("publicAccessRoleId"),
+        })
+
+    # PUT — persist the public flag and principals in the agent record
+    data = request.get_json() or {}
+    if not agent_data or not memory_id:
+        return jsonify({"principals": [], "public": False})
+
+    permissions = {
+        "public": data.get("public", False),
+        "publicAccessRoleId": data.get("publicAccessRoleId"),
+        "principals": data.get("updated", []),
+    }
+    agent_data["_permissions"] = permissions
+    agent_data["isPublic"] = data.get("public", False)
+
+    async def _update_agent():
+        client = get_client()
+        content = {k: v for k, v in agent_data.items() if not k.startswith("_memory")}
+        await client.update_memory(
+            assistant_id=assistant_id,
+            memory_id=memory_id,
+            content=json.dumps(content),
+            metadata={"type": "agent", "agentId": agent_data.get("id", "")},
+        )
+
+    run_async(_update_agent())
+    return jsonify(permissions)
 
 
 @misc_bp.route("/api/permissions/<resource_type>/roles", methods=["GET"])

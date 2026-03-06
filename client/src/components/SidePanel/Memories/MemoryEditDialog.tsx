@@ -5,7 +5,6 @@ import {
   OGDialogTemplate,
   Button,
   Label,
-  Input,
   Spinner,
   useToastContext,
 } from '@librechat/client';
@@ -89,13 +88,11 @@ export default function MemoryEditDialog({
     },
   });
 
-  const [key, setKey] = useState('');
   const [value, setValue] = useState('');
   const [originalKey, setOriginalKey] = useState('');
 
   useEffect(() => {
     if (memory) {
-      setKey(memory.key);
       setValue(memory.value);
       setOriginalKey(memory.key);
     }
@@ -106,7 +103,7 @@ export default function MemoryEditDialog({
       return;
     }
 
-    if (!key.trim() || !value.trim()) {
+    if (!value.trim()) {
       showToast({
         message: localize('com_ui_field_required'),
         status: 'error',
@@ -115,9 +112,8 @@ export default function MemoryEditDialog({
     }
 
     updateMemory({
-      key: key.trim(),
+      key: originalKey,
       value: value.trim(),
-      ...(originalKey !== key.trim() && { originalKey }),
     });
   };
 
@@ -178,22 +174,6 @@ export default function MemoryEditDialog({
               </div>
             )}
 
-            {/* Key input */}
-            <div className="space-y-2">
-              <Label htmlFor="memory-key" className="text-sm font-medium text-text-primary">
-                {localize('com_ui_key')}
-              </Label>
-              <Input
-                id="memory-key"
-                value={key}
-                onChange={(e) => hasUpdateAccess && setKey(e.target.value)}
-                onKeyDown={handleKeyPress}
-                placeholder={localize('com_ui_enter_key')}
-                className="w-full"
-                disabled={!hasUpdateAccess}
-              />
-            </div>
-
             {/* Value textarea */}
             <div className="space-y-2">
               <Label htmlFor="memory-value" className="text-sm font-medium text-text-primary">
@@ -219,7 +199,7 @@ export default function MemoryEditDialog({
               variant="submit"
               onClick={handleSave}
               aria-label={localize('com_ui_save')}
-              disabled={isLoading || !key.trim() || !value.trim()}
+              disabled={isLoading || !value.trim()}
               className="text-white"
             >
               {isLoading ? <Spinner className="size-4" /> : localize('com_ui_save')}

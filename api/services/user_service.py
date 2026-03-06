@@ -27,6 +27,7 @@ def _normalize_user(raw: dict) -> dict:
         "name": raw.get("name", ""),
         "username": raw.get("username", raw.get("email", "").split("@")[0]),
         "avatar": raw.get("avatar", ""),
+        "nickname": raw.get("nickname", ""),
         "provider": raw.get("provider", ""),
         "role": raw.get("role", "USER"),
         "googleId": raw.get("googleId", ""),

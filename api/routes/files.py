@@ -8,7 +8,7 @@ from flask import Blueprint, request, jsonify, g, send_file
 from api.middleware.jwt_auth import require_jwt
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
-from api.services.user_service import get_user_config_assistant_id
+from api.services.user_service import get_user_config_assistant_id, find_user_by_id, update_user_field
 
 files_bp = Blueprint("files", __name__)
 logger = logging.getLogger(__name__)
@@ -174,7 +174,37 @@ def file_config():
 @files_bp.route("/api/files/images/avatar", methods=["POST"])
 @require_jwt
 def upload_avatar():
-    return jsonify({"url": ""})
+    if "file" not in request.files:
+        return jsonify({"error": "No file provided"}), 400
+
+    file = request.files["file"]
+    user_id = g.user_id
+
+    avatar_dir = os.path.join(UPLOAD_DIR, user_id, "avatar")
+    os.makedirs(avatar_dir, exist_ok=True)
+    avatar_path = os.path.join(avatar_dir, "avatar.png")
+
+    try:
+        file.save(avatar_path)
+    except Exception as e:
+        logger.exception("Failed to save avatar: %s", e)
+        return jsonify({"error": "Failed to save avatar"}), 500
+
+    avatar_url = f"/api/files/images/user/{user_id}/avatar"
+
+    user = find_user_by_id(user_id)
+    if user:
+        update_user_field(user, "avatar", avatar_url)
+
+    return jsonify({"url": avatar_url})
+
+
+@files_bp.route("/api/files/images/user/<user_id>/avatar", methods=["GET"])
+def serve_user_avatar(user_id):
+    avatar_path = os.path.join(UPLOAD_DIR, user_id, "avatar", "avatar.png")
+    if not os.path.exists(avatar_path):
+        return jsonify({"error": "Not found"}), 404
+    return send_file(avatar_path, mimetype="image/png")
 
 
 @files_bp.route("/api/files/images/<path:subpath>", methods=["GET"])

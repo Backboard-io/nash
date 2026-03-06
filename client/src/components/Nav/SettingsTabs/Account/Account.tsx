@@ -1,6 +1,8 @@
 import React from 'react';
 import DisplayUsernameMessages from './DisplayUsernameMessages';
 import DeleteAccount from './DeleteAccount';
+import DangerZone from './DangerZone';
+import Nickname from './Nickname';
 import Avatar from './Avatar';
 import EnableTwoFactorItem from './TwoFactorAuthentication';
 import BackupCodesItem from './BackupCodesItem';
@@ -8,9 +10,11 @@ import { useAuthContext } from '~/hooks';
 
 function Account() {
   const { user } = useAuthContext();
-
   return (
     <div className="flex flex-col gap-3 p-1 text-sm text-text-primary">
+      <div className="pb-3">
+        <Nickname />
+      </div>
       <div className="pb-3">
         <DisplayUsernameMessages />
       </div>
@@ -31,6 +35,9 @@ function Account() {
       )}
       <div className="pb-3">
         <DeleteAccount />
+      </div>
+      <div className="pb-3">
+        <DangerZone />
       </div>
     </div>
   );

@@ -106,7 +106,12 @@ export default function MemoryCardActions({ memory }: MemoryCardActionsProps) {
             <Label className="text-left text-sm font-medium">
               <Trans
                 i18nKey="com_ui_delete_confirm_strong"
-                values={{ title: memory.key }}
+                values={{
+                  title:
+                    memory.value.length > 80
+                      ? memory.value.slice(0, 80) + '…'
+                      : memory.value,
+                }}
                 components={{ strong: <strong /> }}
               />
             </Label>

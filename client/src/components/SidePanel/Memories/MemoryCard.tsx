@@ -27,15 +27,15 @@ export default function MemoryCard({ memory, hasUpdateAccess }: MemoryCardProps)
         'hover:bg-surface-secondary',
       )}
     >
-      {/* Row 1: Key + Token count + Actions */}
+      {/* Row 1: Token count + Date + Actions */}
       <div className="flex items-center gap-2">
-        <span className="truncate text-sm font-semibold text-text-primary">{memory.key}</span>
         {memory.tokenCount !== undefined && (
           <span className="shrink-0 text-xs text-text-secondary">
             {memory.tokenCount}{' '}
             {localize(memory.tokenCount === 1 ? 'com_ui_token' : 'com_ui_tokens')}
           </span>
         )}
+        <span className="shrink-0 text-xs text-text-secondary">{formatDate(memory.updated_at)}</span>
         {hasUpdateAccess && (
           <div className="ml-auto shrink-0">
             <MemoryCardActions memory={memory} />
@@ -43,14 +43,11 @@ export default function MemoryCard({ memory, hasUpdateAccess }: MemoryCardProps)
         )}
       </div>
 
-      {/* Row 2: Value + Date */}
-      <div className="mt-1 flex items-baseline gap-2">
-        <p className="min-w-0 flex-1 truncate text-sm text-text-primary" title={memory.value}>
+      {/* Row 2: Value */}
+      <div className="mt-1">
+        <p className="min-w-0 text-sm text-text-primary" title={memory.value}>
           {memory.value}
         </p>
-        <span className="shrink-0 text-xs text-text-secondary">
-          {formatDate(memory.updated_at)}
-        </span>
       </div>
     </div>
   );
