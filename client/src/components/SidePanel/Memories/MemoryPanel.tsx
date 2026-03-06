@@ -89,7 +89,8 @@ export default function MemoryPanel() {
 
   const filteredMemories = useMemo(() => {
     return matchSorter(memories, searchQuery, {
-      keys: ['key', 'value'],
+      keys: ['value'],
+      threshold: matchSorter.rankings.CONTAINS,
     });
   }, [memories, searchQuery]);
 
