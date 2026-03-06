@@ -3,6 +3,7 @@ import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { Constants, tMessageSchema, isAssistantsEndpoint } from 'librechat-data-provider';
 import type { TMessage, TConversation, TSubmission, Agents } from 'librechat-data-provider';
 import { useStreamStatus } from '~/data-provider';
+import { logger } from '~/utils';
 import store from '~/store';
 
 /**
@@ -128,7 +129,7 @@ export default function useResumeOnLoad(
   const { data: streamStatus, isSuccess } = useStreamStatus(conversationId, shouldCheck);
 
   useEffect(() => {
-    console.log('[ResumeOnLoad] Effect check', {
+    logger.debug('[ResumeOnLoad] Effect check', {
       resumableEnabled,
       conversationId,
       messagesLoaded,
@@ -141,20 +142,20 @@ export default function useResumeOnLoad(
     });
 
     if (!resumableEnabled || !conversationId || conversationId === Constants.NEW_CONVO) {
-      console.log('[ResumeOnLoad] Skipping - not enabled or new convo');
+      logger.debug('[ResumeOnLoad] Skipping - not enabled or new convo');
       return;
     }
 
     // Wait for messages to load to avoid race condition where sync overwrites then DB overwrites
     if (!messagesLoaded) {
-      console.log('[ResumeOnLoad] Waiting for messages to load');
+      logger.debug('[ResumeOnLoad] Waiting for messages to load');
       return;
     }
 
     // Don't resume if we already have an active submission FOR THIS CONVERSATION
     // A stale submission with undefined/different conversationId should not block us
     if (hasActiveSubmissionForThisConvo) {
-      console.log('[ResumeOnLoad] Skipping - already have active submission for this conversation');
+      logger.debug('[ResumeOnLoad] Skipping - already have active submission for this conversation');
       // Mark as processed so we don't try again
       processedConvoRef.current = conversationId;
       return;
@@ -162,7 +163,7 @@ export default function useResumeOnLoad(
 
     // If there's a stale submission for a different conversation, log it but continue
     if (currentSubmission && submissionConvoId !== conversationId) {
-      console.log(
+      logger.debug(
         '[ResumeOnLoad] Found stale submission for different conversation, will check for resume',
         {
           staleConvoId: submissionConvoId,
@@ -173,13 +174,13 @@ export default function useResumeOnLoad(
 
     // Wait for stream status query to complete
     if (!isSuccess || !streamStatus) {
-      console.log('[ResumeOnLoad] Waiting for stream status query');
+      logger.debug('[ResumeOnLoad] Waiting for stream status query');
       return;
     }
 
     // Don't process the same conversation twice
     if (processedConvoRef.current === conversationId) {
-      console.log('[ResumeOnLoad] Skipping - already processed this conversation');
+      logger.debug('[ResumeOnLoad] Skipping - already processed this conversation');
       return;
     }
 
@@ -187,14 +188,14 @@ export default function useResumeOnLoad(
     // DON'T mark as processed here - only mark when we actually create a submission
     // This prevents stale cache data from blocking subsequent resume attempts
     if (!streamStatus.active || !streamStatus.streamId) {
-      console.log('[ResumeOnLoad] No active job to resume for:', conversationId);
+      logger.debug('[ResumeOnLoad] No active job to resume for:', conversationId);
       return;
     }
 
     // Mark as processed NOW - we verified there's an active job and will create submission
     processedConvoRef.current = conversationId;
 
-    console.log('[ResumeOnLoad] Found active job, creating submission...', {
+    logger.debug('[ResumeOnLoad] Found active job, creating submission...', {
       streamId: streamStatus.streamId,
       status: streamStatus.status,
       resumeState: streamStatus.resumeState,
@@ -250,7 +251,7 @@ export default function useResumeOnLoad(
   useEffect(() => {
     // Always reset when conversation changes - this allows resuming when navigating back
     if (conversationId !== processedConvoRef.current) {
-      console.log('[ResumeOnLoad] Resetting processedConvoRef for new conversation:', {
+      logger.debug('[ResumeOnLoad] Resetting processedConvoRef for new conversation:', {
         old: processedConvoRef.current,
         new: conversationId,
       });

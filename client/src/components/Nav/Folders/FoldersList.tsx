@@ -30,13 +30,22 @@ function FolderItem({
   onDelete: (folder: TFolder) => void;
 }) {
   const Icon = isActive ? FolderOpenIcon : FolderIcon;
+  const selectFolder = () => onSelect(folder.folderId);
 
   return (
-    <button
-      type="button"
-      onClick={() => onSelect(folder.folderId)}
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={selectFolder}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectFolder();
+        }
+      }}
       className={cn(
         'group flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm transition-colors',
+        'cursor-pointer focus-visible:ring-2 focus-visible:ring-black focus-visible:outline-none dark:focus-visible:ring-white',
         isActive
           ? 'bg-surface-hover text-text-primary'
           : 'text-text-secondary hover:bg-surface-hover hover:text-text-primary',
@@ -60,7 +69,7 @@ function FolderItem({
       >
         <Trash2 className="h-3.5 w-3.5 text-text-secondary" />
       </button>
-    </button>
+    </div>
   );
 }
 

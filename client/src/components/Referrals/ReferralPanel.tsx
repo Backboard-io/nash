@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { Copy, Gift, Sparkles, Ticket, Users } from 'lucide-react';
+import { Popover, Transition } from '@headlessui/react';
 import { registerPage } from 'librechat-data-provider';
 import { useToastContext } from '@librechat/client';
+import { useChatContext } from '~/Providers';
 import { useAuthContext, useLocalize } from '~/hooks';
 import {
   useGetReferralSummary,
@@ -11,7 +13,7 @@ import {
 import { cn } from '~/utils';
 
 type ReferralPanelProps = {
-  variant?: 'settings' | 'hero' | 'login';
+  variant?: 'settings' | 'hero' | 'login' | 'header';
   showRedeem?: boolean;
   className?: string;
 };
@@ -28,6 +30,7 @@ export default function ReferralPanel({
   const localize = useLocalize();
   const { showToast } = useToastContext();
   const { isAuthenticated } = useAuthContext();
+  const { conversation, isSubmitting } = useChatContext();
   const { data: startupConfig } = useGetStartupConfig();
   const { data, isLoading } = useGetReferralSummary({
     enabled: isAuthenticated && startupConfig?.referrals?.enabled === true,
@@ -82,11 +85,22 @@ export default function ReferralPanel({
         ? 'rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-background to-violet-500/10 p-5'
         : 'rounded-2xl border border-border-light bg-surface-secondary/60 p-4';
 
+  const shouldHideHeaderBadge =
+    variant === 'header' &&
+    ((Array.isArray(conversation?.messages) && conversation.messages.length >= 1) || isSubmitting);
+
   if (!startupConfig?.referrals?.enabled) {
     return null;
   }
 
+  if (shouldHideHeaderBadge) {
+    return null;
+  }
+
   if (!isAuthenticated) {
+    if (variant === 'header') {
+      return null;
+    }
     return (
       <div className={cn(shellClassName, className)}>
         <div className="flex items-start gap-3">
@@ -111,6 +125,92 @@ export default function ReferralPanel({
           </a>
         </div>
       </div>
+    );
+  }
+
+  if (variant === 'header') {
+    return (
+      <Popover className={cn('relative', className)}>
+        {({ open }) => (
+          <>
+            <Popover.Button
+              className={cn(
+                'inline-flex h-10 items-center gap-2 rounded-xl border px-3 text-sm font-medium text-text-primary transition-all duration-200 ease-in-out active:scale-[0.97]',
+                open
+                  ? 'border-violet-500/40 bg-violet-500/12 shadow-[0_0_24px_rgba(139,92,246,0.15)]'
+                  : 'border-border-light bg-presentation hover:border-violet-500/30 hover:bg-surface-active-alt',
+              )}
+            >
+              <Gift className="h-4 w-4 text-violet-500" />
+              <span className="hidden sm:inline">Invite</span>
+              <span className="rounded-full bg-violet-500/15 px-1.5 py-0.5 text-[11px] text-violet-500">
+                ${rewardUsd.toFixed(0)}
+              </span>
+            </Popover.Button>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-200"
+              enterFrom="opacity-0 translate-y-1 scale-95"
+              enterTo="opacity-100 translate-y-0 scale-100"
+              leave="transition ease-in duration-150"
+              leaveFrom="opacity-100 translate-y-0 scale-100"
+              leaveTo="opacity-0 translate-y-1 scale-95"
+            >
+              <Popover.Panel className="fixed right-3 top-16 z-[80] w-[320px] rounded-2xl border border-violet-500/20 bg-background/95 p-4 shadow-2xl backdrop-blur-xl sm:right-4">
+                <div className="flex items-start gap-3">
+                  <div className="rounded-xl bg-violet-500/15 p-2 text-violet-500">
+                    <Gift className="h-4 w-4" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-sm font-semibold text-text-primary">Referral rewards</p>
+                      <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-medium text-amber-600 dark:text-amber-400">
+                        ${rewardUsd.toFixed(2)}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs leading-5 text-text-secondary">
+                      Earn token credits when an invited beta upgrades.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  <div className="rounded-xl border border-border-light bg-background/70 p-2">
+                    <div className="text-[10px] uppercase tracking-wide text-text-secondary">Code</div>
+                    <div className="mt-1 truncate text-sm font-semibold tracking-[0.12em] text-text-primary">
+                      {data?.referralCode ?? '...'}
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-border-light bg-background/70 p-2">
+                    <div className="text-[10px] uppercase tracking-wide text-text-secondary">Signups</div>
+                    <div className="mt-1 text-sm font-semibold text-text-primary">{data?.stats.signups ?? 0}</div>
+                  </div>
+                  <div className="rounded-xl border border-border-light bg-background/70 p-2">
+                    <div className="text-[10px] uppercase tracking-wide text-text-secondary">Paid</div>
+                    <div className="mt-1 text-sm font-semibold text-text-primary">
+                      {data?.stats.paidConversions ?? 0}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-3 flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-3 py-2 text-xs font-medium text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-violet-700 active:scale-[0.97]"
+                  >
+                    <Copy className="h-3.5 w-3.5" />
+                    Copy link
+                  </button>
+                  <span className="min-w-0 truncate rounded-xl border border-border-light px-3 py-2 text-[11px] text-text-secondary">
+                    {data?.referralLink}
+                  </span>
+                </div>
+              </Popover.Panel>
+            </Transition>
+          </>
+        )}
+      </Popover>
     );
   }
 

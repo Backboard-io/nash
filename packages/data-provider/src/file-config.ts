@@ -3,6 +3,34 @@ import type { EndpointFileConfig, FileConfig } from './types/files';
 import { EModelEndpoint, isAgentsEndpoint, isDocumentSupportedProvider } from './schemas';
 import { normalizeEndpointName } from './utils';
 
+const invalidPatternWarnings = new Set<string>();
+
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const normalizeMimePattern = (pattern: string): string => {
+  const trimmed = pattern.trim();
+
+  if (!trimmed) {
+    return trimmed;
+  }
+
+  if (trimmed === '*/*') {
+    return '^.*\\/.*$';
+  }
+
+  if (/^[A-Za-z0-9.+-]+\/\*$/.test(trimmed)) {
+    const [type] = trimmed.split('/');
+    return `^${escapeRegex(type)}\\/.*$`;
+  }
+
+  if (/^[A-Za-z0-9.+-]+\/[A-Za-z0-9.+-]+$/.test(trimmed)) {
+    const [type, subtype] = trimmed.split('/');
+    return `^${escapeRegex(type)}\\/${escapeRegex(subtype)}$`;
+  }
+
+  return trimmed;
+};
+
 export const supportsFiles = {
   [EModelEndpoint.openAI]: true,
   [EModelEndpoint.google]: true,
@@ -495,11 +523,15 @@ export type TFileConfig = z.infer<typeof fileConfigSchema>;
 /** Helper function to safely convert string patterns to RegExp objects */
 export const convertStringsToRegex = (patterns: string[]): RegExp[] =>
   patterns.reduce((acc: RegExp[], pattern) => {
+    const normalizedPattern = normalizeMimePattern(pattern);
     try {
-      const regex = new RegExp(pattern);
+      const regex = new RegExp(normalizedPattern);
       acc.push(regex);
     } catch (error) {
-      console.error(`Invalid regex pattern "${pattern}" skipped.`, error);
+      if (!invalidPatternWarnings.has(pattern)) {
+        invalidPatternWarnings.add(pattern);
+        console.error(`Invalid regex pattern "${pattern}" skipped.`, error);
+      }
     }
     return acc;
   }, []);

@@ -5,7 +5,6 @@ import { BirthdayIcon, TooltipAnchor, SplitText } from '@librechat/client';
 import { useChatContext, useAgentsMapContext, useAssistantsMapContext } from '~/Providers';
 import { useGetEndpointsQuery, useGetStartupConfig, useGetAgentByIdQuery } from '~/data-provider';
 import ConvoIcon from '~/components/Endpoints/ConvoIcon';
-import ReferralPanel from '~/components/Referrals/ReferralPanel';
 import { useLocalize, useAuthContext } from '~/hooks';
 import { getIconEndpoint, getEntity } from '~/utils';
 import { useSearchParams } from 'react-router-dom';
@@ -210,7 +209,6 @@ export default function Landing({ centerFormOnLanding }: { centerFormOnLanding: 
             {description}
           </div>
         )}
-        <ReferralPanel variant="hero" className="mt-6 w-full max-w-2xl" />
       </div>
     </div>
   );

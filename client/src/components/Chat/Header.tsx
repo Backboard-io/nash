@@ -9,6 +9,7 @@ import ModelSelector from './Menus/Endpoints/ModelSelector';
 import { useGetStartupConfig } from '~/data-provider';
 import ExportAndShareMenu from './ExportAndShareMenu';
 import BookmarkMenu from './Menus/BookmarkMenu';
+import ReferralPanel from '~/components/Referrals/ReferralPanel';
 import { TemporaryChat } from './TemporaryChat';
 import AddMultiConvo from './AddMultiConvo';
 import { useHasAccess } from '~/hooks';
@@ -73,6 +74,7 @@ export default function Header() {
                   <ExportAndShareMenu
                     isSharedButtonEnabled={startupConfig?.sharedLinksEnabled ?? false}
                   />
+                  <ReferralPanel variant="header" />
                   <TemporaryChat />
                 </>
               )}
@@ -85,6 +87,7 @@ export default function Header() {
             <ExportAndShareMenu
               isSharedButtonEnabled={startupConfig?.sharedLinksEnabled ?? false}
             />
+            <ReferralPanel variant="header" />
             <TemporaryChat />
           </div>
         )}

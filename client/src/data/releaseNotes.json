@@ -1,8 +1,14 @@
 [
   {
+    "tagName": "v2.5.3",
+    "title": "v2.5.3",
+    "publishedAt": null,
+    "body": "**Hotfix release**\n\n- **Chat stability and quieter logging:** Move resumable chat, query-param, and resume-on-load diagnostics behind the app logger so normal users are not flooded with console noise while chat recovery behavior stays easier to trace when logging is enabled.\n- **File upload MIME matching:** Normalize wildcard MIME patterns like `type/*` before building regexes so document/file config rules match reliably without repeated invalid-pattern spam.\n- **Referral and billing polish:** Move the referral CTA into the chat header, tighten when it appears during active conversations, clarify plan pricing/token allowances, and improve folder row click/keyboard behavior in the nav."
+  },
+  {
     "tagName": "v2.5.2",
     "title": "v2.5.2",
-    "publishedAt": null,
+    "publishedAt": "2026-03-06T23:01:26Z",
     "body": "**Hotfix release**\n\n- **Audio playback disabled:** Remove the hidden `silence.mp3` autoplay iframe so the app no longer attempts browser audio playback on load.\n- **Message TTS disabled:** Remove the chat message read-aloud control so assistant messages cannot trigger browser or external text-to-speech playback.\n- **Auto-playback disabled:** Stop mounting stream-audio playback in the chat form so text-to-speech audio cannot auto-play during chat."
   },
   {

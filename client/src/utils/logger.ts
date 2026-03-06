@@ -1,4 +1,3 @@
-const isDevelopment = import.meta.env.MODE === 'development';
 const isLoggerEnabled = import.meta.env.VITE_ENABLE_LOGGER === 'true';
 const loggerFilter = import.meta.env.VITE_LOGGER_FILTER || '';
 
@@ -9,16 +8,18 @@ const createLogFunction = (
   type?: 'log' | 'warn' | 'error' | 'info' | 'debug' | 'dir',
 ): LogFunction => {
   return (...args: unknown[]) => {
-    if (isLoggerEnabled || (import.meta.env.VITE_ENABLE_LOGGER == null && isDevelopment)) {
-      const tag = typeof args[0] === 'string' ? args[0] : '';
-      if (shouldLog(tag)) {
-        if (tag && typeof args[1] === 'string' && type === 'error') {
-          consoleMethod(`[${tag}] ${args[1]}`, ...args.slice(2));
-        } else if (tag && args.length > 1) {
-          consoleMethod(`[${tag}]`, ...args.slice(1));
-        } else {
-          consoleMethod(...args);
-        }
+    if (!shouldEmit(type)) {
+      return;
+    }
+
+    const tag = typeof args[0] === 'string' ? args[0] : '';
+    if (shouldLog(tag)) {
+      if (tag && typeof args[1] === 'string' && type === 'error') {
+        consoleMethod(`[${tag}] ${args[1]}`, ...args.slice(2));
+      } else if (tag && args.length > 1) {
+        consoleMethod(`[${tag}]`, ...args.slice(1));
+      } else {
+        consoleMethod(...args);
       }
     }
   };
@@ -32,6 +33,18 @@ const logger = {
   error: createLogFunction(console.error, 'error'),
   debug: createLogFunction(console.debug, 'debug'),
 };
+
+function shouldEmit(type?: 'log' | 'warn' | 'error' | 'info' | 'debug' | 'dir'): boolean {
+  if (type === 'warn' || type === 'error') {
+    return true;
+  }
+
+  if (isLoggerEnabled) {
+    return true;
+  }
+
+  return false;
+}
 
 function shouldLog(tag: string): boolean {
   if (!loggerFilter) {

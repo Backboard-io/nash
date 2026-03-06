@@ -13,7 +13,10 @@ interface TierCardProps {
   tier: PlanTier;
   name: string;
   description: string;
+  price?: string;
+  priceNote?: string;
   features: string[];
+  highlight?: React.ReactNode;
   currentPlan: PlanTier;
   priceId?: string;
   icon: React.ReactNode;
@@ -27,7 +30,10 @@ function TierCard({
   tier,
   name,
   description,
+  price,
+  priceNote,
   features,
+  highlight,
   currentPlan,
   priceId,
   icon,
@@ -57,7 +63,14 @@ function TierCard({
         </div>
         <h3 className="text-lg font-semibold text-text-primary">{name}</h3>
       </div>
+      {price && (
+        <div className="mb-3">
+          <div className="text-3xl font-semibold tracking-tight text-text-primary">{price}</div>
+          {priceNote && <div className="mt-1 text-xs uppercase tracking-wide text-text-secondary">{priceNote}</div>}
+        </div>
+      )}
       <p className="mb-4 text-sm text-text-secondary">{description}</p>
+      {highlight && <div className="mb-4 rounded-xl border border-border-light bg-surface-secondary/70 p-3">{highlight}</div>}
       <ul className="mb-6 flex-1 space-y-2">
         {features.map((feature, i) => (
           <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
@@ -261,11 +274,15 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                   <TierCard
                     tier="plus"
                     name={localize('com_billing_plus')}
-                    description={localize('com_billing_plus_desc')}
+                    description="For power users who want premium models, memory, and enough monthly capacity to run real workflows."
+                    price="$29.99 CAD"
+                    priceNote="Per month"
                     features={[
                       localize('com_billing_plus_feature_1'),
                       localize('com_billing_plus_feature_2'),
                       localize('com_billing_plus_feature_3'),
+                      '500,000 tokens included each month',
+                      'A strong monthly allowance for daily premium usage',
                       getOverageCopy('plus'),
                     ]}
                     currentPlan={currentPlan}
@@ -279,10 +296,27 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                   <TierCard
                     tier="unlimited"
                     name={localize('com_billing_unlimited')}
-                    description={localize('com_billing_unlimited_desc')}
+                    description="For teams and heavy operators who want a massive monthly allowance and room to run high-volume research."
+                    price="$199.99 CAD"
+                    priceNote="Per month"
+                    highlight={
+                      <div>
+                        <div className="text-sm font-semibold text-text-primary">
+                          3 million tokens is enormous monthly capacity
+                        </div>
+                        <div className="mt-2 space-y-1 text-sm text-text-secondary">
+                          <p>3 million tokens ≈ 2,250,000 words.</p>
+                          <p>That&apos;s roughly 30 full novels, or around 7,500 pages of dense business documents.</p>
+                          <p className="font-medium text-amber-600 dark:text-amber-400">
+                            You could read and analyze an entire library every single month.
+                          </p>
+                        </div>
+                      </div>
+                    }
                     features={[
                       localize('com_billing_unlimited_feature_1'),
-                      localize('com_billing_unlimited_feature_2'),
+                      '3 million included tokens each month',
+                      'Best plan for large document review and high-volume chat',
                       getOverageCopy('pro'),
                       localize('com_billing_unlimited_feature_3'),
                     ]}
