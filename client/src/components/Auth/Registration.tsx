@@ -32,6 +32,8 @@ const Registration: React.FC = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token');
+  const referralCode = queryParams.get('ref') ?? undefined;
+  const promoCode = queryParams.get('promo') ?? undefined;
   const validTheme = isDark(theme) ? 'dark' : 'light';
 
   // only require captcha if we have a siteKey
@@ -124,9 +126,20 @@ const Registration: React.FC = () => {
             aria-label="Registration form"
             method="POST"
             onSubmit={handleSubmit((data: TRegisterUser) =>
-              registerUser.mutate({ ...data, token: token ?? undefined }),
+              registerUser.mutate({
+                ...data,
+                token: token ?? undefined,
+                referralCode,
+                promoCode,
+              }),
             )}
           >
+            {(referralCode || promoCode) && (
+              <div className="mb-4 rounded-2xl border border-violet-500/20 bg-violet-500/5 px-4 py-3 text-sm text-text-primary">
+                {referralCode && <div>Referral code: <span className="font-semibold">{referralCode}</span></div>}
+                {promoCode && <div>Promo code: <span className="font-semibold">{promoCode}</span></div>}
+              </div>
+            )}
             {renderInput('name', 'com_auth_full_name', 'text', {
               required: localize('com_auth_name_required'),
               minLength: {
@@ -214,7 +227,7 @@ const Registration: React.FC = () => {
           <p className="my-4 text-center text-sm font-light text-gray-700 dark:text-white">
             {localize('com_auth_already_have_account')}{' '}
             <a
-              href={loginPage()}
+              href={`${loginPage()}${location.search}`}
               aria-label="Login"
               className="inline-flex p-1 text-sm font-medium text-green-600 transition-colors hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
             >

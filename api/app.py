@@ -41,6 +41,7 @@ def create_app() -> Flask:
     from api.routes.share import share_bp
     from api.routes.misc import misc_bp
     from api.routes.init import init_bp
+    from api.routes.referrals import referrals_bp
     logging.info("routes imported")
     app.register_blueprint(config_bp)
     app.register_blueprint(auth_bp)
@@ -59,6 +60,7 @@ def create_app() -> Flask:
     app.register_blueprint(share_bp)
     app.register_blueprint(misc_bp)
     app.register_blueprint(init_bp)
+    app.register_blueprint(referrals_bp)
     logging.info("routes registered")
     if has_static:
         @app.route("/", defaults={"path": ""})

@@ -68,9 +68,11 @@ export enum QueryKeys {
   folders = 'folders',
   /* Billing */
   billingSubscription = 'billingSubscription',
+  referrals = 'referrals',
   /* Admin */
   adminUsers = 'adminUsers',
   adminUserSubscription = 'adminUserSubscription',
+  adminPromoCodes = 'adminPromoCodes',
 }
 
 // Dynamic query keys that require parameters

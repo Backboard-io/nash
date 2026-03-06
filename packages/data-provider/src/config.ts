@@ -818,6 +818,22 @@ export type TStartupConfig = {
     freeModels?: string[];
     priceIdPlus?: string;
     priceIdUnlimited?: string;
+    plans?: Record<
+      string,
+      {
+        tokens: number;
+        label: string;
+        priceId?: string;
+        overageEnabled?: boolean;
+        overagePriceId?: string;
+        overageTokensPerUnit?: number;
+        overageUnitPriceUsd?: number;
+      }
+    >;
+  };
+  referrals?: {
+    enabled: boolean;
+    rewardUsd: number;
   };
 };
 
@@ -1738,7 +1754,7 @@ export enum TTSProviders {
 /** Enum for app-wide constants */
 export enum Constants {
   /** Key for the app's version. */
-  VERSION = 'v2.4.5',
+  VERSION = 'v2.5.0',
   /** Key for the Custom Config's version (librechat.yaml). */
   CONFIG_VERSION = '1.3.4',
   /** Standard value for the first message's `parentMessageId` value, to indicate no parent exists. */

@@ -121,10 +121,38 @@ def get_config():
             "priceIdPlus": settings.stripe_price_id_plus,
             "priceIdUnlimited": settings.stripe_price_id_unlimited,
             "plans": {
-                "free": {"tokens": settings.free_included_tokens, "label": "Free"},
-                "plus": {"tokens": settings.plus_included_tokens, "label": "Plus", "priceId": settings.stripe_price_id_plus},
-                "pro": {"tokens": settings.pro_included_tokens, "label": "Pro", "priceId": settings.stripe_price_id_unlimited},
+                "free": {
+                    "tokens": settings.free_included_tokens,
+                    "label": "Free",
+                    "overageEnabled": False,
+                },
+                "plus": {
+                    "tokens": settings.plus_included_tokens,
+                    "label": "Plus",
+                    "priceId": settings.stripe_price_id_plus,
+                    "overageEnabled": bool(settings.stripe_metered_price_id_plus),
+                    "overagePriceId": settings.stripe_metered_price_id_plus,
+                    "overageTokensPerUnit": settings.stripe_overage_tokens_per_unit,
+                    "overageUnitPriceUsd": settings.stripe_overage_unit_price_usd,
+                },
+                "pro": {
+                    "tokens": settings.pro_included_tokens,
+                    "label": "Pro",
+                    "priceId": settings.stripe_price_id_unlimited,
+                    "overageEnabled": bool(settings.stripe_metered_price_id_unlimited),
+                    "overagePriceId": settings.stripe_metered_price_id_unlimited,
+                    "overageTokensPerUnit": settings.stripe_overage_tokens_per_unit,
+                    "overageUnitPriceUsd": settings.stripe_overage_unit_price_usd,
+                },
             },
+        },
+        "balance": {
+            "enabled": True,
+            "tokenCreditsPerUsd": settings.token_credits_per_usd,
+        },
+        "referrals": {
+            "enabled": True,
+            "rewardUsd": settings.referral_bonus_usd,
         },
     })
 

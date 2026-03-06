@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { SettingsTabValues } from 'librechat-data-provider';
 import { MessageSquare, Command, DollarSign } from 'lucide-react';
@@ -28,11 +28,21 @@ import { useGetStartupConfig } from '~/data-provider';
 import PlanGate from './PlanGate';
 import { cn } from '~/utils';
 
-export default function Settings({ open, onOpenChange }: TDialogProps) {
+export default function Settings({
+  open,
+  onOpenChange,
+  initialTab,
+}: TDialogProps & { initialTab?: SettingsTabValues }) {
   const isSmallScreen = useMediaQuery('(max-width: 767px)');
   const { data: startupConfig } = useGetStartupConfig();
   const localize = useLocalize();
   const [activeTab, setActiveTab] = useState(SettingsTabValues.GENERAL);
+  useEffect(() => {
+    if (open && initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab, open]);
+
   const tabRefs = useRef({});
   const { hasAnyPersonalizationFeature, hasMemoryOptOut } = usePersonalizationAccess();
 

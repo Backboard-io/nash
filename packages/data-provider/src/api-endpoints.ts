@@ -428,6 +428,9 @@ export const graphToken = (scopes: string) =>
 export const billingSubscription = () => `${BASE_URL}/api/billing/subscription`;
 export const billingCheckout = () => `${BASE_URL}/api/billing/checkout`;
 export const billingPortal = () => `${BASE_URL}/api/billing/portal`;
+export const referralsMe = () => `${BASE_URL}/api/referrals/me`;
+export const referralsRedeem = () => `${BASE_URL}/api/referrals/redeem`;
+export const adminPromoCodes = () => `${BASE_URL}/api/admin/promo-codes`;
 
 // Admin
 export const adminUsers = (q?: string) =>

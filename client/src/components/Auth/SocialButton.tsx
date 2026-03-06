@@ -5,12 +5,14 @@ const SocialButton = ({ id, enabled, serverDomain, oauthPath, Icon, label }) => 
     return null;
   }
 
+  const currentQuery = typeof window !== 'undefined' ? window.location.search : '';
+
   return (
     <div className="mt-2 flex gap-x-2">
       <a
         aria-label={`${label}`}
         className="flex w-full items-center justify-center space-x-3 rounded-2xl border border-border-light bg-surface-primary px-5 py-3 text-text-primary transition-colors duration-200 hover:bg-surface-tertiary"
-        href={`${serverDomain}/oauth/${oauthPath}`}
+        href={`${serverDomain}/oauth/${oauthPath}${currentQuery}`}
         data-testid={id}
       >
         <Icon />

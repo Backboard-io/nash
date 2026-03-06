@@ -1,8 +1,14 @@
 [
   {
+    "tagName": "v2.5.0",
+    "title": "v2.5.0",
+    "publishedAt": "2026-03-06T22:52:13Z",
+    "body": "**Minor release**\n\n- **Referrals and promo codes:** Add Backboard-backed referral codes, promo-code redemption, referral reward accounting, and admin promo management.\n- **Pricing and billing:** Keep the existing tiers, add pay-as-you-go metered overage support after included monthly usage is exhausted, and expand Stripe checkout/webhook handling for overage items.\n- **Account, login, and chat UI:** Add a referral panel in Settings/Account, a shortcut on the account card, and more prominent referral CTAs on the login and chat landing screens.\n- **Credits foundation:** Replace the placeholder balance endpoint with a real token-credit balance and immutable ledger for promo and referral rewards."
+  },
+  {
     "tagName": "v2.4.5",
     "title": "v2.4.5",
-    "publishedAt": "2026-03-06T21:01:09Z",
+    "publishedAt": "2026-03-06T21:01:49Z",
     "body": "**Bugfix release**\n\n- **Google OAuth signup:** Fix Backboard user-memory creation in `create_user()` to handle dict-shaped `add_memory()` responses instead of assuming an object with `.id`.\n- **Auth stability:** Prevent new social sign-ins from crashing after a successful Backboard `201 Created` when the user record is first persisted."
   },
   {

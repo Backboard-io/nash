@@ -1114,6 +1114,8 @@ export interface BillingSubscription {
   plan: 'free' | 'plus' | 'unlimited';
   usageTokens: number;
   includedTokens: number;
+  overageTokens?: number;
+  overageEnabled?: boolean;
   periodStart: string | null;
   periodEnd: string | null;
   stripeSubscriptionId: string | null;
@@ -1139,6 +1141,24 @@ export const createBillingPortal = (): Promise<PortalResponse> => {
   return request.post(endpoints.billingPortal(), {});
 };
 
+export const getReferralSummary = (): Promise<t.TReferralSummary> => {
+  return request.get(endpoints.referralsMe());
+};
+
+export const redeemReferralOrPromoCode = (code: string): Promise<t.TRedeemCodeResponse> => {
+  return request.post(endpoints.referralsRedeem(), { code });
+};
+
+export const getAdminPromoCodes = (): Promise<{ promoCodes: t.TPromoCode[] }> => {
+  return request.get(endpoints.adminPromoCodes());
+};
+
+export const createAdminPromoCode = (
+  data: Partial<t.TPromoCode> & { code: string; usdValue?: number; tokenCreditsAwarded?: number },
+): Promise<t.TPromoCode> => {
+  return request.post(endpoints.adminPromoCodes(), data);
+};
+
 /* Admin */
 export interface AdminUser {
   id: string;
@@ -1159,10 +1179,16 @@ export interface AdminSubscription {
   plan: 'free' | 'plus' | 'unlimited';
   usageTokens: number;
   includedTokens: number;
+  overageTokens?: number;
   periodStart: string | null;
   periodEnd: string | null;
   stripeCustomerId: string | null;
   stripeSubscriptionId: string | null;
+  stripeMeteredItemId?: string | null;
+  referralCode?: string | null;
+  referredByCode?: string | null;
+  referralRewardGrantedAt?: string | null;
+  balance?: t.TBalanceResponse;
 }
 
 export const getAdminUsers = (q?: string): Promise<AdminUsersResponse> => {

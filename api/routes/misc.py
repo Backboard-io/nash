@@ -52,7 +52,7 @@ def get_banner():
 
     from api.services.token_service import get_token_usage
     usage = get_token_usage(user_id)
-    if usage["tokensRemaining"] <= 0:
+    if usage["tokensRemaining"] <= 0 and not usage.get("overageEnabled"):
         return jsonify({
             "bannerId": "token-limit-reached",
             "message": (
@@ -450,6 +450,7 @@ def get_admin_user_subscription(user_id):
 
     from api.routes.billing import get_user_plan
     from api.services.token_service import get_token_usage
+    from api.services.balance_service import get_balance_response
     plan = get_user_plan(target)
     usage = get_token_usage(user_id)
     display_plan = "unlimited" if plan == "pro" else plan
@@ -458,9 +459,15 @@ def get_admin_user_subscription(user_id):
         "plan": display_plan,
         "usageTokens": usage["usageTokens"],
         "includedTokens": usage["includedTokens"],
+        "overageTokens": usage["overageTokens"],
         "periodEnd": None,
         "stripeCustomerId": target.get("stripeCustomerId"),
         "stripeSubscriptionId": target.get("stripeSubscriptionId"),
+        "stripeMeteredItemId": target.get("stripeMeteredItemId"),
+        "balance": get_balance_response(user_id),
+        "referralCode": target.get("referralCode"),
+        "referredByCode": target.get("referredByCode"),
+        "referralRewardGrantedAt": target.get("referralRewardGrantedAt"),
     })
 
 
@@ -490,6 +497,7 @@ def update_admin_user_subscription(user_id):
 
     from api.routes.billing import PLAN_TOKENS
     from api.services.token_service import get_token_usage
+    from api.services.balance_service import get_balance_response
     tokens = PLAN_TOKENS.get(plan, PLAN_TOKENS["free"])
     usage = get_token_usage(user_id)
     display_plan = "unlimited" if plan == "pro" else plan
@@ -498,9 +506,15 @@ def update_admin_user_subscription(user_id):
         "plan": display_plan,
         "usageTokens": usage["usageTokens"],
         "includedTokens": tokens,
+        "overageTokens": usage["overageTokens"],
         "periodEnd": None,
         "stripeCustomerId": target.get("stripeCustomerId"),
         "stripeSubscriptionId": target.get("stripeSubscriptionId"),
+        "stripeMeteredItemId": target.get("stripeMeteredItemId"),
+        "balance": get_balance_response(user_id),
+        "referralCode": target.get("referralCode"),
+        "referredByCode": target.get("referredByCode"),
+        "referralRewardGrantedAt": target.get("referralRewardGrantedAt"),
     })
 
 

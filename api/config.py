@@ -23,6 +23,13 @@ class Settings(BaseSettings):
     stripe_webhook_secret: str
     stripe_price_id_plus: str
     stripe_price_id_unlimited: str
+    stripe_metered_price_id_plus: str = ""
+    stripe_metered_price_id_unlimited: str = ""
+    stripe_overage_tokens_per_unit: int = 100_000
+    stripe_overage_unit_price_usd: float = 1.0
+
+    token_credits_per_usd: int = 1_000_000
+    referral_bonus_usd: float = 5.0
 
     free_included_tokens: int = 250_000
     plus_included_tokens: int = 500_000

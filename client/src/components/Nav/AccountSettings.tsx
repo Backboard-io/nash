@@ -1,7 +1,7 @@
 import { useState, memo, useRef } from 'react';
 import * as Menu from '@ariakit/react/menu';
-import { FileText, LogOut, Sparkles, Zap, Shield } from 'lucide-react';
-import { SystemRoles } from 'librechat-data-provider';
+import { FileText, Gift, LogOut, Sparkles, Zap, Shield } from 'lucide-react';
+import { SettingsTabValues, SystemRoles } from 'librechat-data-provider';
 import { LinkIcon, GearIcon, DropdownMenuSeparator, Avatar } from '@librechat/client';
 import { MyFilesModal } from '~/components/Chat/Input/Files/MyFilesModal';
 import { useGetStartupConfig, useGetUserBalance, useGetSubscription } from '~/data-provider';
@@ -22,6 +22,7 @@ function AccountSettings() {
     enabled: !!isAuthenticated && startupConfig?.balance?.enabled,
   });
   const [showSettings, setShowSettings] = useState(false);
+  const [settingsInitialTab, setSettingsInitialTab] = useState<SettingsTabValues | undefined>(undefined);
   const [showFiles, setShowFiles] = useState(false);
   const [showBilling, setShowBilling] = useState(false);
   const [showAdminUsers, setShowAdminUsers] = useState(false);
@@ -81,7 +82,9 @@ function AccountSettings() {
           <>
             <div className="text-token-text-secondary ml-3 mr-2 py-2 text-sm" role="note">
               {localize('com_nav_balance')}:{' '}
-              {new Intl.NumberFormat().format(Math.round(balanceQuery.data.tokenCredits))}
+              {balanceQuery.data.tokenCreditsUsd != null
+                ? `$${balanceQuery.data.tokenCreditsUsd.toFixed(2)}`
+                : new Intl.NumberFormat().format(Math.round(balanceQuery.data.tokenCredits))}
             </div>
             <DropdownMenuSeparator />
           </>
@@ -111,6 +114,18 @@ function AccountSettings() {
             {localize('com_billing_title')}
           </Menu.MenuItem>
         )}
+        {startupConfig?.referrals?.enabled === true && (
+          <Menu.MenuItem
+            onClick={() => {
+              setSettingsInitialTab(SettingsTabValues.ACCOUNT);
+              setShowSettings(true);
+            }}
+            className="select-item text-sm"
+          >
+            <Gift className="icon-md text-violet-500" aria-hidden="true" />
+            Referral rewards
+          </Menu.MenuItem>
+        )}
         <Menu.MenuItem onClick={() => setShowSettings(true)} className="select-item text-sm">
           <GearIcon className="icon-md" aria-hidden="true" />
           {localize('com_nav_settings')}
@@ -134,7 +149,18 @@ function AccountSettings() {
           triggerRef={accountSettingsButtonRef}
         />
       )}
-      {showSettings && <Settings open={showSettings} onOpenChange={setShowSettings} />}
+      {showSettings && (
+        <Settings
+          open={showSettings}
+          onOpenChange={(nextOpen) => {
+            setShowSettings(nextOpen);
+            if (!nextOpen) {
+              setSettingsInitialTab(undefined);
+            }
+          }}
+          initialTab={settingsInitialTab}
+        />
+      )}
       {showBilling && <BillingModal open={showBilling} onOpenChange={setShowBilling} />}
       {showAdminUsers && (
         <AdminUsersModal open={showAdminUsers} onOpenChange={setShowAdminUsers} />

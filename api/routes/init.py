@@ -18,6 +18,7 @@ from api.services.user_service import (
     get_user_config_assistant_id,
 )
 from api.routes.config_routes import _build_endpoints_response, _build_models_response
+from api.services.balance_service import get_balance_response
 
 logger = logging.getLogger(__name__)
 
@@ -175,7 +176,7 @@ def init():
         "favorites": _clean(favorites) if favorites else {},
         "tags": [_clean(t) for t in tags],
         "folders": [_clean(f) for f in folders],
-        "balance": {"balance": 1000000},
+        "balance": get_balance_response(g.user_id),
         "subscription": {
             "subscription": display_plan if plan != "free" else None,
             "plan": display_plan,
@@ -269,10 +270,38 @@ def _get_startup_config() -> dict:
             "priceIdPlus": settings.stripe_price_id_plus,
             "priceIdUnlimited": settings.stripe_price_id_unlimited,
             "plans": {
-                "free": {"tokens": settings.free_included_tokens, "label": "Free"},
-                "plus": {"tokens": settings.plus_included_tokens, "label": "Plus", "priceId": settings.stripe_price_id_plus},
-                "pro": {"tokens": settings.pro_included_tokens, "label": "Pro", "priceId": settings.stripe_price_id_unlimited},
+                "free": {
+                    "tokens": settings.free_included_tokens,
+                    "label": "Free",
+                    "overageEnabled": False,
+                },
+                "plus": {
+                    "tokens": settings.plus_included_tokens,
+                    "label": "Plus",
+                    "priceId": settings.stripe_price_id_plus,
+                    "overageEnabled": bool(settings.stripe_metered_price_id_plus),
+                    "overagePriceId": settings.stripe_metered_price_id_plus,
+                    "overageTokensPerUnit": settings.stripe_overage_tokens_per_unit,
+                    "overageUnitPriceUsd": settings.stripe_overage_unit_price_usd,
+                },
+                "pro": {
+                    "tokens": settings.pro_included_tokens,
+                    "label": "Pro",
+                    "priceId": settings.stripe_price_id_unlimited,
+                    "overageEnabled": bool(settings.stripe_metered_price_id_unlimited),
+                    "overagePriceId": settings.stripe_metered_price_id_unlimited,
+                    "overageTokensPerUnit": settings.stripe_overage_tokens_per_unit,
+                    "overageUnitPriceUsd": settings.stripe_overage_unit_price_usd,
+                },
             },
+        },
+        "balance": {
+            "enabled": True,
+            "tokenCreditsPerUsd": settings.token_credits_per_usd,
+        },
+        "referrals": {
+            "enabled": True,
+            "rewardUsd": settings.referral_bonus_usd,
         },
     }
 
@@ -293,7 +322,7 @@ def _file_config_data() -> dict:
 
 
 def _get_banner_data(usage: dict):
-    if usage["tokensRemaining"] <= 0:
+    if usage["tokensRemaining"] <= 0 and not usage.get("overageEnabled"):
         return {
             "bannerId": "token-limit-reached",
             "message": (

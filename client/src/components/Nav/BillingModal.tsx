@@ -107,6 +107,18 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
 
   const currentPlan: PlanTier = subscription?.plan ?? 'free';
   const billing = startupConfig?.billing;
+  const formatTokenCount = (value: number | undefined) =>
+    new Intl.NumberFormat().format(Number(value ?? 0));
+
+  const getOverageCopy = (planKey: 'plus' | 'pro') => {
+    const planConfig = billing?.plans?.[planKey];
+    if (!planConfig?.overageEnabled) {
+      return `${formatTokenCount(planConfig?.tokens)} included each month`;
+    }
+    return `${formatTokenCount(planConfig?.tokens)} included monthly, then $${Number(
+      planConfig?.overageUnitPriceUsd ?? 0,
+    ).toFixed(2)} / ${formatTokenCount(planConfig?.overageTokensPerUnit)} tokens`;
+  };
 
   const handleUpgrade = async (priceId: string) => {
     setIsLoading(true);
@@ -134,6 +146,7 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
 
   const usageTokens = subscription?.usageTokens ?? 0;
   const includedTokens = subscription?.includedTokens ?? 0;
+  const overageTokens = subscription?.overageTokens ?? 0;
   const usagePct = includedTokens > 0 ? Math.min(100, Math.round((usageTokens / includedTokens) * 100)) : 0;
 
   return (
@@ -191,6 +204,21 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
               </DialogTitle>
 
               <div className="overflow-auto p-6">
+                {billing?.plans?.plus?.overageEnabled && (
+                  <div className="mb-6 rounded-2xl border border-violet-500/20 bg-violet-500/5 p-4 text-sm text-text-primary">
+                    <div className="font-medium">Pay as you go overage</div>
+                    <p className="mt-1 text-text-secondary">
+                      Paid plans keep working after your included monthly usage is exhausted. Extra usage is billed
+                      automatically in metered token blocks through Stripe.
+                    </p>
+                    {overageTokens > 0 && (
+                      <p className="mt-2 font-medium text-violet-600 dark:text-violet-400">
+                        Current overage this cycle: {formatTokenCount(overageTokens)} tokens
+                      </p>
+                    )}
+                  </div>
+                )}
+
                 {currentPlan !== 'free' && includedTokens > 0 && (
                   <div className="mb-6 rounded-lg border border-border-light p-4">
                     <div className="mb-2 flex items-center justify-between text-sm">
@@ -238,7 +266,7 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                       localize('com_billing_plus_feature_1'),
                       localize('com_billing_plus_feature_2'),
                       localize('com_billing_plus_feature_3'),
-                      localize('com_billing_plus_feature_4'),
+                      getOverageCopy('plus'),
                     ]}
                     currentPlan={currentPlan}
                     priceId={billing?.priceIdPlus ?? ''}
@@ -255,6 +283,7 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                     features={[
                       localize('com_billing_unlimited_feature_1'),
                       localize('com_billing_unlimited_feature_2'),
+                      getOverageCopy('pro'),
                       localize('com_billing_unlimited_feature_3'),
                     ]}
                     currentPlan={currentPlan}

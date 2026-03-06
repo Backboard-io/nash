@@ -410,6 +410,8 @@ export type TRegisterUser = {
   password: string;
   confirm_password?: string;
   token?: string;
+  referralCode?: string;
+  promoCode?: string;
 };
 
 export type TLoginUser = {
@@ -678,10 +680,50 @@ export type TUpdateFeedbackResponse = {
 
 export type TBalanceResponse = {
   tokenCredits: number;
+  tokenCreditsUsd?: number;
   // Automatic refill settings
   autoRefillEnabled: boolean;
   refillIntervalValue?: number;
   refillIntervalUnit?: 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
   lastRefill?: Date;
   refillAmount?: number;
+};
+
+export type TReferralSummary = {
+  referralCode: string;
+  referralLink: string;
+  rewardTokenCredits: number;
+  rewardUsd: number;
+  referredByCode?: string | null;
+  stats: {
+    signups: number;
+    paidConversions: number;
+  };
+  recentReferrals: Array<{
+    userId: string;
+    name: string;
+    referredAt?: string | null;
+    rewardGrantedAt?: string | null;
+  }>;
+};
+
+export type TRedeemCodeResponse = {
+  kind: 'promo' | 'referral';
+  balance: TBalanceResponse;
+  code?: string;
+  tokenCreditsAwarded?: number;
+  usdValue?: number;
+  referralCode?: string;
+  referrerUserId?: string;
+};
+
+export type TPromoCode = {
+  code: string;
+  tokenCreditsAwarded: number;
+  usdValue?: number | null;
+  active: boolean;
+  maxUses?: number | null;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
 };

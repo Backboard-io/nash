@@ -2,6 +2,7 @@ export * from './Auth';
 export * from './Agents';
 export * from './Init';
 export * from './Billing';
+export * from './Referrals';
 export * from './Endpoints';
 export * from './Files';
 /* Memories */

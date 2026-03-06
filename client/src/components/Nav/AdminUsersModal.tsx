@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react';
-import { Search, ChevronDown, ChevronUp, Shield } from 'lucide-react';
+import { Search, ChevronDown, ChevronUp, Gift, Shield } from 'lucide-react';
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import { QueryKeys, dataService } from 'librechat-data-provider';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AdminUser, AdminSubscription } from 'librechat-data-provider';
 import type { TDialogProps } from '~/common';
+import { useCreateAdminPromoCode, useGetAdminPromoCodes } from '~/data-provider';
 import { cn } from '~/utils';
 
 type PlanTier = 'free' | 'plus' | 'unlimited';
@@ -182,10 +183,51 @@ function SubscriptionEditor({ userId, userName, currentRole }: { userId: string;
         </div>
       </div>
 
+      {sub.overageTokens != null && sub.overageTokens > 0 && (
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-text-secondary">Overage</span>
+          <span className="text-xs text-text-primary">
+            {new Intl.NumberFormat().format(sub.overageTokens)} tokens
+          </span>
+        </div>
+      )}
+
+      {sub.balance && (
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-text-secondary">Credit balance</span>
+          <span className="text-xs text-text-primary">
+            {sub.balance.tokenCreditsUsd != null
+              ? `$${sub.balance.tokenCreditsUsd.toFixed(2)}`
+              : new Intl.NumberFormat().format(sub.balance.tokenCredits)}
+          </span>
+        </div>
+      )}
+
+      {sub.referralCode && (
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-text-secondary">Referral code</span>
+          <span className="text-xs text-text-primary">{sub.referralCode}</span>
+        </div>
+      )}
+
+      {sub.referredByCode && (
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-text-secondary">Referred by</span>
+          <span className="text-xs text-text-primary">{sub.referredByCode}</span>
+        </div>
+      )}
+
       {sub.stripeCustomerId && (
         <div className="flex items-center justify-between">
           <span className="text-xs font-medium text-text-secondary">Stripe</span>
           <span className="truncate text-xs text-text-secondary">{sub.stripeCustomerId}</span>
+        </div>
+      )}
+
+      {sub.stripeMeteredItemId && (
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-medium text-text-secondary">Metered item</span>
+          <span className="truncate text-xs text-text-secondary">{sub.stripeMeteredItemId}</span>
         </div>
       )}
 
@@ -208,6 +250,9 @@ function SubscriptionEditor({ userId, userName, currentRole }: { userId: string;
 export default function AdminUsersModal({ open, onOpenChange }: TDialogProps) {
   const [search, setSearch] = useState('');
   const [expandedUser, setExpandedUser] = useState<string | null>(null);
+  const [promoCode, setPromoCode] = useState('');
+  const [promoUsdValue, setPromoUsdValue] = useState('5');
+  const [promoMaxUses, setPromoMaxUses] = useState('');
 
   const { data, isLoading } = useQuery(
     [QueryKeys.adminUsers, search],
@@ -220,6 +265,8 @@ export default function AdminUsersModal({ open, onOpenChange }: TDialogProps) {
   );
 
   const users = data?.users ?? [];
+  const { data: promoData } = useGetAdminPromoCodes({ enabled: open });
+  const promoMutation = useCreateAdminPromoCode();
 
   return (
     <Transition appear show={open}>
@@ -290,6 +337,75 @@ export default function AdminUsersModal({ open, onOpenChange }: TDialogProps) {
                     className="w-full rounded-lg border border-border-medium bg-transparent py-1.5 pl-9 pr-3 text-sm text-text-primary placeholder-text-secondary focus:border-border-heavy focus:outline-none"
                   />
                 </div>
+              </div>
+
+              <div className="border-b border-border-light px-4 py-4">
+                <div className="flex items-center gap-2">
+                  <Gift className="h-4 w-4 text-violet-500" />
+                  <h3 className="text-sm font-medium text-text-primary">Promo codes</h3>
+                </div>
+                <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                  <input
+                    type="text"
+                    placeholder="Code"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                    className="rounded-lg border border-border-medium bg-transparent px-3 py-2 text-sm text-text-primary placeholder-text-secondary focus:border-border-heavy focus:outline-none"
+                  />
+                  <input
+                    type="number"
+                    min="1"
+                    step="0.5"
+                    placeholder="USD reward"
+                    value={promoUsdValue}
+                    onChange={(e) => setPromoUsdValue(e.target.value)}
+                    className="rounded-lg border border-border-medium bg-transparent px-3 py-2 text-sm text-text-primary placeholder-text-secondary focus:border-border-heavy focus:outline-none"
+                  />
+                  <input
+                    type="number"
+                    min="1"
+                    placeholder="Max uses"
+                    value={promoMaxUses}
+                    onChange={(e) => setPromoMaxUses(e.target.value)}
+                    className="rounded-lg border border-border-medium bg-transparent px-3 py-2 text-sm text-text-primary placeholder-text-secondary focus:border-border-heavy focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    disabled={promoMutation.isLoading || promoCode.trim().length === 0}
+                    onClick={() =>
+                      promoMutation.mutate(
+                        {
+                          code: promoCode.trim(),
+                          usdValue: Number(promoUsdValue || '0'),
+                          maxUses: promoMaxUses ? Number(promoMaxUses) : undefined,
+                        },
+                        {
+                          onSuccess: () => {
+                            setPromoCode('');
+                            setPromoUsdValue('5');
+                            setPromoMaxUses('');
+                          },
+                        },
+                      )
+                    }
+                    className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {promoMutation.isLoading ? '...' : 'Create'}
+                  </button>
+                </div>
+                {promoData?.promoCodes?.length ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {promoData.promoCodes.slice(0, 8).map((promo) => (
+                      <div
+                        key={promo.code}
+                        className="rounded-full border border-border-light px-3 py-1 text-xs text-text-secondary"
+                      >
+                        {promo.code} · ${promo.usdValue?.toFixed(2) ?? '0.00'}
+                        {promo.maxUses != null ? ` · max ${promo.maxUses}` : ''}
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </div>
 
               <div className="flex-1 overflow-y-auto">

@@ -14,6 +14,12 @@ from api.middleware.jwt_auth import (
 from api.services.user_service import find_user_by_email, find_user_by_id, create_user, update_user_field, verify_password
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
+from api.services.referral_service import (
+    apply_referral_code_to_user,
+    get_promo_code,
+    redeem_promo_code,
+    referral_code_exists,
+)
 
 auth_bp = Blueprint("auth", __name__)
 logger = logging.getLogger(__name__)
@@ -149,6 +155,8 @@ def register():
     email = (data.get("email") or "").strip()
     username = (data.get("username") or "").strip()
     password = data.get("password") or ""
+    referral_code = (data.get("referralCode") or data.get("ref") or "").strip().upper()
+    promo_code = (data.get("promoCode") or data.get("promo") or "").strip().upper()
 
     if not name or not email or not password:
         return jsonify({"message": "Name, email, and password are required"}), 400
@@ -159,6 +167,10 @@ def register():
     existing = find_user_by_email(email)
     if existing:
         return jsonify({"message": "A user with this email already exists"}), 409
+    if referral_code and not referral_code_exists(referral_code):
+        return jsonify({"message": "Referral code not found"}), 400
+    if promo_code and get_promo_code(promo_code) is None:
+        return jsonify({"message": "Promo code not found"}), 400
 
     user = create_user(
         email=email,
@@ -169,6 +181,11 @@ def register():
     )
 
     _ensure_bb_assistant(user)
+
+    if referral_code:
+        apply_referral_code_to_user(user, referral_code)
+    if promo_code:
+        redeem_promo_code(user["id"], promo_code)
 
     refresh_token = create_refresh_token(user["id"])
 
@@ -188,6 +205,12 @@ def register():
 @auth_bp.route("/oauth/google", methods=["GET"])
 def oauth_google():
     callback_url = f"{settings.domain_server}{settings.google_callback_url}"
+    referral_code = (request.args.get("ref") or "").strip().upper()
+    promo_code = (request.args.get("promo") or "").strip().upper()
+    state_payload = {
+        "ref": referral_code or None,
+        "promo": promo_code or None,
+    }
     params = {
         "client_id": settings.google_client_id,
         "redirect_uri": callback_url,
@@ -195,6 +218,7 @@ def oauth_google():
         "scope": "openid email profile",
         "access_type": "offline",
         "prompt": "select_account",
+        "state": json.dumps(state_payload),
     }
     return redirect(f"{GOOGLE_AUTH_URL}?{urlencode(params)}")
 
@@ -202,8 +226,16 @@ def oauth_google():
 @auth_bp.route("/oauth/google/callback", methods=["GET"])
 def oauth_google_callback():
     code = request.args.get("code")
+    state = request.args.get("state") or "{}"
     if not code:
         return redirect(f"{settings.domain_client}/login?error=no_code")
+
+    try:
+        state_payload = json.loads(state)
+    except json.JSONDecodeError:
+        state_payload = {}
+    referral_code = str(state_payload.get("ref") or "").strip().upper()
+    promo_code = str(state_payload.get("promo") or "").strip().upper()
 
     callback_url = f"{settings.domain_server}{settings.google_callback_url}"
     token_resp = httpx.post(GOOGLE_TOKEN_URL, data={
@@ -243,6 +275,16 @@ def oauth_google_callback():
         )
 
     _ensure_bb_assistant(user)
+    if not user.get("referredByUserId") and referral_code:
+        try:
+            apply_referral_code_to_user(user, referral_code)
+        except ValueError:
+            logger.warning("[auth] ignored invalid referral code during google login for %s", email)
+    if promo_code:
+        try:
+            redeem_promo_code(user["id"], promo_code)
+        except ValueError:
+            logger.warning("[auth] ignored invalid promo code during google login for %s", email)
 
     user_id = user["id"]
     access_token = create_access_token(user_id)

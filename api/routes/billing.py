@@ -4,6 +4,7 @@ from flask import Blueprint, request, jsonify, g
 from api.middleware.jwt_auth import require_jwt
 from api.config import settings
 from api.services.user_service import find_user_by_id
+from api.services.referral_service import grant_referral_reward_if_eligible
 
 billing_bp = Blueprint("billing", __name__)
 
@@ -20,7 +21,27 @@ PLAN_PRICE_IDS = {
     "pro": settings.stripe_price_id_unlimited,
 }
 
+PLAN_METERED_PRICE_IDS = {
+    "plus": settings.stripe_metered_price_id_plus,
+    "pro": settings.stripe_metered_price_id_unlimited,
+}
+
 PRICE_ID_TO_PLAN = {v: k for k, v in PLAN_PRICE_IDS.items()}
+METERED_PRICE_ID_TO_PLAN = {v: k for k, v in PLAN_METERED_PRICE_IDS.items() if v}
+
+
+def _extract_plan_and_metered_item(subscription: dict) -> tuple[str, str]:
+    plan = "free"
+    metered_item_id = ""
+    items = subscription.get("items", {}).get("data", [])
+    for item in items:
+        price = item.get("price", {}) or {}
+        price_id = price.get("id", "")
+        if price_id in PRICE_ID_TO_PLAN:
+            plan = PRICE_ID_TO_PLAN[price_id]
+        if price_id in METERED_PRICE_ID_TO_PLAN:
+            metered_item_id = item.get("id", "")
+    return plan, metered_item_id
 
 
 def get_user_plan(user: dict | None) -> str:
@@ -53,6 +74,8 @@ def get_subscription():
         "usageTokens": usage["usageTokens"],
         "tokensRemaining": usage["tokensRemaining"],
         "includedTokens": usage["includedTokens"],
+        "overageTokens": usage["overageTokens"],
+        "overageEnabled": usage["overageEnabled"],
     })
 
 
@@ -61,14 +84,20 @@ def get_subscription():
 def create_checkout():
     data = request.get_json() or {}
     price_id = data.get("priceId", settings.stripe_price_id_plus)
+    plan = PRICE_ID_TO_PLAN.get(price_id, "plus")
+    line_items = [{"price": price_id, "quantity": 1}]
+    metered_price_id = PLAN_METERED_PRICE_IDS.get(plan, "")
+    if metered_price_id:
+        line_items.append({"price": metered_price_id})
 
     try:
         session = stripe.checkout.Session.create(
             mode="subscription",
-            line_items=[{"price": price_id, "quantity": 1}],
+            line_items=line_items,
             success_url=f"{settings.domain_client}/c/new?checkout=success",
             cancel_url=f"{settings.domain_client}/c/new?checkout=cancel",
             client_reference_id=g.user_id,
+            metadata={"userId": g.user_id, "selectedPlan": plan},
         )
         return jsonify({"url": session.url})
     except Exception as e:
@@ -117,11 +146,12 @@ def stripe_webhook():
             user = find_user_by_id(user_id)
             if user:
                 sub = stripe.Subscription.retrieve(subscription_id)
-                price_id = sub["items"]["data"][0]["price"]["id"]
-                plan = PRICE_ID_TO_PLAN.get(price_id, "plus")
+                plan, metered_item_id = _extract_plan_and_metered_item(sub)
                 update_user_field(user, "plan", plan)
                 update_user_field(user, "stripeCustomerId", customer_id)
                 update_user_field(user, "stripeSubscriptionId", subscription_id)
+                update_user_field(user, "stripeMeteredItemId", metered_item_id)
+                grant_referral_reward_if_eligible(user_id, source="checkout.session.completed")
 
     elif event_type in ("customer.subscription.updated", "customer.subscription.deleted"):
         sub_status = data_obj.get("status", "")
@@ -131,6 +161,16 @@ def stripe_webhook():
             for u in get_all_users():
                 if u.get("stripeCustomerId") == customer_id:
                     update_user_field(u, "plan", "free")
+                    update_user_field(u, "stripeMeteredItemId", "")
+                    break
+        else:
+            from api.services.user_service import get_all_users, update_user_field
+            plan, metered_item_id = _extract_plan_and_metered_item(data_obj)
+            for u in get_all_users():
+                if u.get("stripeCustomerId") == customer_id:
+                    update_user_field(u, "plan", plan)
+                    update_user_field(u, "stripeSubscriptionId", data_obj.get("id", ""))
+                    update_user_field(u, "stripeMeteredItemId", metered_item_id)
                     break
 
     return jsonify({"received": True})

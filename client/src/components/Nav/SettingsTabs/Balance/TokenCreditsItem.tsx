@@ -4,9 +4,10 @@ import { useLocalize } from '~/hooks';
 
 interface TokenCreditsItemProps {
   tokenCredits?: number;
+  tokenCreditsUsd?: number;
 }
 
-const TokenCreditsItem: React.FC<TokenCreditsItemProps> = ({ tokenCredits }) => {
+const TokenCreditsItem: React.FC<TokenCreditsItemProps> = ({ tokenCredits, tokenCreditsUsd }) => {
   const localize = useLocalize();
 
   return (
@@ -19,7 +20,11 @@ const TokenCreditsItem: React.FC<TokenCreditsItemProps> = ({ tokenCredits }) => 
 
       {/* Right Section: tokenCredits Value */}
       <span className="text-sm font-medium text-gray-800 dark:text-gray-200" role="note">
-        {tokenCredits !== undefined ? tokenCredits.toFixed(2) : '0.00'}
+        {tokenCreditsUsd != null
+          ? `$${tokenCreditsUsd.toFixed(2)} (${tokenCredits?.toLocaleString() ?? '0'} credits)`
+          : tokenCredits !== undefined
+            ? tokenCredits.toFixed(2)
+            : '0.00'}
       </span>
     </div>
   );

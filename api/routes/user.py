@@ -5,6 +5,7 @@ from api.services.user_service import find_user_by_id, update_user_field, get_us
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
 from api.services import conversation_service
+from api.services.balance_service import get_balance_response
 
 user_bp = Blueprint("user", __name__)
 
@@ -95,4 +96,4 @@ def accept_terms():
 @user_bp.route("/api/balance", methods=["GET"])
 @require_jwt
 def get_balance():
-    return jsonify({"balance": 1000000})
+    return jsonify(get_balance_response(g.user_id))
