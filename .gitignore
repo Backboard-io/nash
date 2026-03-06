@@ -7,7 +7,8 @@ dist/
 uploads/
 .env
 .env.local
-terraform/.terraform/
+terraform/**/.terraform.lock.hcl
+terraform/**/.terraform/
 terraform/*.tfstate*
 terraform/terraform.tfvars
 terraform/bootstrap/.terraform/

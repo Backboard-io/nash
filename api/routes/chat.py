@@ -18,7 +18,7 @@ from flask import Blueprint, request, jsonify, g, Response
 from backboard import DocumentStatus
 from backboard.exceptions import BackboardAPIError, BackboardValidationError
 from api.middleware.jwt_auth import require_jwt
-from api.services.backboard_service import get_client
+from api.services.backboard_service import get_client, stream_message_proxy_compatible
 from api.services.async_runner import run_async
 from api.services.user_service import get_user_assistant_id, get_user_config_assistant_id
 from api.services.conversation_service import (
@@ -49,6 +49,15 @@ def _extract_user_text(payload: dict) -> str:
             last = messages[-1] if isinstance(messages, list) else {}
             text = last.get("text", "") or last.get("content", "")
     return text
+
+
+def _is_tool_use_error(message: str) -> bool:
+    lowered = message.lower()
+    return (
+        "tool use" in lowered
+        or "does not support tools" in lowered
+        or "no endpoints found" in lowered
+    )
 
 
 async def _get_agent_bb_assistant_id(config_assistant_id: str, agent_id: str) -> str:
@@ -370,83 +379,111 @@ def _run_stream_background(stream_id: str, user_id: str, payload: dict):
             )
             mem_toggle = ephemeral_agent.get("memory", "Off") if isinstance(ephemeral_agent, dict) else "Off"
             bb_memory = {"Auto": "Auto", "On": "Readonly", "Off": "off"}.get(mem_toggle, "off")
+            requested_web_search = (
+                "Auto"
+                if isinstance(ephemeral_agent, dict) and ephemeral_agent.get("web_search") is True
+                else None
+            )
             logger.warning(
-                "[chat] MEMORY DEBUG: payload.memory=%r ephemeral_agent.memory=%r -> mem_toggle=%r -> bb_memory=%r",
+                "[chat] MEMORY DEBUG: payload.memory=%r ephemeral_agent.memory=%r ephemeral_agent.web_search=%r -> mem_toggle=%r -> bb_memory=%r",
                 payload.get("memory"),
                 ephemeral_agent.get("memory") if isinstance(ephemeral_agent, dict) else None,
+                ephemeral_agent.get("web_search") if isinstance(ephemeral_agent, dict) else None,
                 mem_toggle,
                 bb_memory,
             )
-            logger.warning("[chat] stream: calling add_message(thread_id=%s, stream=True, memory=%s) ...", thread_id, bb_memory)
-            stream_response = await client.add_message(
-                thread_id=thread_id,
-                content=user_text,
-                stream=True,
-                memory=bb_memory,
+            logger.warning(
+                "[chat] stream: calling proxy-compatible Backboard message (thread_id=%s, model=%r, memory=%s, web_search=%r) ...",
+                thread_id,
+                model,
+                bb_memory,
+                requested_web_search,
             )
-            logger.warning("[chat] stream: add_message returned, consuming stream ...")
-            stream_started = time.monotonic()
-            stream_iter = stream_response.__aiter__()
-            chunk_count = 0
-            while True:
-                if time.monotonic() - stream_started >= STREAM_TOTAL_TIMEOUT_SEC:
+
+            async def _consume_stream(web_search_mode: str | None):
+                nonlocal full_text
+                nonlocal total_tokens
+
+                stream_response = await stream_message_proxy_compatible(
+                    thread_id=thread_id,
+                    content=user_text,
+                    model=model or None,
+                    memory=bb_memory,
+                    web_search=web_search_mode,
+                )
+                logger.warning("[chat] stream: Backboard stream opened, consuming events ...")
+                stream_started = time.monotonic()
+                stream_iter = stream_response.__aiter__()
+                chunk_count = 0
+
+                while True:
+                    if time.monotonic() - stream_started >= STREAM_TOTAL_TIMEOUT_SEC:
+                        logger.warning(
+                            "Chat stream total timeout for conversation %s after %ss",
+                            conversation_id,
+                            STREAM_TOTAL_TIMEOUT_SEC,
+                        )
+                        full_text += "\n\n[Error: response timed out]"
+                        break
+                    try:
+                        chunk = await asyncio.wait_for(
+                            stream_iter.__anext__(),
+                            timeout=STREAM_IDLE_TIMEOUT_SEC,
+                        )
+                    except StopAsyncIteration:
+                        logger.info("[chat] stream: StopAsyncIteration (stream ended)")
+                        break
+                    except asyncio.TimeoutError:
+                        logger.warning(
+                            "Chat stream idle timeout for conversation %s after %ss",
+                            conversation_id,
+                            STREAM_IDLE_TIMEOUT_SEC,
+                        )
+                        full_text += "\n\n[Error: response timed out]"
+                        break
+
+                    chunk_type = chunk.get("type", "")
+                    if chunk_type == "content_streaming":
+                        content = chunk.get("content", "")
+                        full_text += content
+                        chunk_count += 1
+                        if chunk_count <= 2:
+                            logger.warning("[chat] stream: chunk %d type=%s len=%d", chunk_count, chunk_type, len(content))
+                        stream_state["events"].append({
+                            "type": "text",
+                            "text": {"value": full_text},
+                            "index": 0,
+                            "messageId": response_message_id,
+                            "conversationId": conversation_id,
+                            "userMessageId": user_message_id,
+                            "thread_id": thread_id,
+                            "stream": True,
+                        })
+                    elif chunk_type in ("run_ended", "run_completed"):
+                        total_tokens = int(chunk.get("total_tokens", 0) or 0)
+                        logger.warning("[chat] stream: %s, total_tokens=%d", chunk_type, total_tokens)
+                        break
+                    elif chunk_type in ("error", "run_failed"):
+                        error_msg = chunk.get("error") or chunk.get("message", "Unknown error")
+                        raise BackboardAPIError(error_msg)
+
+            try:
+                await _consume_stream(requested_web_search)
+            except BackboardAPIError as e:
+                if requested_web_search and not full_text and _is_tool_use_error(str(e)):
                     logger.warning(
-                        "Chat stream total timeout for conversation %s after %ss",
-                        conversation_id,
-                        STREAM_TOTAL_TIMEOUT_SEC,
+                        "[chat] stream: model rejected web search tools, retrying without web_search (thread_id=%s, model=%r)",
+                        thread_id,
+                        model,
                     )
-                    full_text += "\n\n[Error: response timed out]"
-                    break
-                try:
-                    chunk = await asyncio.wait_for(
-                        stream_iter.__anext__(),
-                        timeout=STREAM_IDLE_TIMEOUT_SEC,
-                    )
-                except StopAsyncIteration:
-                    logger.info("[chat] stream: StopAsyncIteration (stream ended)")
-                    break
-                except asyncio.TimeoutError:
-                    logger.warning(
-                        "Chat stream idle timeout for conversation %s after %ss",
-                        conversation_id,
-                        STREAM_IDLE_TIMEOUT_SEC,
-                    )
-                    full_text += "\n\n[Error: response timed out]"
-                    break
-                except BackboardAPIError as e:
+                    await _consume_stream(None)
+                else:
                     logger.warning(
                         "[chat] stream: Backboard API error status=%s msg=%s",
                         getattr(e, "status_code", None),
                         str(e),
                     )
                     full_text += f"\n\n[Error: {str(e)}]"
-                    break
-
-                chunk_type = chunk.get("type", "")
-                if chunk_type == "content_streaming":
-                    content = chunk.get("content", "")
-                    full_text += content
-                    chunk_count += 1
-                    if chunk_count <= 2:
-                        logger.warning("[chat] stream: chunk %d type=%s len=%d", chunk_count, chunk_type, len(content))
-                    stream_state["events"].append({
-                        "type": "text",
-                        "text": {"value": full_text},
-                        "index": 0,
-                        "messageId": response_message_id,
-                        "conversationId": conversation_id,
-                        "userMessageId": user_message_id,
-                        "thread_id": thread_id,
-                        "stream": True,
-                    })
-                elif chunk_type in ("run_ended", "run_completed"):
-                    total_tokens = int(chunk.get("total_tokens", 0) or 0)
-                    logger.warning("[chat] stream: %s, total_tokens=%d", chunk_type, total_tokens)
-                    break
-                elif chunk_type in ("error", "run_failed"):
-                    error_msg = chunk.get("error") or chunk.get("message", "Unknown error")
-                    full_text += f"\n\n[Error: {error_msg}]"
-                    break
         except Exception as e:
             logger.exception("Chat stream failed for conversation %s", conversation_id)
             full_text += f"\n\n[Error: {str(e)}]"
