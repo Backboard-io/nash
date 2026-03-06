@@ -1,8 +1,14 @@
 [
   {
+    "tagName": "v2.5.4",
+    "title": "v2.5.4",
+    "publishedAt": "2026-03-06T23:43:57Z",
+    "body": "**Hotfix release**\n\n- **Billing modal layout:** Tighten the pricing cards, compress the overage and usage copy, and widen the dialog so the upgrade CTA stays visible without scrolling on typical desktop screens.\n- **Plan readability:** Reduce redundant plan bullets and shrink the Unlimited highlight block so the modal stays focused on choosing a plan instead of requiring a long read."
+  },
+  {
     "tagName": "v2.5.3",
     "title": "v2.5.3",
-    "publishedAt": null,
+    "publishedAt": "2026-03-06T23:38:27Z",
     "body": "**Hotfix release**\n\n- **Chat stability and quieter logging:** Move resumable chat, query-param, and resume-on-load diagnostics behind the app logger so normal users are not flooded with console noise while chat recovery behavior stays easier to trace when logging is enabled.\n- **File upload MIME matching:** Normalize wildcard MIME patterns like `type/*` before building regexes so document/file config rules match reliably without repeated invalid-pattern spam.\n- **Referral and billing polish:** Move the referral CTA into the chat header, tighten when it appears during active conversations, clarify plan pricing/token allowances, and improve folder row click/keyboard behavior in the nav."
   },
   {

@@ -51,30 +51,30 @@ function TierCard({
   return (
     <div
       className={cn(
-        'flex flex-col rounded-xl border p-5 transition-all',
+        'flex h-full flex-col rounded-xl border p-4 transition-all',
         isCurrent
           ? 'border-2 border-green-500 bg-green-500/5'
           : 'border-border-medium hover:border-border-heavy',
       )}
     >
-      <div className="mb-3 flex items-center gap-2">
+      <div className="mb-2 flex items-center gap-2">
         <div className={cn('flex h-8 w-8 items-center justify-center rounded-lg', accent)}>
           {icon}
         </div>
-        <h3 className="text-lg font-semibold text-text-primary">{name}</h3>
+        <h3 className="text-base font-semibold text-text-primary">{name}</h3>
       </div>
       {price && (
-        <div className="mb-3">
-          <div className="text-3xl font-semibold tracking-tight text-text-primary">{price}</div>
-          {priceNote && <div className="mt-1 text-xs uppercase tracking-wide text-text-secondary">{priceNote}</div>}
+        <div className="mb-2">
+          <div className="text-2xl font-semibold tracking-tight text-text-primary">{price}</div>
+          {priceNote && <div className="mt-0.5 text-[11px] uppercase tracking-wide text-text-secondary">{priceNote}</div>}
         </div>
       )}
-      <p className="mb-4 text-sm text-text-secondary">{description}</p>
-      {highlight && <div className="mb-4 rounded-xl border border-border-light bg-surface-secondary/70 p-3">{highlight}</div>}
-      <ul className="mb-6 flex-1 space-y-2">
+      <p className="mb-3 text-sm leading-5 text-text-secondary">{description}</p>
+      {highlight && <div className="mb-3 rounded-xl border border-border-light bg-surface-secondary/70 p-2.5">{highlight}</div>}
+      <ul className="mb-4 flex-1 space-y-1.5">
         {features.map((feature, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
-            <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
+          <li key={i} className="flex items-start gap-2 text-sm leading-5 text-text-secondary">
+            <Check className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-green-500" />
             <span>{feature}</span>
           </li>
         ))}
@@ -96,7 +96,7 @@ function TierCard({
             }}
             disabled={isLoading || !priceId}
             className={cn(
-              'w-full rounded-lg px-4 py-2.5 text-sm font-medium transition-colors',
+              'w-full rounded-lg px-4 py-2 text-sm font-medium transition-colors',
               tier === 'unlimited'
                 ? 'bg-amber-500 text-white hover:bg-amber-600 disabled:opacity-50'
                 : 'bg-violet-600 text-white hover:bg-violet-700 disabled:opacity-50',
@@ -185,9 +185,9 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
           leaveTo="opacity-0 scale-95"
         >
           <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-            <DialogPanel className="max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-xl bg-background shadow-2xl backdrop-blur-2xl animate-in sm:rounded-2xl">
+            <DialogPanel className="max-h-[90vh] w-full max-w-5xl overflow-hidden rounded-xl bg-background shadow-2xl backdrop-blur-2xl animate-in sm:rounded-2xl">
               <DialogTitle
-                className="flex items-center justify-between border-b border-border-light p-6 pb-4"
+                className="flex items-center justify-between border-b border-border-light p-5 pb-4"
                 as="div"
               >
                 <h2 className="text-lg font-semibold text-text-primary">
@@ -216,16 +216,15 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                 </button>
               </DialogTitle>
 
-              <div className="overflow-auto p-6">
+              <div className="overflow-auto p-5">
                 {billing?.plans?.plus?.overageEnabled && (
-                  <div className="mb-6 rounded-2xl border border-violet-500/20 bg-violet-500/5 p-4 text-sm text-text-primary">
+                  <div className="mb-4 rounded-2xl border border-violet-500/20 bg-violet-500/5 p-3 text-sm text-text-primary">
                     <div className="font-medium">Pay as you go overage</div>
-                    <p className="mt-1 text-text-secondary">
-                      Paid plans keep working after your included monthly usage is exhausted. Extra usage is billed
-                      automatically in metered token blocks through Stripe.
+                    <p className="mt-1 text-sm leading-5 text-text-secondary">
+                      Paid plans keep working after included monthly usage is exhausted. Extra usage is billed automatically in metered token blocks.
                     </p>
                     {overageTokens > 0 && (
-                      <p className="mt-2 font-medium text-violet-600 dark:text-violet-400">
+                      <p className="mt-1.5 font-medium text-violet-600 dark:text-violet-400">
                         Current overage this cycle: {formatTokenCount(overageTokens)} tokens
                       </p>
                     )}
@@ -233,7 +232,7 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                 )}
 
                 {currentPlan !== 'free' && includedTokens > 0 && (
-                  <div className="mb-6 rounded-lg border border-border-light p-4">
+                  <div className="mb-4 rounded-lg border border-border-light p-3">
                     <div className="mb-2 flex items-center justify-between text-sm">
                       <span className="font-medium text-text-primary">
                         {localize('com_billing_usage')}
@@ -254,7 +253,7 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div className="grid grid-cols-1 gap-3 xl:grid-cols-3">
                   <TierCard
                     tier="free"
                     name={localize('com_billing_free')}
@@ -274,7 +273,7 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                   <TierCard
                     tier="plus"
                     name={localize('com_billing_plus')}
-                    description="For power users who want premium models, memory, and enough monthly capacity to run real workflows."
+                    description="Premium models, memory, and enough capacity for daily workflows."
                     price="$29.99 CAD"
                     priceNote="Per month"
                     features={[
@@ -282,7 +281,6 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                       localize('com_billing_plus_feature_2'),
                       localize('com_billing_plus_feature_3'),
                       '500,000 tokens included each month',
-                      'A strong monthly allowance for daily premium usage',
                       getOverageCopy('plus'),
                     ]}
                     currentPlan={currentPlan}
@@ -296,27 +294,22 @@ export default function BillingModal({ open, onOpenChange }: TDialogProps) {
                   <TierCard
                     tier="unlimited"
                     name={localize('com_billing_unlimited')}
-                    description="For teams and heavy operators who want a massive monthly allowance and room to run high-volume research."
+                    description="Built for teams and high-volume research with a huge monthly allowance."
                     price="$199.99 CAD"
                     priceNote="Per month"
                     highlight={
                       <div>
                         <div className="text-sm font-semibold text-text-primary">
-                          3 million tokens is enormous monthly capacity
+                          3 million tokens included monthly
                         </div>
-                        <div className="mt-2 space-y-1 text-sm text-text-secondary">
-                          <p>3 million tokens ≈ 2,250,000 words.</p>
-                          <p>That&apos;s roughly 30 full novels, or around 7,500 pages of dense business documents.</p>
-                          <p className="font-medium text-amber-600 dark:text-amber-400">
-                            You could read and analyze an entire library every single month.
-                          </p>
+                        <div className="mt-1 text-sm leading-5 text-text-secondary">
+                          Roughly 2.25 million words of monthly capacity for deep research and document-heavy work.
                         </div>
                       </div>
                     }
                     features={[
                       localize('com_billing_unlimited_feature_1'),
                       '3 million included tokens each month',
-                      'Best plan for large document review and high-volume chat',
                       getOverageCopy('pro'),
                       localize('com_billing_unlimited_feature_3'),
                     ]}
