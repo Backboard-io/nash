@@ -13,3 +13,4 @@ terraform/terraform.tfvars
 terraform/bootstrap/.terraform/
 terraform/bootstrap/*.tfstate*
 package-lock.json
+.cursor/

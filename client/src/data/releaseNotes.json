@@ -1,0 +1,116 @@
+[
+  {
+    "body": "**Hotfix release**\n\n- **Release notes modal:** Footer version links now open an in-app release notes modal backed by the local release notes mirror for this private repo.\n- **Sidebar layout:** Favorites render directly in the main nav instead of inside the virtualized conversations list, keeping the chat list simpler and more stable.\n- **Housekeeping:** Ignore local `.cursor/` files in git and refresh the Python lockfile entries already present for `gevent`.",
+    "publishedAt": "2026-03-06T20:17:31Z",
+    "tagName": "v2.4.3",
+    "title": "v2.4.3"
+  },
+  {
+    "body": "**Hotfix release**\n\n- **Memory panel:** Search now matches memory values using a contains threshold instead of ranking on both key and value, making memory lookup more predictable.\n- **UI copy:** Continue the Agent to Persona terminology cleanup in `translation.json`.\n  - `All Agents` -> `All Personas`\n  - `Agent Marketplace` descriptions and placeholders -> Persona wording\n  - `Agent Handoffs` -> `Persona Handoffs`\n  - `Max Agent Steps` -> `Max Persona Steps`\n  - `Agents` permissions/create/share/use labels -> Persona wording\n  - `Create New Agent` -> `Create New Persona`",
+    "publishedAt": "2026-03-06T19:48:50Z",
+    "tagName": "v2.4.2",
+    "title": "v2.4.2"
+  },
+  {
+    "body": "**Hotfix release**\n\n- **Runtime:** Switch Docker gunicorn runtime from preload/gthread to **2 gevent workers** with worker connections for safer async/streaming behavior.\n- **Build pipeline:** Fix `build.sh` ECR tagging/push path to use environment-specific repositories like `nash-dev`, `nash-test`, etc.\n- **Dependencies:** Add `gevent` to `pyproject.toml` for the updated production worker class.\n- **App startup:** Add a few extra Flask startup logs around route import/registration and SPA registration.",
+    "publishedAt": "2026-03-06T19:20:00Z",
+    "tagName": "v2.4.1",
+    "title": "v2.4.1"
+  },
+  {
+    "body": "**Minor release**\n\n**API**\n- **Agent permissions:** `GET/PUT /api/permissions/agent/<id>` — read and update persona sharing (principals, public flag) stored in Backboard agent memory.\n- **User:** User routes extended with `update_user_field`, chat data types, and Backboard-backed user memory handling.\n- **Agents, files:** Route updates and fixes.\n- **Misc:** Permissions endpoint returns real data for `resource_type=agent`.\n\n**Client**\n- **Account:** New `DangerZone.tsx` and `Nickname.tsx`; Account tab layout and copy updates.\n- **Memories:** MemoryCard, MemoryCardActions, MemoryEditDialog simplified and aligned with API.\n- **Personas:** AgentConfig cleanup; Marketplace and Landing copy tweaks.\n- **Translations:** `en/translation.json` updates.\n\n**Build**\n- `build.sh`: small adjustments for deploy pipeline.",
+    "publishedAt": "2026-03-06T18:11:34Z",
+    "tagName": "v2.4.0",
+    "title": "v2.4.0"
+  },
+  {
+    "body": "**Minor release**\n\n- **Naming:** Rebrand \"Agent\" → \"Persona\" in the UI and config.\n  - Sidebar/nav: \"My Agents\" → \"Personas\" (`alternateName` in data-provider config).\n  - Marketplace: \"Agent Marketplace\" → \"Persona Marketplace\" (translation).\n  - Builder: \"Agent Builder\" → \"Persona Builder\"; expand button aria-label \"Open persona builder in modal\".",
+    "publishedAt": "2026-03-05T22:13:52Z",
+    "tagName": "v2.3.0",
+    "title": "v2.3.0"
+  },
+  {
+    "body": "**Bugfix release**\n\n- **Chat / conversations / messages:** Use the user's **chat assistant** (`get_user_assistant_id`) instead of the config assistant for thread ownership, conversation listing, message search, and saving conversation meta (title, etc.). Fixes conversations and messages being tied to the wrong Backboard assistant.\n- **Chat:** Use chat assistant when saving conversation meta after streaming; add memory debug logging for stream `add_message` calls.\n- **Scripts:** Add `scripts/clear-stuck-documents.sh`, `scripts/probe-backboard-assistant-thread.sh`, `scripts/probe-backboard-streaming.sh` for Backboard debugging and cleanup.",
+    "publishedAt": "2026-03-05T20:54:21Z",
+    "tagName": "v2.2.4",
+    "title": "v2.2.4"
+  },
+  {
+    "body": "**Bugfix release**\n\n- **Chat:** Stream requests now pass `memory` to Backboard `add_message` using the ephemeral agent's memory setting (Auto → Auto, On → Readonly, Off → off).\n- **Memories:** `create_memory` response correctly handles dict-shaped result (`id` / `memory_id`, `updated_at` / `created_at`) instead of assuming object attributes.",
+    "publishedAt": "2026-03-05T19:26:47Z",
+    "tagName": "v2.2.2",
+    "title": "v2.2.2"
+  },
+  {
+    "body": "**Bugfix release**\n\n- **Auth:** Refresh endpoint now checks for `sub` in JWT payload and returns empty token/user when missing instead of raising.\n- **Messages:** New `GET /api/messages?search=...` — search messages across conversations by text content.\n- **Dockerfile:** Drop explicit gunicorn `--workers`, `--threads`, `--timeout`, `--keep-alive`; use gunicorn defaults.",
+    "publishedAt": "2026-03-05T19:07:52Z",
+    "tagName": "v2.2.1",
+    "title": "v2.2.1"
+  },
+  {
+    "body": "**Minor release**\n\n**Terraform**\n- Add `terraform/dev/` and `terraform/test/` environments (main.tf, variables, outputs, backend, tfvars).\n- Root `variables.tf`: allow `environment = \"test\"` in addition to dev/staging/prod.\n- App Runner module: SSM policy resource uses account ID and path `${app_name}/${environment}/*` instead of `var.ssm_secret_arns`.\n\n**Config**\n- `api/config.py`: Backboard, JWT, Google, Stripe env vars are required (no default empty string). App fails fast if misconfigured.\n\n**Docker / runtime**\n- Dockerfile: `COPY --chown=node:node` for frontend stage.\n- Gunicorn: add `--preload`.\n\n**API**\n- `api/app.py`: basic logging (INFO) around app create, CORS, and `__main__`.\n\n**Scripts**\n- `scripts/start-docker-and-healthcheck.sh`: start Docker and run healthcheck.",
+    "publishedAt": "2026-03-05T18:43:50Z",
+    "tagName": "v2.2.0",
+    "title": "v2.2.0"
+  },
+  {
+    "body": "Bugfix release\n\n- **Dockerfile:** Remove `COPY .env.production .env` so production build no longer depends on a removed file.\n- **Client:** Add workbox-build and workbox-window deps; lockfile updated.",
+    "publishedAt": "2026-03-05T12:40:36Z",
+    "tagName": "v2.1.1",
+    "title": "v2.1.1"
+  },
+  {
+    "body": "# Nash v2.1.0\n\n**Changes since v2.0.0** — minor release with a dedicated init flow, auth/agents/chat improvements, in-memory caching, and docs.\n\n---\n\n## Init flow (batch bootstrap)\n\n- **New `/api/init` endpoint** — Replaces ~15 individual API calls on first page load. Fetches the user’s config-assistant memories once, partitions them by metadata type (conversations, thread mappings, agents, files, presets, prompt groups, favorites, tags, folders), and returns a single payload so the frontend can hydrate from one request.\n- **Frontend Init module** — New `client/src/data-provider/Init/` with React Query hooks that call `/api/init` and expose the bootstrapped data for the app.\n- **Root/Root.tsx** — Wires the init query into the app so the initial load uses the batch endpoint instead of many parallel Backboard calls.\n\n## Backend\n\n- **Auth (`api/routes/auth.py`)** — Expanded Google OAuth and JWT handling (92 lines added): refresh flow, error handling, and session behavior.\n- **Agents (`api/routes/agents.py`)** — Richer agent CRUD and Backboard integration; background migration for agents missing `bb_assistant_id` so existing agents get a Backboard assistant when needed.\n- **Chat (`api/routes/chat.py`)** — Streaming and conversation handling improvements (52 lines added).\n- **Config routes (`api/routes/config_routes.py`)** — Small adjustments for compatibility with init and config-assistant usage.\n- **Conversations (`api/routes/conversations.py`)** — Tweaks for conversation listing and structure.\n- **Conversation service** — Uses init/cache where appropriate and stays consistent with the new init flow.\n- **User service** — Updates for config-assistant lookup and user resolution used by init and auth.\n- **Memory cache (`api/services/memory_cache.py`)** — New short-lived in-process cache for `get_memories(config_assistant_id)`. Multiple endpoints that previously each called Backboard now share one result within a 5s TTL; concurrent callers for the same assistant wait on the first fetch instead of issuing duplicate requests.\n- **App/config** — App factory and config wiring for the new routes and services.\n\n## Frontend\n\n- **SocialButton** — Small fix for Google OAuth button behavior.\n- **useResumableSSE** — Resumable SSE hook adjusted for stability.\n- **Root** — Init query integration and loading/error handling for the bootstrap step.\n- **data-provider** — New Init queries and exports; `api-endpoints` and `data-service` updated for the init endpoint.\n\n## Docs and cleanup\n\n- **README.md** — New project README: quick start, architecture diagram, features, tech stack, project layout, deployment (Docker, Terraform, App Runner).\n- **docs/** — Added `logo-dark.svg` and `logo-light.svg` for light/dark README branding.\n- **Removed** — `.env.production` and the NIPS PDF from the repo to avoid committed secrets and large binaries.\n\n---\n\n## Summary\n\n| Area        | Change |\n|------------|--------|\n| **API**    | `/api/init` batch bootstrap; auth, agents, chat, config, conversations improvements; memory cache service |\n| **Client** | Init data-provider and Root integration; SocialButton and SSE hook fixes |\n| **Docs**   | README and logo assets; repo cleanup |\n\n**Upgrade:** Pull `v2.1.0`, run `./start.sh` (or your usual deploy). No schema or config changes required beyond existing Backboard and env setup.\n",
+    "publishedAt": "2026-03-05T12:25:47Z",
+    "tagName": "v2.1.0",
+    "title": "v2.1.0"
+  },
+  {
+    "body": "Patch: init flow, auth/agents/chat fixes, memory cache, docs",
+    "publishedAt": "2026-03-05T12:24:23Z",
+    "tagName": "v2.0.1",
+    "title": "v2.0.1"
+  },
+  {
+    "body": "Nash 2.0.0 release",
+    "publishedAt": "2026-03-05T11:19:18Z",
+    "tagName": "v2.0.0",
+    "title": "v2.0.0"
+  },
+  {
+    "body": "sso_email_linking",
+    "publishedAt": "2026-03-05T03:05:45Z",
+    "tagName": "v1.1.5",
+    "title": "v1.1.5"
+  },
+  {
+    "body": "auth_bugfixes",
+    "publishedAt": "2026-03-04T23:55:22Z",
+    "tagName": "v1.1.4",
+    "title": "v1.1.4"
+  },
+  {
+    "body": "updated_readme",
+    "publishedAt": "2026-03-04T20:29:35Z",
+    "tagName": "v1.1.3",
+    "title": "v1.1.3"
+  },
+  {
+    "body": "updated_readme",
+    "publishedAt": "2026-03-04T20:27:49Z",
+    "tagName": "v1.1.2",
+    "title": "v1.1.2"
+  },
+  {
+    "body": "updated_readme",
+    "publishedAt": "2026-03-04T20:25:56Z",
+    "tagName": "v1.1.1",
+    "title": "v1.1.1"
+  },
+  {
+    "body": "- memory toggle in chat\r\n- websearch pinned to chat\r\n- monetized: 1 free (only OSS models, no memory) and 2 paid tiers (500k and 3mm tokens)\r\n- agent builder pop out modal\r\n- removed params from config drawer\r\n- added free tier upsells over disabled config drawer options\r\n- document ingest q/a working e2e\r\n- thread/memory handling improvements\r\n- more cache invalidation to keep instances in sync\r\n- fixed tool calling\r\n- fixed thread naming persistence",
+    "publishedAt": "2026-03-04T20:12:55Z",
+    "tagName": "1.1.0",
+    "title": "v1.1.0"
+  }
+]

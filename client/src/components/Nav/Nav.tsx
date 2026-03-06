@@ -25,6 +25,7 @@ import {
 } from '~/hooks';
 import { useConversationsInfiniteQuery, useTitleGeneration } from '~/data-provider';
 import { Conversations } from '~/components/Conversations';
+import FavoritesList from '~/components/Nav/Favorites/FavoritesList';
 import { FoldersList } from './Folders';
 import SearchBar from './SearchBar';
 import NewChat from './NewChat';
@@ -236,6 +237,7 @@ const Nav = memo(
               headerButtons={headerButtons}
               isSmallScreen={isSmallScreen}
             />
+            <FavoritesList isSmallScreen={isSmallScreen} toggleNav={itemToggleNav} />
             <FoldersList />
             <div className="flex min-h-0 flex-grow flex-col overflow-hidden">
               <Conversations

@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import TagManager from 'react-gtm-module';
 import { Constants } from 'librechat-data-provider';
 import { useGetStartupConfig } from '~/data-provider';
 import { useLocalize } from '~/hooks';
+import ReleaseNotesModal from './ReleaseNotesModal';
 
 export default function Footer({ className }: { className?: string }) {
   const { data: config } = useGetStartupConfig();
   const localize = useLocalize();
+  const [showReleaseNotes, setShowReleaseNotes] = useState(false);
 
   const privacyPolicy = config?.interface?.privacyPolicy;
   const termsOfService = config?.interface?.termsOfService;
@@ -24,14 +26,8 @@ export default function Footer({ className }: { className?: string }) {
     </a>
   );
 
-  const mainContentParts = (
-    typeof config?.customFooter === 'string'
-      ? config.customFooter
-      :       '[Nash ' +
-        Constants.VERSION +
-        '](https://nash.backboard.io) - ' +
-        localize('com_ui_latest_footer')
-  ).split('|');
+  const customFooterParts =
+    typeof config?.customFooter === 'string' ? config.customFooter.split('|') : null;
 
   useEffect(() => {
     if (config?.analyticsGtmId != null && typeof window.google_tag_manager === 'undefined') {
@@ -42,30 +38,45 @@ export default function Footer({ className }: { className?: string }) {
     }
   }, [config?.analyticsGtmId]);
 
-  const mainContentRender = mainContentParts.map((text, index) => (
-    <React.Fragment key={`main-content-part-${index}`}>
-      <ReactMarkdown
-        components={{
-          a: ({ node: _n, href, children, ...otherProps }) => {
-            return (
-              <a
-                className="text-text-secondary underline"
-                href={href}
-                rel="noreferrer"
-                {...otherProps}
-              >
-                {children}
-              </a>
-            );
-          },
+  const mainContentRender = customFooterParts
+    ? customFooterParts.map((text, index) => (
+        <React.Fragment key={`main-content-part-${index}`}>
+          <ReactMarkdown
+            components={{
+              a: ({ node: _n, href, children, ...otherProps }) => {
+                return (
+                  <a
+                    className="text-text-secondary underline"
+                    href={href}
+                    rel="noreferrer"
+                    {...otherProps}
+                  >
+                    {children}
+                  </a>
+                );
+              },
 
-          p: ({ node: _n, ...props }) => <span {...props} />,
-        }}
-      >
-        {text.trim()}
-      </ReactMarkdown>
-    </React.Fragment>
-  ));
+              p: ({ node: _n, ...props }) => <span {...props} />,
+            }}
+          >
+            {text.trim()}
+          </ReactMarkdown>
+        </React.Fragment>
+      ))
+    : [
+        <button
+          key="release-notes-link"
+          type="button"
+          className="text-text-secondary underline"
+          onClick={() => setShowReleaseNotes(true)}
+          title={`Open release notes for ${Constants.VERSION}`}
+        >
+          {`Nash ${Constants.VERSION}`}
+        </button>,
+        <span key="latest-footer-copy" className="text-text-secondary">
+          {localize('com_ui_latest_footer')}
+        </span>,
+      ];
 
   const footerElements = [...mainContentRender, privacyPolicyRender, termsOfServiceRender].filter(
     Boolean,
@@ -95,6 +106,11 @@ export default function Footer({ className }: { className?: string }) {
           );
         })}
       </div>
+      <ReleaseNotesModal
+        open={showReleaseNotes}
+        onOpenChange={setShowReleaseNotes}
+        currentVersion={String(Constants.VERSION)}
+      />
     </div>
   );
 }
