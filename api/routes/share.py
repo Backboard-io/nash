@@ -6,7 +6,7 @@ from flask import Blueprint, request, jsonify, g
 
 from api.config import settings
 from api.middleware.jwt_auth import require_jwt
-from api.services.backboard_service import get_client
+from api.services.backboard_service import get_client, get_thread_messages
 from api.services.async_runner import run_async
 from api.services.user_service import get_user_assistant_id
 from api.services.conversation_service import get_thread_id_for_conversation
@@ -80,9 +80,7 @@ def get_share(share_id):
             thread_id = get_thread_id_for_conversation(conversation_id, assistant_id=user_assistant_id)
             if thread_id:
                 async def _fetch():
-                    client = get_client()
-                    thread = await client.get_thread(thread_id)
-                    return thread.messages
+                    return await get_thread_messages(thread_id)
 
                 bb_messages = run_async(_fetch())
                 messages = _format_bb_messages(bb_messages, conversation_id)

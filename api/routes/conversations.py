@@ -5,7 +5,7 @@ from flask import Blueprint, request, jsonify, g
 
 from api.middleware.jwt_auth import require_jwt
 from api.services.user_service import get_user_assistant_id
-from api.services.backboard_service import get_client
+from api.services.backboard_service import get_client, get_thread_messages
 from api.services.async_runner import run_async
 from api.services.conversation_service import (
     list_conversations,
@@ -143,12 +143,12 @@ def gen_title(conversation_id):
 
     async def _generate():
         client = get_client()
-        thread = await client.get_thread(thread_id)
-        if not thread.messages:
+        messages = await get_thread_messages(thread_id)
+        if not messages:
             return "New Chat"
         first_user = ""
         first_assistant = ""
-        for m in thread.messages[:4]:
+        for m in messages[:4]:
             if m.role == "user" and not first_user:
                 first_user = (m.content or "")[:200]
             elif m.role == "assistant" and not first_assistant:
@@ -195,9 +195,7 @@ def fork_conversation():
     src_meta = next((c for c in source_convos if c.get("conversationId") == conversation_id), {})
 
     async def _fetch_src():
-        client = get_client()
-        thread = await client.get_thread(src_thread_id)
-        return thread.messages or []
+        return await get_thread_messages(src_thread_id)
 
     src_messages = run_async(_fetch_src())
 
@@ -247,9 +245,7 @@ def duplicate_conversation():
     src_meta = next((c for c in source_convos if c.get("conversationId") == conversation_id), {})
 
     async def _fetch_src():
-        client = get_client()
-        thread = await client.get_thread(src_thread_id)
-        return thread.messages or []
+        return await get_thread_messages(src_thread_id)
 
     src_messages = run_async(_fetch_src())
 

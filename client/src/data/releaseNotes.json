@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.9.3",
+    "title": "v2.9.3",
+    "publishedAt": "2026-03-07T22:00:00Z",
+    "body": "**Hotfix release**\n\n- **Messages after persona/tool use:** Fix blank chat with spinner after a persona finishes. Backboard returns messages with role='tool'; the SDK Thread model only allowed user/assistant/system. We now fetch thread messages via raw JSON and normalize tool→assistant so GET /api/messages works.\n- **Personas:** Add delete persona from the list (hover on desktop, always visible on mobile) and delete icon in builder header when a persona is selected."
+  },
+  {
     "tagName": "v2.9.2",
     "title": "v2.9.2",
     "publishedAt": "2026-03-07T21:30:00Z",

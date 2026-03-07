@@ -33,6 +33,7 @@ import { Panel, isEphemeralAgent } from '~/common';
 import AgentConfig from './AgentConfig';
 import AgentSelect from './AgentSelect';
 import AgentFooter from './AgentFooter';
+import DeleteButton from './DeleteButton';
 import ModelPanel from './ModelPanel';
 
 /* Helpers */
@@ -231,6 +232,7 @@ export default function AgentPanel() {
   );
 
   const canEdit = hasPermission(PermissionBits.EDIT);
+  const canDeleteThisAgent = hasPermission(PermissionBits.DELETE);
 
   const expandedAgentQuery = useGetExpandedAgentByIdQuery(current_agent_id ?? '', {
     enabled: !isEphemeralAgent(current_agent_id) && canEdit && !permissionsLoading,
@@ -546,7 +548,17 @@ export default function AgentPanel() {
         )}
         {canEditAgent && !agentQuery.isInitialLoading && activePanel === Panel.builder && (
           <>
-            <div className="flex justify-end px-4 pt-2">
+            <div className="flex justify-end gap-1 px-4 pt-2">
+              {(agentQuery.data?.author === user?.id ||
+                user?.role === SystemRoles.ADMIN ||
+                canDeleteThisAgent) &&
+                !permissionsLoading && (
+                  <DeleteButton
+                    agent_id={agent_id ?? ''}
+                    setCurrentAgentId={setCurrentAgentId}
+                    createMutation={create}
+                  />
+                )}
               <button
                 type="button"
                 onClick={() => setShowBuilderModal(true)}

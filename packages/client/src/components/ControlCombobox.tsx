@@ -24,6 +24,8 @@ interface ControlComboboxProps {
   disabled?: boolean;
   iconSide?: 'left' | 'right';
   selectId?: string;
+  /** Optional suffix per item (e.g. delete icon). Click is stopPropagation so it does not select the item. */
+  renderItemSuffix?: (option: OptionWithIcon) => React.ReactNode;
 }
 
 const ROW_HEIGHT = 36;
@@ -45,6 +47,7 @@ function ControlCombobox({
   iconClassName,
   iconSide = 'left',
   selectId,
+  renderItemSuffix,
 }: ControlComboboxProps) {
   const [searchValue, setSearchValue] = useState('');
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -152,26 +155,38 @@ function ControlCombobox({
         <div className="max-h-[300px] overflow-auto">
           <Ariakit.ComboboxList store={combobox}>
             <SelectRenderer store={select} items={matches} itemSize={ROW_HEIGHT} overscan={5}>
-              {({ value, icon, label, ...item }) => (
-                <Ariakit.ComboboxItem
-                  key={item.id}
-                  {...item}
-                  className={cn(
-                    'flex w-full cursor-pointer items-center px-3 text-sm',
-                    'text-text-primary hover:bg-surface-tertiary',
-                    'data-[active-item]:bg-surface-tertiary',
-                  )}
-                  render={<Ariakit.SelectItem value={value} />}
-                >
-                  {icon != null && iconSide === 'left' && (
-                    <div className={optionIconClassName}>{icon}</div>
-                  )}
-                  <span className="flex-grow truncate text-left">{label}</span>
-                  {icon != null && iconSide === 'right' && (
-                    <div className={optionIconClassName}>{icon}</div>
-                  )}
-                </Ariakit.ComboboxItem>
-              )}
+              {({ value, icon, label, ...item }) => {
+                const option: OptionWithIcon = { value: value ?? '', label: label ?? '', icon };
+                return (
+                  <Ariakit.ComboboxItem
+                    key={item.id}
+                    {...item}
+                    className={cn(
+                      'group flex w-full cursor-pointer items-center px-3 text-sm',
+                      'text-text-primary hover:bg-surface-tertiary',
+                      'data-[active-item]:bg-surface-tertiary',
+                    )}
+                    render={<Ariakit.SelectItem value={value} />}
+                  >
+                    {icon != null && iconSide === 'left' && (
+                      <div className={optionIconClassName}>{icon}</div>
+                    )}
+                    <span className="flex-grow truncate text-left">{label}</span>
+                    {icon != null && iconSide === 'right' && (
+                      <div className={optionIconClassName}>{icon}</div>
+                    )}
+                    {renderItemSuffix?.(option) != null && (
+                      <div
+                        className="flex shrink-0 items-center md:opacity-0 md:group-hover:opacity-100 md:group-data-[active-item]:opacity-100"
+                        onClick={(e) => e.stopPropagation()}
+                        role="presentation"
+                      >
+                        {renderItemSuffix(option)}
+                      </div>
+                    )}
+                  </Ariakit.ComboboxItem>
+                );
+              }}
             </SelectRenderer>
           </Ariakit.ComboboxList>
         </div>

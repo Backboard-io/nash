@@ -1,4 +1,4 @@
-import { EarthIcon } from 'lucide-react';
+import { EarthIcon, Trash2 } from 'lucide-react';
 import { ControlCombobox } from '@librechat/client';
 import { useCallback, useEffect, useRef } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
@@ -6,9 +6,18 @@ import { AgentCapabilities, defaultAgentFormValues } from 'librechat-data-provid
 import type { UseMutationResult, QueryObserverResult } from '@tanstack/react-query';
 import type { Agent, AgentCreateParams } from 'librechat-data-provider';
 import type { TAgentCapabilities, AgentForm } from '~/common';
-import { cn, createProviderOption, processAgentOption, getDefaultAgentFormValues } from '~/utils';
-import { useLocalize, useAgentDefaultPermissionLevel } from '~/hooks';
-import { useListAgentsQuery } from '~/data-provider';
+import { cn, createProviderOption, processAgentOption, getDefaultAgentFormValues, logger } from '~/utils';
+import { useLocalize, useAgentDefaultPermissionLevel, useSetIndexOptions } from '~/hooks';
+import { useListAgentsQuery, useDeleteAgentMutation } from '~/data-provider';
+import { useChatContext } from '~/Providers';
+import { useToastContext } from '@librechat/client';
+import {
+  Label,
+  OGDialog,
+  OGDialogTrigger,
+  OGDialogTemplate,
+} from '@librechat/client';
+import { isEphemeralAgent } from '~/common';
 
 const keys = new Set(Object.keys(defaultAgentFormValues));
 
@@ -27,6 +36,9 @@ export default function AgentSelect({
   const lastSelectedAgent = useRef<string | null>(null);
   const { control, reset } = useFormContext();
   const permissionLevel = useAgentDefaultPermissionLevel();
+  const { showToast } = useToastContext();
+  const { conversation } = useChatContext();
+  const { setOption } = useSetIndexOptions();
 
   const { data: agents = null } = useListAgentsQuery(
     { requiredPermission: permissionLevel },
@@ -42,6 +54,44 @@ export default function AgentSelect({
         ),
     },
   );
+
+  const deleteAgent = useDeleteAgentMutation({
+    onSuccess: (_, vars, context) => {
+      const updatedList = context as Agent[] | undefined;
+      if (!updatedList) {
+        return;
+      }
+      showToast({
+        message: localize('com_ui_agent_deleted'),
+        status: 'success',
+      });
+      if (createMutation.data?.id ?? '') {
+        logger.log('agents', 'resetting createMutation');
+        createMutation.reset();
+      }
+      const firstAgent = updatedList[0] as Agent | undefined;
+      if (!firstAgent) {
+        setCurrentAgentId(undefined);
+        return reset(getDefaultAgentFormValues());
+      }
+      if (vars.agent_id === conversation?.agent_id) {
+        setOption('model')('');
+        return setOption('agent_id')(firstAgent.id);
+      }
+      const currentAgent = updatedList.find((agent) => agent.id === conversation?.agent_id);
+      if (currentAgent) {
+        setCurrentAgentId(currentAgent.id);
+      }
+      setCurrentAgentId(firstAgent.id);
+    },
+    onError: (error) => {
+      console.error(error);
+      showToast({
+        message: localize('com_ui_agent_delete_error'),
+        status: 'error',
+      });
+    },
+  });
 
   const resetAgentForm = useCallback(
     (fullAgent: Agent) => {
@@ -188,6 +238,46 @@ export default function AgentSelect({
 
   const createAgent = localize('com_ui_create_new_agent');
 
+  const renderItemSuffix = useCallback(
+    (option: { value?: string | number | null; label?: string }) => {
+      const agentId = String(option?.value ?? '');
+      if (!agentId || isEphemeralAgent(agentId)) {
+        return null;
+      }
+      return (
+        <OGDialog key={agentId}>
+          <OGDialogTrigger asChild>
+            <button
+              type="button"
+              className="rounded-md p-1 text-red-500 hover:bg-surface-hover hover:text-red-600"
+              aria-label={localize('com_ui_delete_agent')}
+              title={localize('com_ui_delete_agent')}
+            >
+              <Trash2 className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </OGDialogTrigger>
+          <OGDialogTemplate
+            title={localize('com_ui_delete_agent')}
+            className="max-w-[450px]"
+            main={
+              <div className="grid w-full items-center gap-2">
+                <Label htmlFor="delete-agent-list" className="text-left text-sm font-medium">
+                  {localize('com_ui_delete_agent_confirm')}
+                </Label>
+              </div>
+            }
+            selection={{
+              selectHandler: () => deleteAgent.mutate({ agent_id: agentId }),
+              selectClasses: 'bg-red-600 hover:bg-red-700 dark:hover:bg-red-800 text-white',
+              selectText: localize('com_ui_delete'),
+            }}
+          />
+        </OGDialog>
+      );
+    },
+    [localize, deleteAgent],
+  );
+
   return (
     <Controller
       name="agent"
@@ -220,6 +310,7 @@ export default function AgentSelect({
           ariaLabel={localize('com_ui_agent')}
           isCollapsed={false}
           showCarat={true}
+          renderItemSuffix={renderItemSuffix}
         />
       )}
     />

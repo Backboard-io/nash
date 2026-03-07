@@ -1,5 +1,7 @@
 import json
 from collections.abc import AsyncIterator
+from dataclasses import dataclass
+from datetime import datetime
 from typing import Any
 
 from backboard import BackboardClient
@@ -7,6 +9,62 @@ from backboard import BackboardClient
 from api.config import settings
 
 _client: BackboardClient | None = None
+
+
+@dataclass
+class _ThreadMessage:
+    """Normalized thread message (supports role='tool' from Backboard)."""
+    message_id: str
+    content: str
+    role: str  # 'user' | 'assistant' | 'system' (tool mapped to assistant)
+    created_at: datetime | None
+
+
+async def get_thread_messages(thread_id: str) -> list[_ThreadMessage]:
+    """Fetch thread messages from Backboard, normalizing role='tool' to 'assistant'.
+
+    The Backboard SDK Thread model only allows role in ('user', 'assistant', 'system'),
+    but the API returns role='tool' for tool-call results, which causes ValidationError.
+    This helper fetches raw JSON and normalizes so GET /api/messages works.
+    """
+    client = get_client()
+    response = await client._make_request("GET", f"threads/{thread_id}")
+    data = response.json()
+    raw_messages = data.get("messages") or []
+    out: list[_ThreadMessage] = []
+    for m in raw_messages:
+        role = (m.get("role") or "assistant").lower()
+        if role == "tool":
+            role = "assistant"
+        if role not in ("user", "assistant", "system"):
+            role = "assistant"
+        msg_id = m.get("id") or m.get("message_id") or ""
+        if isinstance(msg_id, str):
+            pass
+        else:
+            msg_id = str(msg_id)
+        content = m.get("content") or ""
+        if isinstance(content, list):
+            content = "".join(
+                (c.get("text", {}).get("value", "") if isinstance(c, dict) else str(c))
+                for c in content
+            )
+        elif not isinstance(content, str):
+            content = str(content)
+        raw_created = m.get("created_at")
+        created_at: datetime | None = None
+        if raw_created is not None:
+            if isinstance(raw_created, datetime):
+                created_at = raw_created
+            elif isinstance(raw_created, (int, float)):
+                created_at = datetime.fromtimestamp(raw_created)
+            else:
+                try:
+                    created_at = datetime.fromisoformat(str(raw_created).replace("Z", "+00:00"))
+                except (ValueError, TypeError):
+                    pass
+        out.append(_ThreadMessage(message_id=msg_id, content=content, role=role, created_at=created_at))
+    return out
 
 
 def get_client() -> BackboardClient:
