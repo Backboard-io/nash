@@ -26,6 +26,7 @@ import useTimeout from './useTimeout';
 import store from '~/store';
 
 const AuthContext = createContext<TAuthContext | undefined>(undefined);
+const PUBLIC_AUTH_PATH_RE = /(?:^|\/)(?:login|register|forgot-password|reset-password)(?:\/|$)/;
 
 const AuthContextProvider = ({
   authConfig,
@@ -39,6 +40,7 @@ const AuthContextProvider = ({
   const [error, setError] = useState<string | undefined>(undefined);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const logoutRedirectRef = useRef<string | undefined>(undefined);
+  const hasAttemptedSilentRefreshRef = useRef(false);
 
   const { data: userRole = null } = useGetRole(SystemRoles.USER, {
     enabled: !!(isAuthenticated && (user?.role ?? '')),
@@ -142,6 +144,7 @@ const AuthContextProvider = ({
   };
 
   const silentRefresh = useCallback(() => {
+    const isOnPublicAuthPage = PUBLIC_AUTH_PATH_RE.test(window.location.pathname);
     if (authConfig?.test === true) {
       console.log('Test mode. Skipping silent refresh.');
       return;
@@ -162,17 +165,17 @@ const AuthContextProvider = ({
           return;
         }
         console.log('Token is not present. User is not authenticated.');
-        if (authConfig?.test === true) {
+        if (authConfig?.test === true || isOnPublicAuthPage) {
           return;
         }
-        navigate(buildLoginRedirectUrl());
+        navigate(buildLoginRedirectUrl(), { replace: true });
       },
       onError: (error) => {
         console.log('refreshToken mutation error:', error);
-        if (authConfig?.test === true) {
+        if (authConfig?.test === true || isOnPublicAuthPage) {
           return;
         }
-        navigate(buildLoginRedirectUrl());
+        navigate(buildLoginRedirectUrl(), { replace: true });
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- deps are stable at mount; adding refreshToken causes infinite re-fire
@@ -188,7 +191,10 @@ const AuthContextProvider = ({
     if (error != null && error && isAuthenticated) {
       doSetError(undefined);
     }
-    if (token == null || !token || !isAuthenticated) {
+    if (token != null && token && isAuthenticated) {
+      hasAttemptedSilentRefreshRef.current = false;
+    } else if (!hasAttemptedSilentRefreshRef.current) {
+      hasAttemptedSilentRefreshRef.current = true;
       silentRefresh();
     }
   }, [

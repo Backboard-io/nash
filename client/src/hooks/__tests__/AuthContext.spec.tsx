@@ -23,6 +23,7 @@ let mockCapturedLoginOptions: {
   onSuccess: (...args: unknown[]) => void;
   onError: (...args: unknown[]) => void;
 };
+const mockRefreshMutate = jest.fn();
 
 jest.mock('~/data-provider', () => ({
   useLoginUserMutation: jest.fn(
@@ -35,7 +36,7 @@ jest.mock('~/data-provider', () => ({
     },
   ),
   useLogoutUserMutation: jest.fn(() => ({ mutate: jest.fn() })),
-  useRefreshTokenMutation: jest.fn(() => ({ mutate: jest.fn() })),
+  useRefreshTokenMutation: jest.fn(() => ({ mutate: mockRefreshMutate })),
   useGetUserQuery: jest.fn(() => ({
     data: undefined,
     isError: false,
@@ -51,7 +52,7 @@ function TestConsumer() {
   return <div data-testid="consumer" data-authenticated={ctx.isAuthenticated} />;
 }
 
-function renderProvider() {
+function renderProvider(config: TAuthConfig = authConfig) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   });
@@ -60,7 +61,7 @@ function renderProvider() {
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <MemoryRouter>
-          <AuthContextProvider authConfig={authConfig}>
+          <AuthContextProvider authConfig={config}>
             <TestConsumer />
           </AuthContextProvider>
         </MemoryRouter>
@@ -74,6 +75,7 @@ describe('AuthContextProvider — login onError redirect handling', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockRefreshMutate.mockReset();
     Object.defineProperty(window, 'location', {
       value: { ...originalLocation, pathname: '/login', search: '', hash: '' },
       writable: true,
@@ -170,5 +172,20 @@ describe('AuthContextProvider — login onError redirect handling', () => {
     const navigatedUrl = mockNavigate.mock.calls[0][0] as string;
     const params = new URLSearchParams(navigatedUrl.split('?')[1]);
     expect(decodeURIComponent(params.get('redirect_to')!)).toBe(target);
+  });
+
+  it('does not redirect again when silent refresh returns no token on an auth page', () => {
+    renderProvider({ loginRedirect: '/login' });
+
+    expect(mockRefreshMutate).toHaveBeenCalledTimes(1);
+    const refreshOptions = mockRefreshMutate.mock.calls[0][1] as {
+      onSuccess?: (data?: unknown) => void;
+    };
+
+    act(() => {
+      refreshOptions.onSuccess?.({ token: '', user: null });
+    });
+
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });

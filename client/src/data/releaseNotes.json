@@ -1,8 +1,14 @@
 [
   {
+    "tagName": "v2.5.5",
+    "title": "v2.5.5",
+    "publishedAt": "2026-03-07T00:01:47Z",
+    "body": "**Hotfix release**\n\n- **Login screen recovery:** Stop the auth refresh flow from clearing startup config during login-page bootstrap, which could leave the app stuck on the blinking Nash logo with only the referral card visible.\n- **Safer auth boot:** Treat empty refresh responses on public auth routes as a stable signed-out state instead of redirecting the user back into the same login route loop.\n- **Regression coverage:** Add a focused auth-context test so the no-session login path keeps rendering the actual sign-in UI."
+  },
+  {
     "tagName": "v2.5.4",
     "title": "v2.5.4",
-    "publishedAt": "2026-03-06T23:43:57Z",
+    "publishedAt": "2026-03-06T23:44:51Z",
     "body": "**Hotfix release**\n\n- **Billing modal layout:** Tighten the pricing cards, compress the overage and usage copy, and widen the dialog so the upgrade CTA stays visible without scrolling on typical desktop screens.\n- **Plan readability:** Reduce redundant plan bullets and shrink the Unlimited highlight block so the modal stays focused on choosing a plan instead of requiring a long read."
   },
   {
