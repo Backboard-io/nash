@@ -793,13 +793,31 @@ def all_effective_permissions(resource_type):
 @misc_bp.route("/api/permissions/<resource_type>/<resource_id>/effective", methods=["GET"])
 @require_jwt
 def resource_effective_permissions(resource_type, resource_id):
-    return jsonify({
-        "isOwner": True,
-        "canRead": True,
-        "canWrite": True,
-        "canDelete": True,
-        "canShare": True,
-    })
+    # Client expects { permissionBits: number }; VIEW=1, EDIT=2, DELETE=4, SHARE=8, owner=15
+    if resource_type.lower() != "agent":
+        return jsonify({"permissionBits": 15})
+
+    assistant_id = get_user_config_assistant_id(g.user_id)
+
+    async def _find_agent():
+        client = get_client()
+        response = await client.get_memories(assistant_id)
+        for m in response.memories:
+            meta = m.metadata or {}
+            if meta.get("type") != "agent":
+                continue
+            try:
+                a = json.loads(m.content)
+                if a.get("id") == resource_id or str(m.id) == resource_id:
+                    return True
+            except json.JSONDecodeError:
+                continue
+        return False
+
+    is_own = run_async(_find_agent())
+    # Own agent: full permission (VIEW|EDIT|DELETE|SHARE). Otherwise none (list only shows own).
+    permission_bits = 15 if is_own else 0
+    return jsonify({"permissionBits": permission_bits})
 
 
 @misc_bp.route("/api/permissions/<resource_type>/<resource_id>", methods=["GET", "PUT"])

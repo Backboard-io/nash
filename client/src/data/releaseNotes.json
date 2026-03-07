@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.9.4",
+    "title": "v2.9.4",
+    "publishedAt": "2026-03-07T23:00:00Z",
+    "body": "**Hotfix release**\n\n- **Persona list/edit for users:** Fix \"Persona Not Available\" for non-admin users. The effective-permissions endpoint now returns the shape the client expects (`permissionBits`) and grants full permission for the user's own personas from their config assistant, so users can list and edit their own personas in the build panel."
+  },
+  {
     "tagName": "v2.9.3",
     "title": "v2.9.3",
     "publishedAt": "2026-03-07T22:00:00Z",
