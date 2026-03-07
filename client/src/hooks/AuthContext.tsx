@@ -20,7 +20,7 @@ import {
   useLogoutUserMutation,
   useRefreshTokenMutation,
 } from '~/data-provider';
-import { isSafeRedirect, buildLoginRedirectUrl, getPostLoginRedirect } from '~/utils';
+import { isAbortedError, isSafeRedirect, buildLoginRedirectUrl, getPostLoginRedirect } from '~/utils';
 import { TAuthConfig, TUserContext, TAuthContext, TResError } from '~/common';
 import useTimeout from './useTimeout';
 import store from '~/store';
@@ -41,6 +41,7 @@ const AuthContextProvider = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const logoutRedirectRef = useRef<string | undefined>(undefined);
   const hasAttemptedSilentRefreshRef = useRef(false);
+  const silentRefreshAbortRetriesRef = useRef(0);
 
   const { data: userRole = null } = useGetRole(SystemRoles.USER, {
     enabled: !!(isAuthenticated && (user?.role ?? '')),
@@ -159,6 +160,7 @@ const AuthContextProvider = ({
     } catch (e) { /* sessionStorage unavailable */ }
     refreshToken.mutate(undefined, {
       onSuccess: (data: t.TRefreshTokenResponse | undefined) => {
+        silentRefreshAbortRetriesRef.current = 0;
         const { user, token = '' } = data ?? {};
         if (token) {
           setUserContext({ token, isAuthenticated: true, user });
@@ -171,6 +173,17 @@ const AuthContextProvider = ({
         navigate(buildLoginRedirectUrl(), { replace: true });
       },
       onError: (error) => {
+        if (isAbortedError(error) && silentRefreshAbortRetriesRef.current < 2) {
+          silentRefreshAbortRetriesRef.current += 1;
+          hasAttemptedSilentRefreshRef.current = false;
+          window.setTimeout(() => {
+            if (!hasAttemptedSilentRefreshRef.current) {
+              hasAttemptedSilentRefreshRef.current = true;
+              silentRefresh();
+            }
+          }, 150);
+          return;
+        }
         console.log('refreshToken mutation error:', error);
         if (authConfig?.test === true || isOnPublicAuthPage) {
           return;

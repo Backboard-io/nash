@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.6.0",
+    "title": "v2.6.0",
+    "publishedAt": "2026-03-07T01:40:47Z",
+    "body": "**Minor release**\n\n- **Responsive billing and settings navigation:** Move billing and settings into dedicated routes, extract a shared billing content view, improve mobile account-menu navigation, and tighten the pricing experience across desktop and small screens.\n- **Model selector tiers:** Add list-wide `Free`, `Fast`, and `Powerful` filters above the provider-grouped model picker, backed by explicit tier metadata in the model config payload.\n- **Chat stability and polish:** Retry aborted silent auth refreshes, improve final conversation/message handling in SSE completion paths, and surface the app version in mobile navigation."
+  },
+  {
     "tagName": "v2.5.5",
     "title": "v2.5.5",
     "publishedAt": "2026-03-07T00:01:47Z",

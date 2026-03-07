@@ -608,7 +608,7 @@ export type TResData = TBaseResData & {
 };
 
 export type TFinalResData = Omit<TBaseResData, 'conversation'> & {
-  conversation: Partial<t.TConversation> & Pick<t.TConversation, 'conversationId'>;
+  conversation?: Partial<t.TConversation> | null;
   requestMessage?: t.TMessage;
   responseMessage?: t.TMessage;
 };

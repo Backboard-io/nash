@@ -1,38 +1,42 @@
 import { useState, memo, useRef } from 'react';
 import * as Menu from '@ariakit/react/menu';
 import { FileText, Gift, LogOut, Sparkles, Zap, Shield } from 'lucide-react';
-import { SettingsTabValues, SystemRoles } from 'librechat-data-provider';
+import { SystemRoles } from 'librechat-data-provider';
 import { LinkIcon, GearIcon, DropdownMenuSeparator, Avatar } from '@librechat/client';
+import { useNavigate } from 'react-router-dom';
 import { MyFilesModal } from '~/components/Chat/Input/Files/MyFilesModal';
 import { useGetStartupConfig, useGetUserBalance, useGetSubscription } from '~/data-provider';
 import { useAuthContext } from '~/hooks/AuthContext';
 import AdminUsersModal from './AdminUsersModal';
-import BillingModal from './BillingModal';
 import { useLocalize } from '~/hooks';
-import Settings from './Settings';
 import { cn } from '~/utils';
 
-function AccountSettings() {
+function AccountSettings({ onNavigate }: { onNavigate?: () => void }) {
   const localize = useLocalize();
   const { user, isAuthenticated, logout } = useAuthContext();
+  const navigate = useNavigate();
   const { data: startupConfig } = useGetStartupConfig();
   const billingEnabled = !!startupConfig?.billing?.enabled;
   const { data: subscription } = useGetSubscription({ enabled: !!isAuthenticated && billingEnabled });
   const balanceQuery = useGetUserBalance({
     enabled: !!isAuthenticated && startupConfig?.balance?.enabled,
   });
-  const [showSettings, setShowSettings] = useState(false);
-  const [settingsInitialTab, setSettingsInitialTab] = useState<SettingsTabValues | undefined>(undefined);
   const [showFiles, setShowFiles] = useState(false);
-  const [showBilling, setShowBilling] = useState(false);
   const [showAdminUsers, setShowAdminUsers] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const accountSettingsButtonRef = useRef<HTMLButtonElement>(null);
 
   const plan = subscription?.plan ?? 'free';
   const isAdmin = user?.role === SystemRoles.ADMIN;
 
+  const handleNavigate = (path: string) => {
+    setIsMenuOpen(false);
+    onNavigate?.();
+    navigate(path);
+  };
+
   return (
-    <Menu.MenuProvider>
+    <Menu.MenuProvider open={isMenuOpen} setOpen={setIsMenuOpen}>
       <Menu.MenuButton
         ref={accountSettingsButtonRef}
         aria-label={localize('com_nav_account_settings')}
@@ -103,7 +107,7 @@ function AccountSettings() {
           </Menu.MenuItem>
         )}
         {billingEnabled && (
-          <Menu.MenuItem onClick={() => setShowBilling(true)} className="select-item text-sm">
+          <Menu.MenuItem onClick={() => handleNavigate('/billing')} className="select-item text-sm">
             {plan === 'unlimited' ? (
               <Zap className="icon-md text-amber-500" aria-hidden="true" />
             ) : plan === 'plus' ? (
@@ -116,17 +120,14 @@ function AccountSettings() {
         )}
         {startupConfig?.referrals?.enabled === true && (
           <Menu.MenuItem
-            onClick={() => {
-              setSettingsInitialTab(SettingsTabValues.ACCOUNT);
-              setShowSettings(true);
-            }}
+            onClick={() => handleNavigate('/settings/account')}
             className="select-item text-sm"
           >
             <Gift className="icon-md text-violet-500" aria-hidden="true" />
             Referral rewards
           </Menu.MenuItem>
         )}
-        <Menu.MenuItem onClick={() => setShowSettings(true)} className="select-item text-sm">
+        <Menu.MenuItem onClick={() => handleNavigate('/settings')} className="select-item text-sm">
           <GearIcon className="icon-md" aria-hidden="true" />
           {localize('com_nav_settings')}
         </Menu.MenuItem>
@@ -149,19 +150,6 @@ function AccountSettings() {
           triggerRef={accountSettingsButtonRef}
         />
       )}
-      {showSettings && (
-        <Settings
-          open={showSettings}
-          onOpenChange={(nextOpen) => {
-            setShowSettings(nextOpen);
-            if (!nextOpen) {
-              setSettingsInitialTab(undefined);
-            }
-          }}
-          initialTab={settingsInitialTab}
-        />
-      )}
-      {showBilling && <BillingModal open={showBilling} onOpenChange={setShowBilling} />}
       {showAdminUsers && (
         <AdminUsersModal open={showAdminUsers} onOpenChange={setShowAdminUsers} />
       )}

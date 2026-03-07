@@ -1,11 +1,13 @@
 import React from 'react';
 import { TStartupConfig } from 'librechat-data-provider';
 
+import type { TModelTier } from 'librechat-data-provider';
+
 export interface Endpoint {
   value: string;
   label: string;
   hasModels: boolean;
-  models?: Array<{ name: string; isGlobal?: boolean; isPremium?: boolean }>;
+  models?: Array<{ name: string; isGlobal?: boolean; isPremium?: boolean; tiers?: TModelTier[] }>;
   icon: React.ReactNode;
   agentNames?: Record<string, string>;
   assistantNames?: Record<string, string>;

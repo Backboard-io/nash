@@ -72,6 +72,19 @@ endpoints:
           - 'openai/o4-mini'
           - 'openai/o4-mini-deep-research'
         fetch: false
+      selectorTiers:
+        fast:
+          - 'openai/gpt-4.1-mini'
+          - 'openai/gpt-4o-mini'
+          - 'openai/gpt-5-mini'
+          - 'openai/gpt-5-nano'
+          - 'openai/o3-mini'
+        powerful:
+          - 'openai/gpt-5'
+          - 'openai/gpt-5-pro'
+          - 'openai/o1-pro'
+          - 'openai/o3'
+          - 'openai/o3-pro'
       titleConvo: true
       titleModel: 'openai/gpt-4o-mini'
       modelDisplayLabel: 'OpenAI'
@@ -90,6 +103,16 @@ endpoints:
           - 'anthropic/claude-sonnet-4-5-20250929'
           - 'anthropic/claude-sonnet-4-6'
         fetch: false
+      selectorTiers:
+        fast:
+          - 'anthropic/claude-3-haiku-20240307'
+          - 'anthropic/claude-haiku-4-5-20251001'
+        powerful:
+          - 'anthropic/claude-opus-4-1-20250805'
+          - 'anthropic/claude-opus-4-20250514'
+          - 'anthropic/claude-opus-4-5-20251101'
+          - 'anthropic/claude-opus-4-6'
+          - 'anthropic/claude-sonnet-4-6'
       titleConvo: true
       titleModel: 'anthropic/claude-sonnet-4-6'
       modelDisplayLabel: 'Anthropic'
@@ -111,6 +134,21 @@ endpoints:
           - 'google/gemma-3-4b-it'
           - 'google/gemma-3n-e4b-it'
         fetch: false
+      selectorTiers:
+        free:
+          - 'google/gemma-3-12b-it'
+          - 'google/gemma-3-27b-it'
+          - 'google/gemma-3-4b-it'
+          - 'google/gemma-3n-e4b-it'
+        fast:
+          - 'google/gemini-2.0-flash-001'
+          - 'google/gemini-2.0-flash-lite-001'
+          - 'google/gemini-2.5-flash'
+          - 'google/gemini-2.5-flash-lite'
+          - 'google/gemini-3-flash-preview'
+        powerful:
+          - 'google/gemini-2.5-pro'
+          - 'google/gemini-3-pro-preview'
       titleConvo: true
       titleModel: 'google/gemini-2.5-flash'
       modelDisplayLabel: 'Google'
@@ -128,6 +166,17 @@ endpoints:
           - 'xai/grok-4-fast'
           - 'xai/grok-code-fast-1'
         fetch: false
+      selectorTiers:
+        fast:
+          - 'xai/grok-3-mini'
+          - 'xai/grok-3-mini-beta'
+          - 'xai/grok-4-1-fast-non-reasoning'
+          - 'xai/grok-4-fast'
+          - 'xai/grok-code-fast-1'
+        powerful:
+          - 'xai/grok-3'
+          - 'xai/grok-3-beta'
+          - 'xai/grok-4'
       titleConvo: true
       titleModel: 'xai/grok-3-mini'
       modelDisplayLabel: 'xAI'
@@ -472,6 +521,25 @@ endpoints:
           - 'openrouter/z-ai/glm-4.7-flash'
           - 'openrouter/z-ai/glm-5'
         fetch: false
+      selectorTiers:
+        free:
+          - 'openrouter/meta-llama/llama-3.2-3b-instruct:free'
+          - 'openrouter/meta-llama/llama-3.3-70b-instruct:free'
+          - 'openrouter/mistralai/mistral-small-3.1-24b-instruct:free'
+          - 'openrouter/arcee-ai/trinity-large-preview:free'
+          - 'openrouter/arcee-ai/trinity-mini:free'
+        fast:
+          - 'openrouter/google/gemini-2.5-flash'
+          - 'openrouter/google/gemini-2.5-flash-lite'
+          - 'openrouter/openai/gpt-5-mini'
+          - 'openrouter/openai/gpt-5-nano'
+          - 'openrouter/qwen/qwen-turbo'
+        powerful:
+          - 'openrouter/openai/gpt-5'
+          - 'openrouter/openai/gpt-5-pro'
+          - 'openrouter/deepseek/deepseek-r1'
+          - 'openrouter/google/gemini-3-pro-preview'
+          - 'openrouter/anthropic/claude-opus-4.1'
       titleConvo: true
       titleModel: 'openrouter/google/gemini-2.5-flash'
       modelDisplayLabel: 'OpenRouter'
@@ -485,6 +553,17 @@ endpoints:
           - 'cohere/command-r-plus-08-2024'
           - 'cohere/command-r7b-12-2024'
         fetch: false
+      selectorTiers:
+        free:
+          - 'cohere/command-a-03-2025'
+          - 'cohere/command-r-08-2024'
+          - 'cohere/command-r-plus-08-2024'
+          - 'cohere/command-r7b-12-2024'
+        fast:
+          - 'cohere/command-r7b-12-2024'
+        powerful:
+          - 'cohere/command-a-03-2025'
+          - 'cohere/command-r-plus-08-2024'
       titleConvo: true
       titleModel: 'cohere/command-a-03-2025'
       modelDisplayLabel: 'Cohere'
@@ -497,6 +576,16 @@ endpoints:
           - 'cerebras/openai/gpt-oss-120b'
           - 'cerebras/qwen/qwen3-235b-a22b-2507'
         fetch: false
+      selectorTiers:
+        free:
+          - 'cerebras/meta-llama/llama-3.1-8b-instruct'
+          - 'cerebras/openai/gpt-oss-120b'
+          - 'cerebras/qwen/qwen3-235b-a22b-2507'
+        fast:
+          - 'cerebras/meta-llama/llama-3.1-8b-instruct'
+        powerful:
+          - 'cerebras/openai/gpt-oss-120b'
+          - 'cerebras/qwen/qwen3-235b-a22b-2507'
       titleConvo: true
       titleModel: 'cerebras/meta-llama/llama-3.1-8b-instruct'
       modelDisplayLabel: 'Cerebras'
@@ -528,6 +617,24 @@ endpoints:
           - 'aws-bedrock/meta.llama4-scout-17b-instruct-v1:0'
           - 'aws-bedrock/mistral.pixtral-large-2502-v1:0'
         fetch: false
+      selectorTiers:
+        free:
+          - 'aws-bedrock/meta.llama3-1-70b-instruct-v1:0'
+          - 'aws-bedrock/meta.llama3-1-8b-instruct-v1:0'
+          - 'aws-bedrock/meta.llama3-2-11b-instruct-v1:0'
+          - 'aws-bedrock/meta.llama3-2-1b-instruct-v1:0'
+          - 'aws-bedrock/meta.llama3-2-3b-instruct-v1:0'
+          - 'aws-bedrock/meta.llama3-2-90b-instruct-v1:0'
+          - 'aws-bedrock/meta.llama3-3-70b-instruct-v1:0'
+          - 'aws-bedrock/meta.llama4-maverick-17b-instruct-v1:0'
+          - 'aws-bedrock/meta.llama4-scout-17b-instruct-v1:0'
+        fast:
+          - 'aws-bedrock/anthropic.claude-3-5-haiku-20241022-v1:0'
+          - 'aws-bedrock/meta.llama3-1-8b-instruct-v1:0'
+        powerful:
+          - 'aws-bedrock/anthropic.claude-opus-4-1-20250805-v1:0'
+          - 'aws-bedrock/anthropic.claude-opus-4-20250514-v1:0'
+          - 'aws-bedrock/deepseek.r1-v1:0'
       titleConvo: true
       titleModel: 'aws-bedrock/anthropic.claude-3-5-sonnet-20241022-v2:0'
       modelDisplayLabel: 'AWS Bedrock'

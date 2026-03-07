@@ -153,7 +153,9 @@ export function EndpointModelItem({ modelId, endpoint, isSelected, isPremium }: 
         aria-label={isFavorite ? localize('com_ui_unpin') : localize('com_ui_pin')}
         className={cn(
           'rounded-md p-1 hover:bg-surface-hover',
-          isFavorite ? 'visible' : 'invisible group-hover:visible group-data-[active-item]:visible',
+          isFavorite
+            ? 'visible'
+            : 'visible md:invisible md:group-hover:visible md:group-data-[active-item]:visible',
         )}
       >
         {isFavorite ? (
@@ -237,7 +239,7 @@ function VirtualizedModelList({
 
 export function renderEndpointModels(
   endpoint: Endpoint | null,
-  models: Array<{ name: string; isGlobal?: boolean; isPremium?: boolean }>,
+  models: Array<{ name: string; isGlobal?: boolean; isPremium?: boolean; tiers?: string[] }>,
   selectedModel: string | null,
   filteredModels?: string[],
   endpointIndex?: number,

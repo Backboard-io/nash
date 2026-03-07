@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { QueryKeys } from 'librechat-data-provider';
+import { Constants, QueryKeys } from 'librechat-data-provider';
 import { useQueryClient } from '@tanstack/react-query';
 import type { Dispatch, SetStateAction } from 'react';
 import { useLocalize, useNewConvo } from '~/hooks';
@@ -56,9 +56,14 @@ export default function MobileNav({
           />
         </svg>
       </button>
-      <h1 className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-normal">
-        {title ?? localize('com_ui_new_chat')}
-      </h1>
+      <div className="flex flex-1 items-center justify-center gap-2 overflow-hidden px-2">
+        <h1 className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap text-center text-sm font-normal">
+          {title ?? localize('com_ui_new_chat')}
+        </h1>
+        <span className="flex-shrink-0 rounded-full border border-border-light bg-surface-secondary px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-text-secondary">
+          {String(Constants.VERSION)}
+        </span>
+      </div>
       <button
         type="button"
         aria-label={localize('com_ui_new_chat')}

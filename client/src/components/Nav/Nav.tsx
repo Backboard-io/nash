@@ -150,6 +150,16 @@ const Nav = memo(
       });
     }, [newUser, setNavVisible, setNewUser]);
 
+    const closeNav = useCallback(() => {
+      startTransition(() => {
+        setNavVisible(false);
+        localStorage.setItem('navVisible', JSON.stringify(false));
+        if (newUser) {
+          setNewUser(false);
+        }
+      });
+    }, [newUser, setNavVisible, setNewUser]);
+
     const itemToggleNav = useCallback(() => {
       if (isSmallScreen) {
         toggleNavVisible();
@@ -254,7 +264,7 @@ const Nav = memo(
             </div>
           </div>
           <Suspense fallback={<Skeleton className="mt-1 h-12 w-full rounded-xl" />}>
-            <AccountSettings />
+            <AccountSettings onNavigate={isSmallScreen ? closeNav : undefined} />
           </Suspense>
         </nav>
       </div>

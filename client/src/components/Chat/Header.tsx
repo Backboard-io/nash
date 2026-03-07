@@ -66,6 +66,8 @@ export default function Header() {
               )}
             >
               <ModelSelector startupConfig={startupConfig} />
+              {isSmallScreen && <ReferralPanel variant="header" />}
+              {isSmallScreen && <TemporaryChat />}
               {interfaceConfig.presets === true && interfaceConfig.modelSelect && <PresetsMenu />}
               {hasAccessToBookmarks === true && <BookmarkMenu />}
               {hasAccessToMultiConvo === true && <AddMultiConvo />}
@@ -74,8 +76,6 @@ export default function Header() {
                   <ExportAndShareMenu
                     isSharedButtonEnabled={startupConfig?.sharedLinksEnabled ?? false}
                   />
-                  <ReferralPanel variant="header" />
-                  <TemporaryChat />
                 </>
               )}
             </div>

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ViolationTypes, ErrorTypes } from 'librechat-data-provider';
+import { getModelName } from 'librechat-data-provider';
 import type { Agent, TModelsConfig } from 'librechat-data-provider';
 import type { Request, Response } from 'express';
 
@@ -162,7 +163,7 @@ export async function validateAgentModel(
     };
   }
 
-  const validModel = !!availableModels.find((availableModel) => availableModel === model);
+  const validModel = !!availableModels.find((availableModel) => getModelName(availableModel) === model);
 
   if (validModel) {
     return { isValid: true };

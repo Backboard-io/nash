@@ -19,7 +19,9 @@ import dashboardRoutes from './Dashboard';
 import ShareRoute from './ShareRoute';
 import ChatRoute from './ChatRoute';
 import Search from './Search';
+import BillingRoute from './BillingRoute';
 import Root from './Root';
+import SettingsRoute from './SettingsRoute';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -110,6 +112,18 @@ export const router = createBrowserRouter(
             {
               path: 'search',
               element: <Search />,
+            },
+            {
+              path: 'billing',
+              element: <BillingRoute />,
+            },
+            {
+              path: 'settings',
+              element: <SettingsRoute />,
+            },
+            {
+              path: 'settings/:tab',
+              element: <SettingsRoute />,
             },
             {
               path: 'agents',

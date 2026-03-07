@@ -6,6 +6,7 @@ import type {
   TAgentsMap,
   TAssistantsMap,
   TEndpointsConfig,
+  TModelTier,
 } from 'librechat-data-provider';
 import type { useLocalize } from '~/hooks';
 import SpecIcon from '~/components/Chat/Menus/Endpoints/components/SpecIcon';
@@ -96,6 +97,30 @@ export function filterModels(
 
     return modelName.toLowerCase().includes(searchTermLower);
   });
+}
+
+export function filterEndpointsByTier(
+  endpoints: Endpoint[],
+  activeTier: TModelTier | null,
+): Endpoint[] {
+  if (!activeTier) {
+    return endpoints;
+  }
+
+  return endpoints
+    .map((endpoint) => {
+      if (!endpoint.models?.length) {
+        return endpoint;
+      }
+
+      const filteredModels = endpoint.models.filter((model) => model.tiers?.includes(activeTier));
+      return {
+        ...endpoint,
+        models: filteredModels,
+        hasModels: filteredModels.length > 0,
+      };
+    })
+    .filter((endpoint) => !endpoint.models || endpoint.models.length > 0);
 }
 
 export function getSelectedIcon({

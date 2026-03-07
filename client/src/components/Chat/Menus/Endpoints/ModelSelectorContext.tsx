@@ -14,17 +14,19 @@ import { useAgentsMapContext, useAssistantsMapContext, useLiveAnnouncer } from '
 import { useGetEndpointsQuery, useListAgentsQuery } from '~/data-provider';
 import { useModelSelectorChatContext } from './ModelSelectorChatContext';
 import useSelectMention from '~/hooks/Input/useSelectMention';
-import { filterItems } from './utils';
+import { filterEndpointsByTier, filterItems } from './utils';
 
 type ModelSelectorContextType = {
   // State
   searchValue: string;
   selectedValues: SelectedValues;
+  activeTier: t.TModelTier | null;
   endpointSearchValues: Record<string, string>;
   searchResults: (t.TModelSpec | Endpoint)[] | null;
   // LibreChat
   modelSpecs: t.TModelSpec[];
   mappedEndpoints: Endpoint[];
+  filteredMappedEndpoints: Endpoint[];
   agentsMap: t.TAgentsMap | undefined;
   assistantsMap: t.TAssistantsMap | undefined;
   endpointsConfig: t.TEndpointsConfig;
@@ -32,6 +34,7 @@ type ModelSelectorContextType = {
   // Functions
   endpointRequiresUserKey: (endpoint: string) => boolean;
   setSelectedValues: React.Dispatch<React.SetStateAction<SelectedValues>>;
+  setActiveTier: React.Dispatch<React.SetStateAction<t.TModelTier | null>>;
   setSearchValue: (value: string) => void;
   setEndpointSearchValue: (endpoint: string, value: string) => void;
   handleSelectSpec: (spec: t.TModelSpec) => void;
@@ -95,6 +98,11 @@ export function ModelSelectorProvider({ children, startupConfig }: ModelSelector
     startupConfig,
     endpointsConfig,
   });
+  const [activeTier, setActiveTier] = useState<t.TModelTier | null>(null);
+  const filteredMappedEndpoints = useMemo(
+    () => filterEndpointsByTier(mappedEndpoints, activeTier),
+    [mappedEndpoints, activeTier],
+  );
 
   const getModelDisplayName = useCallback(
     (endpoint: Endpoint, model: string): string => {
@@ -160,9 +168,10 @@ export function ModelSelectorProvider({ children, startupConfig }: ModelSelector
     if (!searchValue) {
       return null;
     }
-    const allItems = [...modelSpecs, ...mappedEndpoints];
+    const visibleModelSpecs = activeTier ? [] : modelSpecs;
+    const allItems = [...visibleModelSpecs, ...filteredMappedEndpoints];
     return filterItems(allItems, searchValue, agentsMap, assistantsMap || {});
-  }, [searchValue, modelSpecs, mappedEndpoints, agentsMap, assistantsMap]);
+  }, [searchValue, modelSpecs, filteredMappedEndpoints, activeTier, agentsMap, assistantsMap]);
 
   const setDebouncedSearchValue = useMemo(
     () =>
@@ -236,18 +245,21 @@ export function ModelSelectorProvider({ children, startupConfig }: ModelSelector
     searchValue,
     searchResults,
     selectedValues,
+    activeTier,
     endpointSearchValues,
     // LibreChat
     agentsMap,
     modelSpecs,
     assistantsMap,
     mappedEndpoints,
+    filteredMappedEndpoints,
     endpointsConfig,
 
     // Functions
     handleSelectSpec,
     handleSelectModel,
     setSelectedValues,
+    setActiveTier,
     handleSelectEndpoint,
     setEndpointSearchValue,
     endpointRequiresUserKey,

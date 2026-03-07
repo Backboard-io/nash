@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useCombobox } from '@librechat/client';
 import { AutoSizer, List } from 'react-virtualized';
-import { EModelEndpoint } from 'librechat-data-provider';
+import { EModelEndpoint, getModelName } from 'librechat-data-provider';
 import type { TConversation } from 'librechat-data-provider';
 import type { MentionOption, ConvoGenerator } from '~/common';
 import type { SetterOrUpdater } from 'recoil';
@@ -95,7 +95,7 @@ export default function Mention({
     } else if (mention.type === 'endpoint') {
       const models = (modelsConfig?.[mention.value || ''] ?? []).map((model) => ({
         value: mention.value,
-        label: model,
+        label: getModelName(model),
         type: 'model',
       }));
 

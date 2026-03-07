@@ -15,6 +15,7 @@ import {
   isEphemeralAgentId,
   isAssistantsEndpoint,
   getDefaultParamsEndpoint,
+  getModelName,
 } from 'librechat-data-provider';
 import type {
   TPreset,
@@ -192,7 +193,7 @@ const useNewConvo = (index = 0) => {
             conversation.assistant_id = undefined;
           }
 
-          const models = modelsConfig?.[defaultEndpoint] ?? [];
+          const models = (modelsConfig?.[defaultEndpoint] ?? []).map(getModelName);
           const defaultParamsEndpoint = getDefaultParamsEndpoint(endpointsConfig, defaultEndpoint);
           conversation = buildDefaultConvo({
             conversation,

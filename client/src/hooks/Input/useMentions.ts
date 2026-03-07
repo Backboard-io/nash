@@ -9,6 +9,7 @@ import {
   isAgentsEndpoint,
   getConfigDefaults,
   isAssistantsEndpoint,
+  getModelName,
 } from 'librechat-data-provider';
 import type { TAssistantsMap, TEndpointsConfig } from 'librechat-data-provider';
 import type { MentionOption } from '~/common';
@@ -165,17 +166,20 @@ export default function useMentions({
         return [];
       }
 
-      const models = (modelsConfig?.[endpoint] ?? []).map((model) => ({
-        value: endpoint,
-        label: model,
-        type: 'model' as const,
-        icon: EndpointIcon({
-          conversation: { endpoint, model },
-          endpointsConfig,
-          context: 'menu-item',
-          size: 20,
-        }),
-      }));
+      const models = (modelsConfig?.[endpoint] ?? []).map((model) => {
+        const modelName = getModelName(model);
+        return {
+          value: endpoint,
+          label: modelName,
+          type: 'model' as const,
+          icon: EndpointIcon({
+            conversation: { endpoint, model: modelName },
+            endpointsConfig,
+            context: 'menu-item',
+            size: 20,
+          }),
+        };
+      });
       return models;
     });
 

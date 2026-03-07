@@ -94,7 +94,7 @@ function EndpointMenuContent({
   endpointIndex: number;
 }) {
   const localize = useLocalize();
-  const { agentsMap, assistantsMap, modelSpecs, selectedValues, endpointSearchValues } =
+  const { agentsMap, assistantsMap, modelSpecs, selectedValues, endpointSearchValues, activeTier } =
     useModelSelectorContext();
   const { model: selectedModel, modelSpec: selectedSpec } = selectedValues;
   const searchValue = endpointSearchValues[endpoint.value] || '';
@@ -130,9 +130,10 @@ function EndpointMenuContent({
 
   return (
     <>
-      {endpointSpecs.map((spec: TModelSpec) => (
-        <ModelSpecItem key={spec.name} spec={spec} isSelected={selectedSpec === spec.name} />
-      ))}
+      {!activeTier &&
+        endpointSpecs.map((spec: TModelSpec) => (
+          <ModelSpecItem key={spec.name} spec={spec} isSelected={selectedSpec === spec.name} />
+        ))}
       {filteredModels
         ? renderEndpointModels(
             endpoint,

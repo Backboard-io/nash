@@ -8,6 +8,29 @@ import {
   authTypeSchema,
 } from './schemas';
 
+export const modelTierValues = ['free', 'fast', 'powerful'] as const;
+export const tModelTierSchema = z.enum(modelTierValues);
+export type TModelTier = z.infer<typeof tModelTierSchema>;
+
+export type TModelConfig = {
+  name: string;
+  tiers?: TModelTier[];
+};
+
+export const tModelConfigSchema = z.object({
+  name: z.string(),
+  tiers: z.array(tModelTierSchema).optional(),
+});
+
+export const getModelName = (model: string | TModelConfig): string =>
+  typeof model === 'string' ? model : model.name;
+
+export const getModelTiers = (model: string | TModelConfig): TModelTier[] =>
+  typeof model === 'string' ? [] : model.tiers ?? [];
+
+export const hasModelTier = (model: string | TModelConfig, tier: TModelTier): boolean =>
+  getModelTiers(model).includes(tier);
+
 export type TModelSpec = {
   name: string;
   label: string;

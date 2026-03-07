@@ -10,6 +10,7 @@ config_bp = Blueprint("config", __name__)
 _endpoint_config: dict | None = None
 
 FREE_TIER_PROVIDERS = {"Cohere", "Cerebras", "Featherless"}
+MODEL_TIERS = ("free", "fast", "powerful")
 
 
 def _load_endpoint_config() -> dict:
@@ -63,12 +64,46 @@ def _build_models_response() -> dict:
     all_models = []
     for ep in custom_endpoints:
         name = ep.get("name", "")
-        models = ep.get("models", {}).get("default", [])
+        models = _extract_model_entries(ep)
         result[name] = models
         all_models.extend(models)
 
     result["agents"] = all_models or ["default"]
     return result
+
+
+def _extract_model_entries(endpoint_config: dict) -> list[dict]:
+    raw_models = endpoint_config.get("models", {}).get("default", [])
+    selector_tiers = endpoint_config.get("selectorTiers", {})
+
+    normalized_tiers = {
+        tier: set(selector_tiers.get(tier, []))
+        for tier in MODEL_TIERS
+    }
+
+    models = []
+    for raw_model in raw_models:
+        if isinstance(raw_model, dict):
+            model_name = raw_model.get("name", "")
+            explicit_tiers = raw_model.get("tiers", []) or []
+        else:
+            model_name = raw_model
+            explicit_tiers = []
+
+        if not model_name:
+            continue
+
+        tiers = set(explicit_tiers)
+        for tier in MODEL_TIERS:
+            if model_name in normalized_tiers[tier]:
+                tiers.add(tier)
+
+        model_entry = {"name": model_name}
+        if tiers:
+            model_entry["tiers"] = [tier for tier in MODEL_TIERS if tier in tiers]
+        models.append(model_entry)
+
+    return models
 
 
 @config_bp.route("/api/config", methods=["GET"])

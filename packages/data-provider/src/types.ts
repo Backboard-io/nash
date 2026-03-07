@@ -10,6 +10,7 @@ import type {
 } from './schemas';
 import type { SettingDefinition } from './generate';
 import type { TMinimalFeedback } from './feedback';
+import type { TModelConfig } from './models';
 import type { ContentTypes } from './types/runs';
 import type { Agent } from './types/assistants';
 
@@ -388,7 +389,7 @@ export type TEndpointsConfig =
   | Record<EModelEndpoint | string, TConfig | null | undefined>
   | undefined;
 
-export type TModelsConfig = Record<string, string[]>;
+export type TModelsConfig = Record<string, Array<string | TModelConfig>>;
 
 export type TUpdateTokenCountResponse = {
   count: number;
