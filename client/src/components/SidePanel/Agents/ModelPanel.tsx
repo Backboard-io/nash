@@ -6,6 +6,7 @@ import { useFormContext, useWatch, Controller } from 'react-hook-form';
 import { componentMapping } from '~/components/SidePanel/Parameters/components';
 import {
   alternateName,
+  getModelName,
   getSettingsKeys,
   getEndpointField,
   LocalStorageKeys,
@@ -42,24 +43,27 @@ export default function ModelPanel({
     return value ?? '';
   }, [providerOption]);
   const models = useMemo(
-    () => (provider ? (modelsData[provider] ?? []) : []),
+    () =>
+      (provider ? (modelsData[provider] ?? []) : []).map((m) =>
+        typeof m === 'string' ? m : m.name,
+      ),
     [modelsData, provider],
   );
 
   useEffect(() => {
     const _model = model ?? '';
     if (provider && _model) {
-      const modelExists = models.includes(_model);
+      const modelExists = models.some((m) => getModelName(m) === _model);
       if (!modelExists) {
         const newModels = modelsData[provider] ?? [];
-        setValue('model', newModels[0] ?? '');
+        setValue('model', newModels[0] != null ? getModelName(newModels[0]) : '');
       }
       localStorage.setItem(LocalStorageKeys.LAST_AGENT_MODEL, _model);
       localStorage.setItem(LocalStorageKeys.LAST_AGENT_PROVIDER, provider);
     }
 
     if (provider && !_model) {
-      setValue('model', models[0] ?? '');
+      setValue('model', models[0] != null ? getModelName(models[0]) : '');
     }
   }, [provider, models, modelsData, setValue, model]);
 
@@ -196,8 +200,8 @@ export default function ModelPanel({
                     searchPlaceholder={localize('com_ui_select_model')}
                     setValue={field.onChange}
                     items={models.map((model) => ({
-                      label: model,
-                      value: model,
+                      label: getModelName(model),
+                      value: getModelName(model),
                     }))}
                     disabled={!provider}
                     className={cn('disabled:opacity-50', error ? 'border-2 border-red-500' : '')}

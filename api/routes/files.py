@@ -171,6 +171,55 @@ def file_config():
     })
 
 
+@files_bp.route("/api/files/images", methods=["POST"])
+@require_jwt
+def upload_image():
+    """Image upload endpoint - mirrors /api/files but used for image attachments."""
+    if "file" not in request.files:
+        return jsonify({"error": "No file provided"}), 400
+
+    file = request.files["file"]
+    client_file_id = request.form.get("file_id")
+    file_id = str(uuid.uuid4())
+    filename = file.filename or "unknown"
+    user_dir = os.path.join(UPLOAD_DIR, g.user_id)
+    os.makedirs(user_dir, exist_ok=True)
+    filepath = os.path.join(user_dir, f"{file_id}_{filename}")
+    file.save(filepath)
+
+    assistant_id = get_user_config_assistant_id(g.user_id)
+    file_size = os.path.getsize(filepath)
+    content_type = file.content_type or "image/png"
+
+    file_meta = {
+        "file_id": file_id,
+        "filename": filename,
+        "bytes": file_size,
+        "type": content_type,
+        "source": "local",
+        "filepath": filepath,
+    }
+
+    async def _track_pending():
+        client = get_client()
+        pending_meta = {**file_meta, "status": "pending"}
+        await client.add_memory(
+            assistant_id=assistant_id,
+            content=json.dumps(pending_meta),
+            metadata={"type": FILE_META_TYPE, "fileId": file_id, "filename": filename},
+        )
+
+    try:
+        run_async(_track_pending())
+        result = {**file_meta, "status": "pending"}
+        if client_file_id:
+            result["temp_file_id"] = client_file_id
+        return jsonify(result)
+    except Exception as e:
+        logger.exception("Image upload tracking failed: %s", e)
+        return jsonify({"error": str(e)}), 502
+
+
 @files_bp.route("/api/files/images/avatar", methods=["POST"])
 @require_jwt
 def upload_avatar():

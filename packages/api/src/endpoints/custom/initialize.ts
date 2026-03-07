@@ -203,7 +203,7 @@ export async function initializeCustom({
   }
 
   const memoryMode = ephemeralAgent?.memory;
-  if (typeof memoryMode === 'string' && ['On', 'Off', 'Auto'].includes(memoryMode)) {
+  if (typeof memoryMode === 'string' && ['Auto', 'Readonly', 'Off'].includes(memoryMode)) {
     mergedHeaders['x-backboard-memory'] = memoryMode;
   }
 

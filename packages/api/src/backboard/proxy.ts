@@ -453,7 +453,7 @@ export async function handleChatCompletions(req: Request, res: Response): Promis
       const sub = await getSubscriptionBB(userId);
       if (sub.plan === 'free') {
         memoryMode = 'Off';
-      } else if (memoryHeader && ['On', 'Off', 'Auto'].includes(memoryHeader)) {
+      } else if (memoryHeader && ['Auto', 'Readonly', 'Off'].includes(memoryHeader)) {
         memoryMode = memoryHeader;
       }
     }

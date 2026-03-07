@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.8.0",
+    "title": "v2.8.0",
+    "publishedAt": "2026-03-07T16:00:00Z",
+    "body": "**Minor release**\n\n- **Thread forking:** Fork any conversation at any message — choose visible path, branches, or all-messages-to-target. Duplicate conversations in one click.\n- **Memory toggle labels:** Fix memory mode toggle so label always reflects the active state correctly.\n- **Persona creation:** Fix persona builder so new personas save and appear without requiring a page refresh.\n- **File uploads:** Reliability improvements to file attachment handling in the chat input."
+  },
+  {
     "tagName": "v2.7.2",
     "title": "v2.7.2",
     "publishedAt": "2026-03-07T07:00:00Z",

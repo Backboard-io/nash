@@ -143,3 +143,12 @@ async def _delete_conversation_meta(assistant_id: str, conversation_id: str) -> 
 
 def delete_conversation_meta(assistant_id: str, conversation_id: str) -> bool:
     return run_async(_delete_conversation_meta(assistant_id, conversation_id))
+
+
+def get_conversation_forked_messages(assistant_id: str, conversation_id: str) -> list | None:
+    """Return the forked message snapshot for a conversation, or None if not a fork."""
+    convos = list_conversations(assistant_id)
+    for c in convos:
+        if c.get("conversationId") == conversation_id:
+            return c.get("forked_messages") or None
+    return None

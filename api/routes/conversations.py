@@ -1,3 +1,6 @@
+import uuid
+from datetime import datetime, timezone
+
 from flask import Blueprint, request, jsonify, g
 
 from api.middleware.jwt_auth import require_jwt
@@ -9,6 +12,7 @@ from api.services.conversation_service import (
     save_conversation_meta,
     delete_conversation_meta,
     get_thread_id_for_conversation,
+    get_or_create_thread,
 )
 
 conversations_bp = Blueprint("conversations", __name__)
@@ -174,13 +178,100 @@ def gen_title(conversation_id):
 @conversations_bp.route("/api/convos/fork", methods=["POST"])
 @require_jwt
 def fork_conversation():
-    return jsonify({"error": "Not implemented"}), 501
+    data = request.get_json() or {}
+    message_id = data.get("messageId")
+    conversation_id = data.get("conversationId")
+    split_at_target = data.get("splitAtTarget", False)
+
+    if not message_id or not conversation_id:
+        return jsonify({"error": "messageId and conversationId required"}), 400
+
+    assistant_id = get_user_assistant_id(g.user_id)
+    src_thread_id = get_thread_id_for_conversation(conversation_id, assistant_id=assistant_id)
+    if not src_thread_id:
+        return jsonify({"error": "Source conversation not found"}), 404
+
+    source_convos = list_conversations(assistant_id)
+    src_meta = next((c for c in source_convos if c.get("conversationId") == conversation_id), {})
+
+    async def _fetch_src():
+        client = get_client()
+        thread = await client.get_thread(src_thread_id)
+        return thread.messages or []
+
+    src_messages = run_async(_fetch_src())
+
+    target_idx = len(src_messages) - 1
+    for i, m in enumerate(src_messages):
+        if str(m.message_id) == message_id:
+            target_idx = i
+            break
+
+    sliced = src_messages[target_idx:] if split_at_target else src_messages[:target_idx + 1]
+
+    new_conversation_id = str(uuid.uuid4())
+    get_or_create_thread(assistant_id, new_conversation_id)
+
+    snapshot = _build_message_snapshot(sliced, new_conversation_id)
+
+    now = datetime.now(timezone.utc).isoformat()
+    fork_meta = {
+        "conversationId": new_conversation_id,
+        "title": f"Fork: {src_meta.get('title', 'New Chat')}",
+        "endpoint": src_meta.get("endpoint", "agents"),
+        "model": src_meta.get("model", ""),
+        "createdAt": now,
+        "updatedAt": now,
+        "forked_from": conversation_id,
+        "forked_messages": snapshot,
+    }
+    save_conversation_meta(assistant_id, new_conversation_id, fork_meta)
+
+    return jsonify({"conversation": _format_convo(fork_meta), "messages": snapshot})
 
 
 @conversations_bp.route("/api/convos/duplicate", methods=["POST"])
 @require_jwt
 def duplicate_conversation():
-    return jsonify({"error": "Not implemented"}), 501
+    data = request.get_json() or {}
+    conversation_id = data.get("conversationId")
+    if not conversation_id:
+        return jsonify({"error": "conversationId required"}), 400
+
+    assistant_id = get_user_assistant_id(g.user_id)
+    src_thread_id = get_thread_id_for_conversation(conversation_id, assistant_id=assistant_id)
+    if not src_thread_id:
+        return jsonify({"error": "Source conversation not found"}), 404
+
+    source_convos = list_conversations(assistant_id)
+    src_meta = next((c for c in source_convos if c.get("conversationId") == conversation_id), {})
+
+    async def _fetch_src():
+        client = get_client()
+        thread = await client.get_thread(src_thread_id)
+        return thread.messages or []
+
+    src_messages = run_async(_fetch_src())
+
+    new_conversation_id = str(uuid.uuid4())
+    get_or_create_thread(assistant_id, new_conversation_id)
+
+    snapshot = _build_message_snapshot(src_messages, new_conversation_id)
+
+    now = datetime.now(timezone.utc).isoformat()
+    dup_meta = {
+        "conversationId": new_conversation_id,
+        "title": f"Copy: {src_meta.get('title', 'New Chat')}",
+        "endpoint": src_meta.get("endpoint", "agents"),
+        "model": src_meta.get("model", ""),
+        "createdAt": now,
+        "updatedAt": now,
+        "forked_from": conversation_id,
+        "forked_messages": snapshot,
+    }
+    save_conversation_meta(assistant_id, new_conversation_id, dup_meta)
+
+    return jsonify({"conversation": _format_convo(dup_meta), "messages": snapshot})
 
 
 @conversations_bp.route("/api/convos/<conversation_id>/folder", methods=["PUT"])
@@ -196,6 +287,28 @@ def move_to_folder(conversation_id):
             save_conversation_meta(assistant_id, conversation_id, c)
             return jsonify(_format_convo(c))
     return jsonify({"error": "Not found"}), 404
+
+
+def _build_message_snapshot(messages: list, conversation_id: str) -> list:
+    """Convert a list of Backboard message objects into the UI message format."""
+    snapshot = []
+    prev_id = "00000000-0000-0000-0000-000000000000"
+    for m in messages:
+        msg = {
+            "messageId": str(m.message_id),
+            "conversationId": conversation_id,
+            "parentMessageId": prev_id,
+            "text": m.content or "",
+            "sender": "User" if m.role == "user" else "Nash",
+            "isCreatedByUser": m.role == "user",
+            "endpoint": "agents",
+            "createdAt": m.created_at.isoformat() if m.created_at else "",
+            "updatedAt": m.created_at.isoformat() if m.created_at else "",
+            "error": False,
+        }
+        snapshot.append(msg)
+        prev_id = msg["messageId"]
+    return snapshot
 
 
 def _normalize_endpoint(ep: str) -> str:

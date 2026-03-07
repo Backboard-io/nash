@@ -25,7 +25,9 @@ export default function Settings({
 
   const { settings, multiViewSettings } = getSettings();
   const { endpoint: _endpoint } = conversation as TConversation;
-  const models = modelsQuery.data?.[_endpoint ?? ''] ?? [];
+  const models = (modelsQuery.data?.[_endpoint ?? ''] ?? []).map((m) =>
+    typeof m === 'string' ? m : m.name,
+  );
   const OptionComponent = settings[endpoint];
 
   if (OptionComponent) {

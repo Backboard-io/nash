@@ -4,7 +4,11 @@ from api.middleware.jwt_auth import require_jwt
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
 from api.services.user_service import get_user_assistant_id
-from api.services.conversation_service import get_thread_id_for_conversation, list_conversations
+from api.services.conversation_service import (
+    get_thread_id_for_conversation,
+    list_conversations,
+    get_conversation_forked_messages,
+)
 
 messages_bp = Blueprint("messages", __name__)
 
@@ -68,12 +72,35 @@ def get_messages(conversation_id):
     if not thread_id:
         return jsonify([])
 
+    forked_snapshot = get_conversation_forked_messages(assistant_id, conversation_id)
+
     async def _fetch():
         client = get_client()
         thread = await client.get_thread(thread_id)
         return thread.messages
 
     bb_messages = run_async(_fetch())
+
+    if forked_snapshot:
+        messages = list(forked_snapshot)
+        last_id = messages[-1]["messageId"] if messages else "00000000-0000-0000-0000-000000000000"
+        for m in bb_messages:
+            msg = {
+                "messageId": str(m.message_id),
+                "conversationId": conversation_id,
+                "parentMessageId": last_id,
+                "text": m.content or "",
+                "sender": "User" if m.role == "user" else "Nash",
+                "isCreatedByUser": m.role == "user",
+                "endpoint": "agents",
+                "createdAt": m.created_at.isoformat() if m.created_at else "",
+                "updatedAt": m.created_at.isoformat() if m.created_at else "",
+                "error": False,
+            }
+            messages.append(msg)
+            last_id = msg["messageId"]
+        return jsonify(messages)
+
     messages = []
     for m in bb_messages:
         messages.append({
