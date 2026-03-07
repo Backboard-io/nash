@@ -1558,6 +1558,7 @@
   "com_billing_unlimited": "Unlimited",
   "com_billing_current_plan": "Current plan",
   "com_billing_upgrade": "Upgrade",
+  "com_billing_downgrade": "Downgrade",
   "com_billing_manage": "Manage subscription",
   "com_billing_free_desc": "Open-source models only",
   "com_billing_plus_desc": "All features and included tokens",

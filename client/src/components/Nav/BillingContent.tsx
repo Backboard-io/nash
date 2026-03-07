@@ -91,7 +91,15 @@ function TierCard({
             <Check className="h-4 w-4" />
             {localize('com_billing_current_plan')}
           </div>
-        ) : isDowngrade ? null : (
+        ) : isDowngrade ? (
+          <button
+            onClick={onManage}
+            disabled={isLoading}
+            className="w-full rounded-lg border border-border-medium px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:border-border-heavy hover:text-text-primary disabled:opacity-50"
+          >
+            {isLoading ? '...' : localize('com_billing_downgrade')}
+          </button>
+        ) : (
           <button
             onClick={() => {
               if (currentPlan !== 'free' && priceId) {

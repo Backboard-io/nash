@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.9.1",
+    "title": "v2.9.1",
+    "publishedAt": "2026-03-07T21:00:00Z",
+    "body": "**Hotfix release**\n\n- **Billing pricing:** Fix Plus plan price display from $29.99 to $19.99 CAD on all billing screens.\n- **Downgrade flow:** Users on the Unlimited plan can now click a Downgrade button on the Free and Plus cards, which opens the Stripe customer portal to complete the plan change."
+  },
+  {
     "tagName": "v2.9.0",
     "title": "v2.9.0",
     "publishedAt": "2026-03-07T20:00:00Z",
