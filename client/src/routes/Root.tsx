@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useMediaQuery } from '@librechat/client';
 import type { ContextType } from '~/common';
@@ -18,12 +18,11 @@ import {
 } from '~/Providers';
 import { useUserTermsQuery, useGetStartupConfig, useInitQuery } from '~/data-provider';
 import { Nav, MobileNav, NAV_WIDTH } from '~/components/Nav';
-import { TermsAndConditionsModal, CookieConsentBanner } from '~/components/ui';
+import { CookieConsentBanner, TermsGate } from '~/components/ui';
 import { useHealthCheck } from '~/data-provider';
 import { Banner } from '~/components/Banners';
 
 export default function Root() {
-  const [showTerms, setShowTerms] = useState(false);
   const [bannerHeight, setBannerHeight] = useState(0);
   const [navVisible, setNavVisible] = useState(() => {
     const savedNavVisible = localStorage.getItem('navVisible');
@@ -34,38 +33,24 @@ export default function Root() {
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
   useInitQuery({ enabled: isAuthenticated });
-
-  // Global health check - runs once per authenticated session
   useHealthCheck(isAuthenticated);
 
   const assistantsMap = useAssistantsMap({ isAuthenticated });
   const agentsMap = useAgentsMap({ isAuthenticated });
   const fileMap = useFileMap({ isAuthenticated });
 
-  const { data: config } = useGetStartupConfig();
-  const { data: termsData } = useUserTermsQuery({
-    enabled: isAuthenticated && config?.interface?.termsOfService?.modalAcceptance === true,
-  });
+  useGetStartupConfig();
+  const { data: termsData } = useUserTermsQuery({ enabled: isAuthenticated });
 
   useSearchEnabled(isAuthenticated);
 
-  useEffect(() => {
-    if (termsData) {
-      setShowTerms(!termsData.termsAccepted);
-    }
-  }, [termsData]);
-
-  const handleAcceptTerms = () => {
-    setShowTerms(false);
-  };
-
-  const handleDeclineTerms = () => {
-    setShowTerms(false);
-    logout('/login?redirect=false');
-  };
-
   if (!isAuthenticated) {
     return null;
+  }
+
+  // Block access until terms are explicitly accepted
+  if (termsData != null && !termsData.termsAccepted) {
+    return <TermsGate onDecline={() => logout('/login?redirect=false')} />;
   }
 
   return (
@@ -98,16 +83,6 @@ export default function Root() {
               </div>
             </PromptGroupsProvider>
           </AgentsMapContext.Provider>
-          {config?.interface?.termsOfService?.modalAcceptance === true && (
-            <TermsAndConditionsModal
-              open={showTerms}
-              onOpenChange={setShowTerms}
-              onAccept={handleAcceptTerms}
-              onDecline={handleDeclineTerms}
-              title={config.interface.termsOfService.modalTitle}
-              modalContent={config.interface.termsOfService.modalContent}
-            />
-          )}
           <CookieConsentBanner />
         </AssistantsMapContext.Provider>
       </FileMapContext.Provider>

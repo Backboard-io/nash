@@ -29,6 +29,7 @@ const Registration: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [countdown, setCountdown] = useState<number>(3);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [termsChecked, setTermsChecked] = useState(false);
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -208,11 +209,40 @@ const Registration: React.FC = () => {
               </div>
             )}
 
-            <div className="mt-6">
+            <label className="mb-4 flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={termsChecked}
+                onChange={(e) => setTermsChecked(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-border-light accent-green-600"
+                aria-required="true"
+              />
+              <span className="text-xs text-gray-600 dark:text-gray-400">
+                I agree to Nash&apos;s{' '}
+                <Link
+                  to="/terms"
+                  target="_blank"
+                  className="text-green-600 hover:underline dark:text-green-400"
+                >
+                  Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link
+                  to="/privacy"
+                  target="_blank"
+                  className="text-green-600 hover:underline dark:text-green-400"
+                >
+                  Privacy Policy
+                </Link>
+              </span>
+            </label>
+
+            <div className="mt-2">
               <Button
                 disabled={
                   Object.keys(errors).length > 0 ||
                   isSubmitting ||
+                  !termsChecked ||
                   (requireCaptcha && !turnstileToken)
                 }
                 type="submit"
@@ -234,17 +264,6 @@ const Registration: React.FC = () => {
             >
               {localize('com_auth_login')}
             </a>
-          </p>
-          <p className="text-center text-xs text-gray-500 dark:text-gray-400">
-            By creating an account, you agree to our{' '}
-            <Link to="/terms" className="text-green-600 hover:underline dark:text-green-400">
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link to="/privacy" className="text-green-600 hover:underline dark:text-green-400">
-              Privacy Policy
-            </Link>
-            .
           </p>
         </>
       )}

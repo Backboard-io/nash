@@ -1,6 +1,7 @@
 import json
 import logging
 import httpx
+from datetime import datetime, timezone
 from urllib.parse import urlencode
 
 from flask import Blueprint, request, redirect, jsonify, make_response
@@ -221,6 +222,11 @@ def register():
     )
 
     _ensure_bb_assistant(user)
+
+    # Record terms acceptance at registration — user checked the agreement checkbox
+    accepted_at = datetime.now(timezone.utc).isoformat()
+    update_user_field(user, "termsAcceptedAt", accepted_at)
+    audit_service.emit("user.terms_accepted", user_id=user["id"])
 
     if referral_code:
         apply_referral_code_to_user(user, referral_code)
