@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.12.3",
+    "title": "v2.12.3",
+    "publishedAt": "2026-03-08T00:00:00Z",
+    "body": "**Hotfix release — folder conversation routing and delete fixes**\n\n- **Bug fix: continuing a folder conversation starts a new thread** — Folder conversation listing now always includes `folderId` in every returned conversation. Old conversations missing `folderId` in their metadata are lazily patched on first folder view, so the chat payload correctly routes to the folder's BB assistant instead of creating a new thread.\n- **Bug fix: deleting a folder conversation shows 'New Chat' instead of removing it** — `DELETE /api/convos` now also removes the `thread_mapping` memory from the folder's BB assistant so the conversation disappears from the folder listing entirely."
+  },
+  {
     "tagName": "v2.12.2",
     "title": "v2.12.2",
     "publishedAt": "2026-03-08T00:00:00Z",

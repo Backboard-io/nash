@@ -46,7 +46,18 @@ def get_conversations():
         for entry in folder_entries:
             cid = entry["conversationId"]
             meta = meta_by_id.get(cid)
-            convos.append(meta if meta else {"conversationId": cid, "title": "New Chat", "endpoint": "", "model": "", "isArchived": False, "tags": [], "createdAt": "", "updatedAt": ""})
+            if meta:
+                if not meta.get("folderId"):
+                    # Lazy migration: old conversation predates folderId tagging.
+                    # Patch the meta in Backboard so future loads (including get_conversation)
+                    # return the correct folderId, and the chat payload carries it.
+                    patched = {**meta, "folderId": folder_id, "hidden": True}
+                    save_conversation_meta(assistant_id, cid, {"folderId": folder_id, "hidden": True})
+                    convos.append(patched)
+                else:
+                    convos.append(meta)
+            else:
+                convos.append({"conversationId": cid, "title": "New Chat", "endpoint": "", "model": "", "isArchived": False, "tags": [], "createdAt": "", "updatedAt": "", "folderId": folder_id, "hidden": True})
 
         filtered = [c for c in convos if c.get("isArchived", False) == is_archived]
         if tags:
@@ -155,6 +166,18 @@ def delete_conversation():
         return jsonify({"error": "conversationId required"}), 400
 
     assistant_id = get_user_assistant_id(g.user_id)
+    config_assistant_id = get_user_config_assistant_id(g.user_id)
+
+    # If the conversation belongs to a folder, also remove its thread_mapping from
+    # the folder's BB assistant so it disappears from the folder listing.
+    convos = list_conversations(assistant_id)
+    existing = next((c for c in convos if c.get("conversationId") == conversation_id), None)
+    folder_id = (existing or {}).get("folderId", "")
+    if folder_id:
+        folder_bb_assistant_id = run_async(_get_bb_assistant_id_for_folder(config_assistant_id, folder_id))
+        if folder_bb_assistant_id:
+            remove_thread_mapping(folder_bb_assistant_id, conversation_id)
+
     delete_conversation_meta(assistant_id, conversation_id)
     return jsonify({"message": "Deleted"})
 
