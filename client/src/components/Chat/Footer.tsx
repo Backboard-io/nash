@@ -5,6 +5,7 @@ import { Constants } from 'librechat-data-provider';
 import { useGetStartupConfig } from '~/data-provider';
 import { useLocalize } from '~/hooks';
 import ReleaseNotesModal from './ReleaseNotesModal';
+import SlotMachineText from './SlotMachineText';
 
 export default function Footer({ className }: { className?: string }) {
   const { data: config } = useGetStartupConfig();
@@ -73,9 +74,7 @@ export default function Footer({ className }: { className?: string }) {
         >
           {`Nash ${Constants.VERSION}`}
         </button>,
-        <span key="latest-footer-copy" className="text-text-secondary">
-          {localize('com_ui_latest_footer')}
-        </span>,
+        <SlotMachineText key="latest-footer-copy" className="text-text-secondary" />,
       ];
 
   const footerElements = [...mainContentRender, privacyPolicyRender, termsOfServiceRender].filter(

@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.11.0",
+    "title": "v2.11.0",
+    "publishedAt": "2026-03-08T00:00:00Z",
+    "body": "**Minor release**\n\n- **Slot machine footer tagline:** The static \"Every AI for Everyone.\" footer text now cycles through rotating phrases with a smooth drop-in animation matching the greeting text style.\n- **Ambient basketball court canvas:** The landing page background features a subliminal, massively-scaled half-court line drawing that breathes with a slow opacity pulse. Slightly different angle each page load.\n- New `CourtCanvas` and `SlotMachineText` components."
+  },
+  {
     "tagName": "v2.10.0",
     "title": "v2.10.0",
     "publishedAt": "2026-03-08T00:00:00Z",

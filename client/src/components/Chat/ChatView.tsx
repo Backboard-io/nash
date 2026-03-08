@@ -14,6 +14,7 @@ import MessagesView from './Messages/MessagesView';
 import FolderThreadsView from './FolderThreadsView';
 import Presentation from './Presentation';
 import ChatForm from './Input/ChatForm';
+import CourtCanvas from './CourtCanvas';
 import Landing from './Landing';
 import Header from './Header';
 import Footer from './Footer';
@@ -87,6 +88,7 @@ function ChatView({ index = 0 }: { index?: number }) {
         <AddedChatContext.Provider value={addedChatHelpers}>
           <Presentation>
             <div className="relative flex h-full w-full flex-col">
+              {isNormalLanding && <CourtCanvas />}
               {!isLoading && <Header />}
               <>
                 <div
