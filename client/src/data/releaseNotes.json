@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.13.3",
+    "title": "v2.13.3",
+    "publishedAt": "2026-03-08T00:00:00Z",
+    "body": "**Hotfix release — deployment monitoring and version visibility**\n\n- **`/health` endpoint now reports version** — `GET /health` returns `{\"status\": \"ok\", \"version\": \"2.13.3\"}` so the deployed version is visible without auth.\n- **`pyproject.toml` version synced** — backend package version now tracks the release version and is read by the health endpoint at startup via stdlib `tomllib`.\n- **`scripts/nash-watchdog.sh`** — new watchdog script polls `/health` and `/api/init` every 5 seconds to detect the non-responsive condition; version appears on every output line so deployment rollovers are visible in the feed.\n- **`start.sh`** — add `--timeout 0` to match the production Dockerfile gunicorn args."
+  },
+  {
     "tagName": "v2.13.2",
     "title": "v2.13.2",
     "publishedAt": "2026-03-08T20:00:00Z",

@@ -33,6 +33,7 @@ echo "Starting Python API on :3080 with gunicorn..."
 OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES uv run gunicorn \
   --bind 0.0.0.0:3080 \
   --workers 1 \
+  --timeout 0 \
   --worker-class gevent \
   --worker-connections 1000 \
   "api.app:create_app()" > /tmp/nash-api.log 2>&1 &

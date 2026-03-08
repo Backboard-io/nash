@@ -1,11 +1,26 @@
 import yaml
 import os
+import tomllib
 
 from flask import Blueprint, jsonify
 
 from api.config import settings
 
 config_bp = Blueprint("config", __name__)
+
+def _read_version() -> str:
+    try:
+        pyproject_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            "pyproject.toml",
+        )
+        with open(pyproject_path, "rb") as f:
+            data = tomllib.load(f)
+        return data.get("project", {}).get("version", "unknown")
+    except Exception:
+        return "unknown"
+
+_VERSION = _read_version()
 
 _endpoint_config: dict | None = None
 
@@ -226,4 +241,4 @@ def get_models():
 
 @config_bp.route("/health", methods=["GET"])
 def health():
-    return jsonify({"status": "ok"})
+    return jsonify({"status": "ok", "version": _VERSION})
