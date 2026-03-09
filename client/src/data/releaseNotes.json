@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.14.7",
+    "title": "v2.14.7",
+    "publishedAt": "2026-03-09T00:00:00Z",
+    "body": "**Hotfix release — legal/support email correction**\n\n- **Terms page:** replace legacy support contact addresses with `support@backboard.io` in account security, termination, and contact sections.\n- **Legal footer:** update the contact mailto in legal layout pages to `support@backboard.io` for consistency."
+  },
+  {
     "tagName": "v2.14.6",
     "title": "v2.14.6",
     "publishedAt": "2026-03-09T00:00:00Z",

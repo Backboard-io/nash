@@ -27,7 +27,7 @@ export default function Terms() {
       <p>
         You are responsible for maintaining the confidentiality of your account credentials and
         for all activity that occurs under your account. Notify us immediately at{' '}
-        <a href="mailto:support@nash.ai">support@nash.ai</a> if you suspect unauthorized access.
+        <a href="mailto:support@backboard.io">support@backboard.io</a> if you suspect unauthorized access.
       </p>
       <p>
         You may not share your account with others or create accounts on behalf of others without
@@ -126,7 +126,7 @@ export default function Terms() {
       <p>
         We may suspend or terminate your access to the Service at any time for any reason,
         including violation of these Terms. You may terminate your account at any time by
-        contacting <a href="mailto:support@nash.ai">support@nash.ai</a>. Upon termination, your
+        contacting <a href="mailto:support@backboard.io">support@backboard.io</a>. Upon termination, your
         right to use the Service ceases immediately. Provisions that by their nature should
         survive termination (liability, indemnification, disputes) will do so.
       </p>
@@ -150,7 +150,7 @@ export default function Terms() {
       <h2>15. Contact</h2>
       <p>
         Questions about these Terms? Contact us at{' '}
-        <a href="mailto:support@nash.ai">support@nash.ai</a> or write to:
+        <a href="mailto:support@backboard.io">support@backboard.io</a> or write to:
       </p>
       <p>
         Backboard.io, Inc.<br />

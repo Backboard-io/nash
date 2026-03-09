@@ -42,7 +42,7 @@ export default function LegalLayout({ title, lastUpdated, children }: LegalLayou
             <Link to="/privacy" className="hover:text-green-500 transition-colors">Privacy</Link>
             <Link to="/terms" className="hover:text-green-500 transition-colors">Terms</Link>
             <Link to="/cookies" className="hover:text-green-500 transition-colors">Cookies</Link>
-            <a href="mailto:support@nash.ai" className="hover:text-green-500 transition-colors">Contact</a>
+            <a href="mailto:support@backboard.io" className="hover:text-green-500 transition-colors">Contact</a>
           </div>
         </footer>
       </div>
