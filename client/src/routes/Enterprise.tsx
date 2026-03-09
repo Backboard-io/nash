@@ -156,6 +156,7 @@ export default function Enterprise() {
         <OGDialogTemplate
           title="Book an enterprise discovery call"
           className="w-full max-w-lg"
+          showCancelButton={false}
           main={
             <div className="flex flex-col gap-3 p-1">
               <p className="text-xs text-text-secondary">
