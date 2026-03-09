@@ -30,6 +30,8 @@ cp .env.example .env   # configure your keys
 ./start.sh             # installs deps, builds frontend, starts everything
 ```
 
+For enterprise CTA warm-lead routing, set `CLOSER_NOTES_WARM_LEAD_ASSISTANT_ID` in `.env`.
+
 | Service  | URL                     |
 |----------|-------------------------|
 | App      | http://localhost:3090    |

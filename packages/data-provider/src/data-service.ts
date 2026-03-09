@@ -703,6 +703,18 @@ export const getCustomConfigSpeech = (): Promise<t.TCustomConfigSpeechResponse> 
   return request.get(endpoints.getCustomConfigSpeech());
 };
 
+export const postEnterpriseInterest = (payload?: {
+  eventType?: 'cta_click' | 'form_submit';
+  route?: string;
+  name?: string;
+  email?: string;
+  company?: string;
+  role?: string;
+  notes?: string;
+}): Promise<{ ok: boolean }> => {
+  return request.post(endpoints.enterpriseInterest(), payload ?? {});
+};
+
 /* conversations */
 
 export function duplicateConversation(

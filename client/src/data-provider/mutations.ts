@@ -1074,3 +1074,20 @@ export const useUpdateChatAssistantMutation = (
     },
   );
 };
+
+export const useEnterpriseInterestMutation = (): UseMutationResult<
+  { ok: boolean },
+  unknown,
+  {
+    eventType?: 'cta_click' | 'form_submit';
+    route?: string;
+    name?: string;
+    email?: string;
+    company?: string;
+    role?: string;
+    notes?: string;
+  } | void,
+  unknown
+> => {
+  return useMutation((payload) => dataService.postEnterpriseInterest(payload));
+};

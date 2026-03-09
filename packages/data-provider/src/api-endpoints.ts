@@ -287,6 +287,7 @@ export const textToSpeechManual = () => `${textToSpeech()}/manual`;
 export const textToSpeechVoices = () => `${textToSpeech()}/voices`;
 
 export const getCustomConfigSpeech = () => `${speech()}/config/get`;
+export const enterpriseInterest = () => `${BASE_URL}/api/enterprise-interest`;
 
 export const getPromptGroup = (_id: string) => `${prompts()}/groups/${_id}`;
 

@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     backboard_api_key: str 
     backboard_assistant_id: str 
     backboard_auth_assistant_id: str 
+    closer_notes_warm_lead_assistant_id: str = ""
 
     jwt_secret: str
     jwt_refresh_secret: str

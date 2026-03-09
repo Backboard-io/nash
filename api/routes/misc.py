@@ -2,10 +2,13 @@
 import json
 import re
 import uuid
+from datetime import datetime, timezone
 
 from flask import Blueprint, request, jsonify, g
 
-from api.middleware.jwt_auth import require_jwt
+from api.config import settings
+from api.middleware.jwt_auth import require_jwt, decode_access_token
+from api.services import audit_service
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
 from api.services.user_service import (
@@ -78,6 +81,105 @@ def get_banner():
         })
 
     return jsonify(None)
+
+
+@misc_bp.route("/api/enterprise-interest", methods=["POST"])
+def post_enterprise_interest():
+    data = request.get_json(silent=True) or {}
+    event_type = (data.get("eventType") or "cta_click").strip() or "cta_click"
+    route = (data.get("route") or "/enterprise").strip() or "/enterprise"
+
+    auth = request.headers.get("Authorization", "")
+    user = None
+    user_id = ""
+    if auth.startswith("Bearer "):
+        token = auth.replace("Bearer ", "", 1)
+        try:
+            payload = decode_access_token(token)
+            user_id = str(payload.get("sub", "") or "")
+            if user_id:
+                user = find_user_by_id(user_id)
+        except Exception:
+            user = None
+            user_id = ""
+
+    form_name = (data.get("name") or "").strip()
+    form_email = (data.get("email") or "").strip()
+    form_company = (data.get("company") or "").strip()
+    form_role = (data.get("role") or "").strip()
+    form_notes = (data.get("notes") or "").strip()
+
+    assistant_id = (settings.closer_notes_warm_lead_assistant_id or "").strip()
+    if not assistant_id:
+        audit_service.emit(
+            "enterprise_interest.missing_assistant",
+            result="fail",
+            user_id=user_id or None,
+        )
+        return jsonify({"ok": False, "error": "closer_notes_warm_lead_assistant_id is not configured"}), 503
+
+    lead_name = form_name or ((user or {}).get("name") or "")
+    lead_email = form_email or ((user or {}).get("email") or "")
+    lead_company = form_company or ""
+    lead_role = form_role or ""
+    lead_notes = form_notes or ""
+
+    payload = {
+        "type": "warm_lead",
+        "source": "nash_enterprise_contact_form" if event_type == "form_submit" else "nash_enterprise_cta",
+        "event_type": event_type,
+        "user_id": user_id,
+        "email": lead_email,
+        "name": lead_name,
+        "company": lead_company,
+        "role": lead_role,
+        "notes": lead_notes,
+        "clicked_at": datetime.now(timezone.utc).isoformat(),
+        "route": route,
+        "intent": "enterprise_discovery_requested" if event_type == "form_submit" else "enterprise_info_requested",
+        # SocialBlast-compatible lead keys for downstream Closer Notes handling.
+        "contact_name": lead_name,
+        "contact_role": lead_role or None,
+        "company_name": lead_company or "Unknown",
+        "opp_name": f"Enterprise Discovery - {lead_company or lead_name or 'Unknown'}",
+        "opp_stage": "qualification",
+        "opp_confidence": 40 if event_type == "form_submit" else 25,
+        "email_subject": "Enterprise discovery request from Nash",
+        "email_body": lead_notes or "Enterprise contact form submission from /enterprise",
+        "what_i_noticed": lead_notes or None,
+    }
+
+    async def _save():
+        client = get_client()
+        await client.add_memory(
+            assistant_id=assistant_id,
+            content=json.dumps(payload),
+            metadata={
+                "type": "warm_lead",
+                "source": "nash_enterprise_contact_form" if event_type == "form_submit" else "nash_enterprise_cta",
+                "userId": user_id,
+                "email": lead_email,
+            },
+        )
+
+    try:
+        run_async(_save())
+        audit_service.emit(
+            "enterprise_interest.clicked",
+            user_id=user_id or None,
+            result="success",
+            event_type=event_type,
+        )
+        return jsonify({"ok": True})
+    except Exception:
+        audit_service.emit(
+            "enterprise_interest.clicked",
+            user_id=user_id or None,
+            result="fail",
+            event_type=event_type,
+        )
+        # Non-blocking behavior for the CTA flow; UI should still navigate.
+        return jsonify({"ok": False}), 202
 
 
 _ALL_PERMISSIONS = {

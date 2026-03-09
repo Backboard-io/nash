@@ -27,6 +27,7 @@ import Privacy from './Privacy';
 import Terms from './Terms';
 import Cookies from './Cookies';
 import Docs from './Docs';
+import Enterprise from './Enterprise';
 
 const AuthLayout = () => (
   <AuthContextProvider>
@@ -43,6 +44,11 @@ export const router = createBrowserRouter(
     {
       path: 'docs',
       element: <Docs />,
+      errorElement: <RouteErrorBoundary />,
+    },
+    {
+      path: 'enterprise',
+      element: <Enterprise />,
       errorElement: <RouteErrorBoundary />,
     },
     {

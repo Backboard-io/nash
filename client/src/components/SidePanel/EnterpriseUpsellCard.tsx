@@ -1,8 +1,13 @@
 import { Building2, ArrowUpRight } from 'lucide-react';
 import { Button } from '@librechat/client';
+import { useNavigate } from 'react-router-dom';
+import { useEnterpriseInterestMutation } from '~/data-provider';
 import { cn } from '~/utils';
 
 export default function EnterpriseUpsellCard({ className }: { className?: string }) {
+  const navigate = useNavigate();
+  const interestMutation = useEnterpriseInterestMutation();
+
   return (
     <div
       className={cn(
@@ -28,11 +33,12 @@ export default function EnterpriseUpsellCard({ className }: { className?: string
         variant="outline"
         size="sm"
         onClick={() => {
-          window.location.href = 'mailto:support@backboard.io?subject=Enterprise%20workspace%20setup';
+          interestMutation.mutate({ eventType: 'cta_click', route: '/enterprise' });
+          navigate('/enterprise');
         }}
         className="mt-3 w-full border-bb-blue/30 text-bb-blue transition-colors duration-200 hover:bg-bb-blue/10 hover:text-bb-blueDark active:scale-[0.97] dark:border-bb-blue/60 dark:text-white dark:hover:bg-bb-blue/35 dark:hover:text-white"
       >
-        <span>Contact support</span>
+        <span>Get started!</span>
         <ArrowUpRight className="ml-1 h-3.5 w-3.5" aria-hidden />
       </Button>
     </div>
