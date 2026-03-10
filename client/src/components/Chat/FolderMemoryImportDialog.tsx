@@ -13,18 +13,15 @@ import { useCreateFolderMemoryMutation } from '~/data-provider';
 import { useLocalize } from '~/hooks';
 
 const IMPORT_PROMPT = `I'm switching to a new AI assistant and want to bring my context with me.
-
 Please output everything you know about me — my preferences, work context, communication style, projects, tools, and any other relevant details — as a structured list.
-
 Format each item as:
-[category_name]: description
-
+[category_name]: description with relevant context
 For example:
-[coding_style]: Prefers functional programming with early returns and minimal nesting
-[primary_language]: TypeScript and Python
-[work_context]: Building AI-powered SaaS products
-
-Be thorough. Include everything you've learned about me across our conversations.`;
+[spouse_name]: Cindy is Karl's wife, Cindy and Karl met in 2010
+[primary_coding_language]: TypeScript and Python are Karl's primary coding languages
+[work_context]: Karl builds AI-powered SaaS products
+Be thorough. Include everything you've learned about me across our conversations.
+Before you start, ask me two questions: "Is there anything specific or general you want me to leave out?" and "Is there anything you want me to provide extra detail about?"`;
 
 function parseImportedMemories(text: string): CreateFolderMemoryParams[] {
   const lines = text.split('\n').filter((line) => line.trim().length > 0);

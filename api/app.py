@@ -49,6 +49,10 @@ def create_app() -> Flask:
     from api.routes.referrals import referrals_bp
     logging.info("routes imported")
 
+    @app.route("/api/health")
+    def health():
+        return jsonify({"status": "ok"})
+
     @app.errorhandler(429)
     def ratelimit_handler(e):
         audit_service.emit(

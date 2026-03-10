@@ -1,5 +1,11 @@
 [
   {
+    "tagName": "v2.14.8",
+    "title": "v2.14.8",
+    "publishedAt": "2026-03-09T00:00:00Z",
+    "body": "**Hotfix release — memory export prompt update**\n\n- **Memory import prompts:** both main and folder memory-import flows now use an updated export prompt: structured list with \"description with relevant context\", example categories (e.g. spouse_name, primary_coding_language, work_context), and two pre-export questions (leave out? / extra detail?)."
+  },
+  {
     "tagName": "v2.14.7",
     "title": "v2.14.7",
     "publishedAt": "2026-03-09T00:00:00Z",

@@ -43,6 +43,7 @@ locals {
       STRIPE_PRICE_ID_UNLIMITED  = var.stripe_price_id_unlimited
       PLUS_INCLUDED_TOKENS       = var.plus_included_tokens
       BACKBOARD_AUTH_ASSISTANT_ID = var.backboard_auth_assistant_id
+      CLOSER_NOTES_WARM_LEAD_ASSISTANT_ID="190c9e11-27c0-4e9e-855a-87136aa7e509"
     },
     var.domain_client != "" ? { DOMAIN_CLIENT = var.domain_client } : {},
     var.domain_server != "" ? { DOMAIN_SERVER = var.domain_server } : {},

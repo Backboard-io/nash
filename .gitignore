@@ -14,4 +14,8 @@ terraform/terraform.tfvars
 terraform/bootstrap/.terraform/
 terraform/bootstrap/*.tfstate*
 package-lock.json
-.cursor/
+.cursor/        
+client/coverage/
+client/junit.xml
+packages/data-provider/coverage/
+packages/data-provider/junit.xml

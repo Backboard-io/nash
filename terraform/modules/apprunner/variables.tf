@@ -67,13 +67,13 @@ variable "health_check_path" {
 variable "health_check_interval" {
   type        = number
   description = "Health check interval in seconds."
-  default     = 10
+  default     = 20
 }
 
 variable "health_check_timeout" {
   type        = number
   description = "Health check timeout in seconds."
-  default     = 5
+  default     = 19
 }
 
 variable "health_check_healthy_threshold" {
