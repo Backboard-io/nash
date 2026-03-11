@@ -352,7 +352,10 @@ export default function useEventHandlers({
       const { messages, userMessage, isRegenerate = false, isTemporary = false } = submission;
       const initialResponse = {
         ...submission.initialResponse,
-        parentMessageId: userMessage.messageId,
+        parentMessageId:
+          isRegenerate && userMessage.overrideParentMessageId
+            ? userMessage.overrideParentMessageId
+            : userMessage.messageId,
         messageId: data.responseMessageId ?? userMessage.messageId + '_',
       };
       if (isRegenerate) {

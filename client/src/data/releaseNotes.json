@@ -1,5 +1,11 @@
 [
     {
+        "body": "**Hotfix release \u2014 regeneration fork fix**\n\n- Fix regenerated responses appearing appended at end of thread instead of as siblings of the original response.\n- Backend now uses `overrideParentMessageId` so the regenerated response shares the correct parent in the message tree.\n- Frontend `createdHandler` updated to match, enabling `\u276e\u276f` sibling navigation immediately during streaming.",
+        "publishedAt": "2026-03-11T03:00:00Z",
+        "tagName": "v2.14.13",
+        "title": "v2.14.13"
+    },
+    {
         "body": "**Hotfix release \u2014 search results in left drawer**\n\n- Move chat search to the left sidebar with fuzzy title matching and remove the dedicated /search page.\n- Refresh conversation lists on search input so results stay in sync.\n- Show an empty-state message when no titles match.",
         "publishedAt": "2026-03-11T02:40:44Z",
         "tagName": "v2.14.12",

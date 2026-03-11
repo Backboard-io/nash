@@ -609,6 +609,8 @@ def stream_chat(stream_id):
         user_message_id = str(uuid.uuid4())
         response_message_id = str(uuid.uuid4())
         parent_message_id = payload.get("parentMessageId", "00000000-0000-0000-0000-000000000000")
+        override_parent_message_id = payload.get("overrideParentMessageId")
+        is_regenerate = payload.get("isRegenerate", False)
 
         user_message = {
             "messageId": user_message_id,
@@ -711,7 +713,7 @@ def stream_chat(stream_id):
         response_message = {
             "messageId": response_message_id,
             "conversationId": conversation_id,
-            "parentMessageId": user_message_id,
+            "parentMessageId": (override_parent_message_id or parent_message_id) if is_regenerate else user_message_id,
             "text": full_text,
             "sender": "Nash",
             "isCreatedByUser": False,
