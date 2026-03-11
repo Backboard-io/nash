@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="docs/logo-light.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="client/dist/assets/nash_dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="client/dist/assets/nash.png">
     <img alt="Nash" src="docs/logo-light.svg" width="320">
   </picture>
 </p>

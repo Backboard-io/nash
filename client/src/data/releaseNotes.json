@@ -1,5 +1,11 @@
 [
     {
+        "body": "**Hotfix release**\n\n- **Logo/icon update:** Logo and logo-dark wired up across README, docs, and client assets.",
+        "publishedAt": "2026-03-11T23:00:00Z",
+        "tagName": "v2.14.20",
+        "title": "v2.14.20"
+    },
+    {
         "body": "**Hotfix release**\n\n- **librechat.yaml model sync:** Removed 26 stale models (retired OpenAI gpt-3.5/gpt-4 snapshots, gemini-2.0-flash, all gemma, grok-3 family, old cohere) and added 17 new models across OpenAI (gpt-5.3/5.4), Google (gemini-3.1 previews), xAI (grok-4-0709, reasoning variants), OpenRouter, and Cohere (command-a-reasoning-08-2025).\n- **selectorTiers updated:** Google free tier removed (no gemma models), xAI and Cohere tiers refreshed to match live model roster.",
         "publishedAt": "2026-03-11T22:30:00Z",
         "tagName": "v2.14.19",
