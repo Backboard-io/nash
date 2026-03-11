@@ -340,7 +340,7 @@ def _prepare_stream(stream_id: str, user_id: str, payload: dict) -> dict:
             else "Off"
         )
     )
-    bb_memory = {"Auto": "Auto", "On": "Readonly", "Off": "off"}.get(mem_toggle, "off")
+    bb_memory = {"Auto": "Auto", "Readonly": "Readonly", "On": "On", "Off": "off"}.get(mem_toggle, "off")
     requested_web_search = (
         "Auto"
         if isinstance(ephemeral_agent, dict) and ephemeral_agent.get("web_search") is True

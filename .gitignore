@@ -19,3 +19,4 @@ client/coverage/
 client/junit.xml
 packages/data-provider/coverage/
 packages/data-provider/junit.xml
+backboard-models.txt
