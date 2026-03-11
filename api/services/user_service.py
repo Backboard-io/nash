@@ -6,6 +6,7 @@ The per-user Backboard assistant ID (bbAssistantId) is stored directly
 on the user record, not in separate mapping entries.
 """
 import json
+import time
 from datetime import datetime, timezone
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,7 +15,11 @@ from api.config import settings
 from api.services.backboard_service import get_client
 from api.services.async_runner import run_async
 
-_user_cache: dict[str, dict] = {}
+# Cache user records for up to 5 minutes.  update_user_field writes through
+# and resets the timestamp, so in-app changes are never stale.
+_USER_CACHE_TTL_SEC = 300
+# (email -> (loaded_at_monotonic, user_dict))
+_user_cache: dict[str, tuple[float, dict]] = {}
 
 USER_TYPES = {"user", "librechat_user"}
 
@@ -80,33 +85,46 @@ async def _load_users_from_backboard() -> list[dict]:
     return users
 
 
-def _cache_user(u: dict) -> None:
+def _is_cache_entry_fresh(entry: tuple[float, dict] | None) -> bool:
+    return entry is not None and (time.monotonic() - entry[0]) < _USER_CACHE_TTL_SEC
+
+
+def _cache_user(u: dict, loaded_at: float | None = None) -> None:
     """Cache a user, preferring librechat_user records over nash user records on collision."""
     email = u.get("email", "")
     if not email:
         return
     existing = _user_cache.get(email)
-    if existing and existing.get("_raw_type") == "librechat_user" and u.get("_raw_type") != "librechat_user":
+    if (
+        existing
+        and _is_cache_entry_fresh(existing)
+        and existing[1].get("_raw_type") == "librechat_user"
+        and u.get("_raw_type") != "librechat_user"
+    ):
         return
-    _user_cache[email] = u
+    _user_cache[email] = (loaded_at if loaded_at is not None else time.monotonic(), u)
 
 
 def find_user_by_email(email: str) -> dict | None:
-    if email in _user_cache:
-        return _user_cache[email]
+    entry = _user_cache.get(email)
+    if _is_cache_entry_fresh(entry):
+        return entry[1]
     users = run_async(_load_users_from_backboard())
+    now = time.monotonic()
     for u in users:
-        _cache_user(u)
-    return _user_cache.get(email)
+        _cache_user(u, loaded_at=now)
+    entry = _user_cache.get(email)
+    return entry[1] if entry else None
 
 
 def find_user_by_id(user_id: str) -> dict | None:
-    for u in _user_cache.values():
-        if u.get("id") == user_id:
-            return u
+    now = time.monotonic()
+    for entry in _user_cache.values():
+        if _is_cache_entry_fresh(entry) and entry[1].get("id") == user_id:
+            return entry[1]
     users = run_async(_load_users_from_backboard())
     for u in users:
-        _cache_user(u)
+        _cache_user(u, loaded_at=now)
         if u.get("id") == user_id:
             return u
     return None
@@ -145,7 +163,7 @@ def update_user_field(user: dict, field: str, value) -> None:
         return
     email = user.get("email", "")
     if email:
-        _user_cache[email] = user
+        _user_cache[email] = (time.monotonic(), user)
 
 
 def create_user(
@@ -210,7 +228,7 @@ def create_user(
         return result
 
     run_async(_save())
-    _user_cache[email] = user_data
+    _user_cache[email] = (time.monotonic(), user_data)
     return user_data
 
 
@@ -248,9 +266,10 @@ def get_user_config_assistant_id(user_id: str) -> str:
 
 def get_all_users() -> list[dict]:
     users = run_async(_load_users_from_backboard())
+    now = time.monotonic()
     for u in users:
-        _cache_user(u)
-    return list(_user_cache.values())
+        _cache_user(u, loaded_at=now)
+    return [entry[1] for entry in _user_cache.values()]
 
 
 def delete_user(user: dict) -> None:
@@ -277,4 +296,4 @@ def delete_user(user: dict) -> None:
 
     email = user.get("email", "")
     if email:
-        _user_cache.pop(email, None)
+        _user_cache.pop(email, None)  # type: ignore[arg-type]

@@ -31,11 +31,11 @@ def _get_loop() -> asyncio.AbstractEventLoop:
     return _loop
 
 
-def run_async(coro):
+def run_async(coro, *, timeout: float | None = None):
     """Submit a coroutine to the persistent loop and block until it completes."""
     loop = _get_loop()
     future: Future = asyncio.run_coroutine_threadsafe(coro, loop)
-    return future.result()
+    return future.result(timeout=timeout)
 
 
 _STOP = object()

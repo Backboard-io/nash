@@ -28,16 +28,14 @@ def token_credits_to_usd(token_credits: int) -> float:
     return round(token_credits / settings.token_credits_per_usd, 2)
 
 
-async def _load_balance_bundle(user_id: str) -> tuple[tuple[BalanceRecord, str] | None, list[tuple[LedgerEntry, str]]]:
-    assistant_id = get_user_config_assistant_id(user_id)
-    client = get_client()
-    response = await client.get_memories(assistant_id)
+def _extract_balance_bundle_from_memories(
+    memories,
+) -> tuple[BalanceRecord | None, list[LedgerEntry]]:
+    balance_record: BalanceRecord | None = None
+    ledger_records: list[LedgerEntry] = []
 
-    balance_row: tuple[BalanceRecord, str] | None = None
-    ledger_rows: list[tuple[LedgerEntry, str]] = []
-
-    for memory in response.memories:
-        meta = memory.metadata or {}
+    for memory in memories or []:
+        meta = getattr(memory, "metadata", None) or {}
         memory_type = meta.get("type")
         try:
             parsed = json.loads(memory.content)
@@ -46,16 +44,54 @@ async def _load_balance_bundle(user_id: str) -> tuple[tuple[BalanceRecord, str] 
 
         if memory_type == BALANCE_META_TYPE:
             try:
-                balance_row = (BalanceRecord.model_validate(parsed), memory.id)
+                balance_record = BalanceRecord.model_validate(parsed)
             except Exception:
                 continue
         elif memory_type == LEDGER_META_TYPE:
             try:
-                ledger_rows.append((LedgerEntry.model_validate(parsed), memory.id))
+                ledger_records.append(LedgerEntry.model_validate(parsed))
             except Exception:
                 continue
 
-    ledger_rows.sort(key=lambda item: item[0].createdAt, reverse=True)
+    ledger_records.sort(key=lambda item: item.createdAt, reverse=True)
+    return balance_record, ledger_records
+
+
+async def _load_balance_bundle(
+    user_id: str,
+) -> tuple[tuple[BalanceRecord, str] | None, list[tuple[LedgerEntry, str]]]:
+    assistant_id = get_user_config_assistant_id(user_id)
+    client = get_client()
+    response = await client.get_memories(assistant_id)
+
+    balance_record, ledger_records = _extract_balance_bundle_from_memories(response.memories)
+    balance_row: tuple[BalanceRecord, str] | None = None
+    ledger_rows: list[tuple[LedgerEntry, str]] = []
+
+    if balance_record is not None:
+        balance_row = (balance_record, "")
+        for memory in response.memories:
+            meta = memory.metadata or {}
+            if meta.get("type") == BALANCE_META_TYPE:
+                balance_row = (balance_record, memory.id)
+                break
+
+    if ledger_records:
+        ledger_rows = [(record, "") for record in ledger_records]
+        for memory in response.memories:
+            meta = memory.metadata or {}
+            if meta.get("type") != LEDGER_META_TYPE:
+                continue
+            try:
+                parsed = json.loads(memory.content)
+                record = LedgerEntry.model_validate(parsed)
+            except Exception:
+                continue
+            for idx, (existing, _) in enumerate(ledger_rows):
+                if existing.id == record.id:
+                    ledger_rows[idx] = (record, memory.id)
+                    break
+
     return balance_row, ledger_rows
 
 
@@ -94,6 +130,16 @@ def get_balance_response(user_id: str) -> dict:
     record = get_or_create_balance_record(user_id)
     payload = record.model_dump(mode="json")
     payload["tokenCreditsUsd"] = token_credits_to_usd(record.tokenCredits)
+    return payload
+
+
+def get_balance_response_from_memories(memories, user_id: str) -> dict:
+    balance_record, _ = _extract_balance_bundle_from_memories(memories)
+    if not balance_record:
+        balance_record = BalanceRecord(user=user_id)
+        run_async(_persist_balance(user_id, balance_record))
+    payload = balance_record.model_dump(mode="json")
+    payload["tokenCreditsUsd"] = token_credits_to_usd(balance_record.tokenCredits)
     return payload
 
 

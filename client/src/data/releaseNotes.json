@@ -1,5 +1,11 @@
 [
     {
+        "body": "**Hotfix release — outage resilience & stale-cache fix**\n\n- **`/api/init` duplicate scan eliminated:** Balance payload now reuses the single `get_memories` response already fetched for conversations/agents/presets, halving Backboard load on every page load.\n- **`/api/init` per-user TTL cache (10s):** Burst reconnects from the same user (client reload, watchdog polling) are absorbed without redundant Backboard hits.\n- **`/api/init` Backboard timeout (12s):** If Backboard is slow the endpoint returns 503 instead of holding the gevent worker indefinitely, keeping the process responsive for other users.\n- **User cache TTL (5 min):** User records were cached forever until restart. Manually upgraded users now see their new plan within 5 minutes without a redeploy.",
+        "publishedAt": "2026-03-11T17:00:00Z",
+        "tagName": "v2.14.16",
+        "title": "v2.14.16"
+    },
+    {
         "body": "**Hotfix release**\n\n- **Dockerfile:** Add gunicorn `--no-control-socket` for compatibility in containerized runs.",
         "publishedAt": "2026-03-11T05:00:00Z",
         "tagName": "v2.14.15",

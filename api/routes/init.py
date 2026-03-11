@@ -7,6 +7,8 @@ hydrate everything from a single request.
 import json
 import logging
 import threading
+import time
+from concurrent.futures import TimeoutError
 
 from flask import Blueprint, jsonify, g
 
@@ -18,11 +20,16 @@ from api.services.user_service import (
     get_user_config_assistant_id,
 )
 from api.routes.config_routes import _build_endpoints_response, _build_models_response
-from api.services.balance_service import get_balance_response
+from api.services.balance_service import get_balance_response_from_memories
 
 logger = logging.getLogger(__name__)
 
 init_bp = Blueprint("init", __name__)
+
+INIT_CACHE_TTL_SEC = 10
+INIT_BACKBOARD_TIMEOUT_SEC = 12
+_init_cache: dict[str, tuple[float, dict]] = {}
+_init_cache_lock = threading.Lock()
 
 CONVO_META_TYPE = "conversation_meta"
 THREAD_MAP_TYPE = "thread_mapping"
@@ -91,9 +98,21 @@ def _migrate_agents_background(agents: list[dict], config_assistant_id: str) -> 
 @init_bp.route("/api/init", methods=["GET"])
 @require_jwt
 def init():
+    now = time.monotonic()
+    with _init_cache_lock:
+        cached = _init_cache.get(g.user_id)
+        if cached and (now - cached[0]) < INIT_CACHE_TTL_SEC:
+            return jsonify(cached[1])
+
     config_assistant_id = get_user_config_assistant_id(g.user_id)
 
-    response = run_async(get_client().get_memories(config_assistant_id))
+    try:
+        response = run_async(
+            get_client().get_memories(config_assistant_id),
+            timeout=INIT_BACKBOARD_TIMEOUT_SEC,
+        )
+    except TimeoutError:
+        return jsonify({"error": "Backboard timeout"}), 503
 
     agents = []
     files = []
@@ -159,7 +178,7 @@ def init():
     page_size = 25
     convo_page = [_format_convo(c) for c in convos[:page_size]]
 
-    return jsonify({
+    payload = {
         "agents": {
             "object": "list",
             "data": cleaned_agents,
@@ -181,7 +200,7 @@ def init():
         "favorites": _clean(favorites) if favorites else {},
         "tags": [_clean(t) for t in tags],
         "folders": [_clean(f) for f in folders],
-        "balance": get_balance_response(g.user_id),
+        "balance": get_balance_response_from_memories(response.memories, g.user_id),
         "subscription": {
             "subscription": display_plan if plan != "free" else None,
             "plan": display_plan,
@@ -211,7 +230,12 @@ def init():
         "permissions": {},
         "fileConfig": _file_config_data(),
         "banner": _get_banner_data(usage),
-    })
+    }
+
+    with _init_cache_lock:
+        _init_cache[g.user_id] = (now, payload)
+
+    return jsonify(payload)
 
 
 def _format_convo(c: dict) -> dict:
