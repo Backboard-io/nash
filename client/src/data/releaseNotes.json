@@ -1,5 +1,11 @@
 [
     {
+        "body": "**Hotfix release**\n\n- **librechat.yaml model sync:** Removed 26 stale models (retired OpenAI gpt-3.5/gpt-4 snapshots, gemini-2.0-flash, all gemma, grok-3 family, old cohere) and added 17 new models across OpenAI (gpt-5.3/5.4), Google (gemini-3.1 previews), xAI (grok-4-0709, reasoning variants), OpenRouter, and Cohere (command-a-reasoning-08-2025).\n- **selectorTiers updated:** Google free tier removed (no gemma models), xAI and Cohere tiers refreshed to match live model roster.",
+        "publishedAt": "2026-03-11T22:30:00Z",
+        "tagName": "v2.14.19",
+        "title": "v2.14.19"
+    },
+    {
         "body": "**Hotfix release**\n\n- **Memory create dialog:** Removed the key field from the manual memory creation form — value-only input simplifies the UX and key is now handled server-side.\n- **Memory create mutation:** Fixed cache update to handle API response shape variation where memory data is returned at the top level rather than nested under `data.memory`.\n- **Backboard model diff script:** New `scripts/diff-backboard-models.py` utility paginates all Backboard providers/models and diffs against `librechat.yaml` to surface missing or stale model entries.",
         "publishedAt": "2026-03-11T22:00:00Z",
         "tagName": "v2.14.18",
