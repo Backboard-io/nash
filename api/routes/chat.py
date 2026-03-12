@@ -335,9 +335,9 @@ def _prepare_stream(stream_id: str, user_id: str, payload: dict) -> dict:
         "Off"
         if is_temporary_chat
         else (
-            ephemeral_agent.get("memory", "Off")
+            ephemeral_agent.get("memory", "Auto")
             if isinstance(ephemeral_agent, dict)
-            else "Off"
+            else "Auto"
         )
     )
     bb_memory = {"Auto": "Auto", "Readonly": "Readonly", "On": "On", "Off": "off"}.get(mem_toggle, "off")

@@ -1,5 +1,11 @@
 [
     {
+        "body": "**Hotfix release**\n\n- **Memory default:** Backend now defaults memory mode to `Auto` when no preference is sent (e.g. fresh login, cleared storage). Previously defaulted to `Off`, so the UI showed \"Memory Auto\" but Nash behaved as if memory was off.",
+        "publishedAt": "2026-03-12T00:30:00Z",
+        "tagName": "v2.14.23",
+        "title": "v2.14.23"
+    },
+    {
         "body": "**Hotfix release**\n\n- **README:** Logo/picture markup fix.",
         "publishedAt": "2026-03-12T00:15:00Z",
         "tagName": "v2.14.22",
