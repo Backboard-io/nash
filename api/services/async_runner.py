@@ -31,8 +31,13 @@ def _get_loop() -> asyncio.AbstractEventLoop:
     return _loop
 
 
-def run_async(coro, *, timeout: float | None = None):
-    """Submit a coroutine to the persistent loop and block until it completes."""
+def run_async(coro, *, timeout: float | None = 30):
+    """Submit a coroutine to the persistent loop and block until it completes.
+
+    Defaults to a 30-second timeout so a stalled Backboard call never holds
+    a Flask worker thread indefinitely.  Pass timeout=None only when the
+    caller has its own explicit deadline (e.g. the MCP tool loop uses 120s).
+    """
     loop = _get_loop()
     future: Future = asyncio.run_coroutine_threadsafe(coro, loop)
     return future.result(timeout=timeout)

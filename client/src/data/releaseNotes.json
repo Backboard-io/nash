@@ -1,5 +1,11 @@
 [
     {
+        "body": "**Hotfix release — worker thread exhaustion fix**\n\n- **`run_async` default timeout (30s):** Every Backboard API call now has a 30-second backstop. Previously the default was no timeout, so a stalled Backboard response held a Flask worker thread indefinitely. With enough concurrent requests the entire worker pool could drain, making the server unresponsive while the health check still passed. Explicit overrides (`/api/init` at 12s, health check at 2s, MCP tool loop at 120s) are unaffected.",
+        "publishedAt": "2026-03-13T16:00:00Z",
+        "tagName": "v2.14.25",
+        "title": "v2.14.25"
+    },
+    {
         "body": "**Hotfix release — MCP tool loop hang fix**\n\n- **MCP tool loop:** Capped `run_with_tool_loop` at 10 iterations — an infinite `REQUIRES_ACTION` cycle from the Backboard API could hang the process for 20+ minutes.\n- **MCP timeout:** Added a 120-second hard timeout on `run_async` for MCP calls so a stuck loop releases the Flask worker thread within 2 minutes instead of never.\n- **Health check:** `/api/health` now probes the shared async event loop with a 2-second timeout and returns HTTP 503 if it is stuck, enabling App Runner to detect and auto-replace a hung instance.",
         "publishedAt": "2026-03-12T20:30:00Z",
         "tagName": "v2.14.24",
