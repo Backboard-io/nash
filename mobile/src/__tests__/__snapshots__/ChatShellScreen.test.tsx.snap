@@ -1,0 +1,2459 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
+<RNCSafeAreaView
+  className="flex-1 bg-surface-primary-alt"
+  edges={
+    {
+      "bottom": "additive",
+      "left": "additive",
+      "right": "additive",
+      "top": "additive",
+    }
+  }
+>
+  <View
+    className="flex-1 bg-surface-primary-alt"
+  >
+    <View
+      className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation pl-1"
+    >
+      <View
+        accessibilityLabel="Close sidebar"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="menu-toggle"
+      >
+        <Text
+          className="text-xl text-text-primary"
+        >
+          ☰
+        </Text>
+      </View>
+      <View
+        className="flex flex-1 flex-row items-center justify-center gap-2 overflow-hidden px-2"
+      >
+        <Text
+          className="min-w-0 flex-shrink text-center text-sm text-text-primary"
+          numberOfLines={1}
+        >
+          Testing: Initiating Dialogue
+        </Text>
+        <View
+          className="rounded-full border border-border-light bg-surface-secondary px-2 py-0.5"
+        >
+          <Text
+            className="text-xxs font-medium uppercase tracking-wide text-text-secondary"
+          >
+            v2.14.25
+          </Text>
+        </View>
+      </View>
+      <View
+        accessibilityLabel="New chat"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="new-chat-button"
+      >
+        <Text
+          className="text-xl text-text-primary"
+        >
+          ✎
+        </Text>
+      </View>
+    </View>
+    <View
+      className="flex flex-row items-center gap-2 px-4 pt-2"
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="pt-2 text-sm font-medium text-text-primary"
+        >
+          ◻ 
+          Model
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 rounded-xl border border-border-light bg-brand-purple-soft px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="pt-2 text-sm font-semibold text-brand-purple"
+        >
+          ⌁ $5
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 w-10 items-center justify-center rounded-xl border bg-surface-primary border-border-light"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="temporary-toggle"
+      >
+        <Text
+          className="text-base text-text-primary"
+        >
+          ◌
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="text-base text-text-primary"
+        >
+          ⇪
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="text-base text-text-primary"
+        >
+          ⌑
+        </Text>
+      </View>
+    </View>
+    <View
+      className="flex-1 items-center justify-center px-4 pb-16"
+    >
+      <View
+        className="mb-4 h-14 w-14 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+      >
+        <Text
+          className="text-2xl text-text-primary"
+        >
+          ⚙
+        </Text>
+      </View>
+      <Text
+        className="text-center text-2xl font-medium text-text-primary"
+        testID="greeting-text"
+      >
+        Good afternoon, Erin Tomorri
+      </Text>
+    </View>
+    <View
+      className="bg-surface-primary-alt px-2 pb-2"
+    >
+      <View
+        className="rounded-3xl border bg-surface-chat px-4 pb-2 pt-3 border-border-light"
+      >
+        <TextInput
+          className="min-h-9 text-base text-text-primary"
+          multiline={true}
+          onChangeText={[Function]}
+          placeholder="Message input"
+          placeholderTextColor="#595959"
+          testID="composer-input"
+          value=""
+        />
+        <View
+          className="mt-2 flex flex-row items-center justify-between"
+        >
+          <View
+            className="flex flex-row items-center gap-2"
+          >
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            >
+              <Text
+                className="text-base text-text-primary"
+              >
+                ◖
+              </Text>
+            </View>
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 rounded-full border border-border-light bg-surface-primary px-3"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            >
+              <Text
+                className="pt-1 text-xs font-semibold text-text-primary"
+              >
+                ◍ 
+                Memory
+              </Text>
+            </View>
+          </View>
+          <View
+            className="flex flex-row items-center gap-2"
+          >
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            >
+              <Text
+                className="text-base text-text-primary"
+              >
+                ◉
+              </Text>
+            </View>
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": true,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 w-8 items-center justify-center rounded-full bg-surface-hover"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              testID="composer-send-button"
+            >
+              <Text
+                className="text-base text-text-tertiary"
+              >
+                ↑
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      className="absolute inset-0 z-20 flex-row"
+      pointerEvents="box-none"
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="absolute inset-0 bg-overlay-mask"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="left-drawer-overlay"
+      />
+      <View
+        className="h-full w-[82%] border-r border-border-light bg-surface-primary-alt px-4 pb-4 pt-4"
+        testID="left-drawer"
+      >
+        <View
+          className="mb-4 flex-row items-center justify-between"
+        >
+          <Text
+            className="text-xl text-text-primary"
+          >
+            ☰
+          </Text>
+          <Text
+            className="text-xl text-text-primary"
+          >
+            ⌖
+          </Text>
+          <Text
+            className="text-xl text-text-primary"
+          >
+            ✎
+          </Text>
+        </View>
+        <View
+          className="rounded-lg border border-border-light bg-surface-primary px-3 py-2"
+        >
+          <TextInput
+            className="text-sm text-text-primary"
+            onChangeText={[Function]}
+            placeholder="Search messages"
+            placeholderTextColor="#595959"
+            testID="drawer-search-input"
+            value=""
+          />
+        </View>
+        <View
+          className="mt-4"
+        >
+          <Text
+            className="text-base font-medium text-text-primary"
+          >
+            ◫ Persona Marketplace
+          </Text>
+        </View>
+        <View
+          className="mt-5 flex-row items-center justify-between"
+        >
+          <Text
+            className="text-xs font-bold uppercase tracking-wider text-text-tertiary"
+          >
+            Folders
+          </Text>
+          <Text
+            className="text-lg text-text-tertiary"
+          >
+            +
+          </Text>
+        </View>
+        <View
+          className="mt-3 flex-row items-center justify-between"
+        >
+          <Text
+            className="text-base font-bold text-text-primary"
+          >
+            Chats
+          </Text>
+          <View
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            testID="toggle-chats-expanded"
+          >
+            <Text
+              className="text-sm text-text-tertiary"
+            >
+              ⌃
+            </Text>
+          </View>
+        </View>
+        <View
+          className="mt-2 flex-1"
+        >
+          <View
+            className="mb-3"
+          >
+            <Text
+              className="mb-1 text-xs text-text-tertiary"
+            >
+              Yesterday
+            </Text>
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="rounded-md px-2 py-2 bg-surface-hover"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              testID="conversation-item-conv_1"
+            >
+              <Text
+                className="text-sm text-text-primary"
+              >
+                ⚙ 
+                Testing: Initiating Dialogue
+              </Text>
+            </View>
+          </View>
+          <View
+            className="mb-3"
+          >
+            <Text
+              className="mb-1 text-xs text-text-tertiary"
+            >
+              Previous 7 days
+            </Text>
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="rounded-md px-2 py-2 "
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              testID="conversation-item-conv_2"
+            >
+              <Text
+                className="text-sm text-text-primary"
+              >
+                ⚙ 
+                Persona ideation checklist
+              </Text>
+            </View>
+          </View>
+          <View
+            className="mb-3"
+          >
+            <Text
+              className="mb-1 text-xs text-text-tertiary"
+            >
+              Previous 30 days
+            </Text>
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="rounded-md px-2 py-2 "
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              testID="conversation-item-conv_3"
+            >
+              <Text
+                className="text-sm text-text-primary"
+              >
+                ⚙ 
+                Backboard setup notes
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          className="mt-2 flex-row items-center border-t border-border-light pt-3"
+        >
+          <View
+            className="h-9 w-9 items-center justify-center rounded-full bg-[#8c7521]"
+          >
+            <Text
+              className="text-xs font-bold text-white"
+            >
+              ET
+            </Text>
+          </View>
+          <Text
+            className="ml-2 flex-1 text-sm text-text-primary"
+          >
+            Erin Tomorri
+          </Text>
+          <View
+            className="rounded-full border border-border-light px-2 py-0.5"
+          >
+            <Text
+              className="text-xxs font-bold text-text-tertiary"
+            >
+              FREE
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      className="absolute inset-0 z-30"
+      pointerEvents="box-none"
+    >
+      <View
+        className="absolute top-20 h-[74px] w-[54px] items-center justify-center rounded-l-md border border-r-0 border-border-light bg-surface-primary/80"
+        style={
+          {
+            "right": 0,
+          }
+        }
+      >
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="h-10 w-10 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="right-rail-toggle"
+        >
+          <Text
+            className="text-base text-text-primary"
+          >
+            〉
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`ChatShellScreen matches main chat snapshot 1`] = `
+<RNCSafeAreaView
+  className="flex-1 bg-surface-primary-alt"
+  edges={
+    {
+      "bottom": "additive",
+      "left": "additive",
+      "right": "additive",
+      "top": "additive",
+    }
+  }
+>
+  <View
+    className="flex-1 bg-surface-primary-alt"
+  >
+    <View
+      className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation pl-1"
+    >
+      <View
+        accessibilityLabel="Open sidebar"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="menu-toggle"
+      >
+        <Text
+          className="text-xl text-text-primary"
+        >
+          ☰
+        </Text>
+      </View>
+      <View
+        className="flex flex-1 flex-row items-center justify-center gap-2 overflow-hidden px-2"
+      >
+        <Text
+          className="min-w-0 flex-shrink text-center text-sm text-text-primary"
+          numberOfLines={1}
+        >
+          Testing: Initiating Dialogue
+        </Text>
+        <View
+          className="rounded-full border border-border-light bg-surface-secondary px-2 py-0.5"
+        >
+          <Text
+            className="text-xxs font-medium uppercase tracking-wide text-text-secondary"
+          >
+            v2.14.25
+          </Text>
+        </View>
+      </View>
+      <View
+        accessibilityLabel="New chat"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="new-chat-button"
+      >
+        <Text
+          className="text-xl text-text-primary"
+        >
+          ✎
+        </Text>
+      </View>
+    </View>
+    <View
+      className="flex flex-row items-center gap-2 px-4 pt-2"
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="pt-2 text-sm font-medium text-text-primary"
+        >
+          ◻ 
+          Model
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 rounded-xl border border-border-light bg-brand-purple-soft px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="pt-2 text-sm font-semibold text-brand-purple"
+        >
+          ⌁ $5
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 w-10 items-center justify-center rounded-xl border bg-surface-primary border-border-light"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="temporary-toggle"
+      >
+        <Text
+          className="text-base text-text-primary"
+        >
+          ◌
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="text-base text-text-primary"
+        >
+          ⇪
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="text-base text-text-primary"
+        >
+          ⌑
+        </Text>
+      </View>
+    </View>
+    <View
+      className="flex-1 items-center justify-center px-4 pb-16"
+    >
+      <View
+        className="mb-4 h-14 w-14 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+      >
+        <Text
+          className="text-2xl text-text-primary"
+        >
+          ⚙
+        </Text>
+      </View>
+      <Text
+        className="text-center text-2xl font-medium text-text-primary"
+        testID="greeting-text"
+      >
+        Good afternoon, Erin Tomorri
+      </Text>
+    </View>
+    <View
+      className="bg-surface-primary-alt px-2 pb-2"
+    >
+      <View
+        className="rounded-3xl border bg-surface-chat px-4 pb-2 pt-3 border-border-light"
+      >
+        <TextInput
+          className="min-h-9 text-base text-text-primary"
+          multiline={true}
+          onChangeText={[Function]}
+          placeholder="Message input"
+          placeholderTextColor="#595959"
+          testID="composer-input"
+          value=""
+        />
+        <View
+          className="mt-2 flex flex-row items-center justify-between"
+        >
+          <View
+            className="flex flex-row items-center gap-2"
+          >
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            >
+              <Text
+                className="text-base text-text-primary"
+              >
+                ◖
+              </Text>
+            </View>
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 rounded-full border border-border-light bg-surface-primary px-3"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            >
+              <Text
+                className="pt-1 text-xs font-semibold text-text-primary"
+              >
+                ◍ 
+                Memory
+              </Text>
+            </View>
+          </View>
+          <View
+            className="flex flex-row items-center gap-2"
+          >
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            >
+              <Text
+                className="text-base text-text-primary"
+              >
+                ◉
+              </Text>
+            </View>
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": true,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 w-8 items-center justify-center rounded-full bg-surface-hover"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              testID="composer-send-button"
+            >
+              <Text
+                className="text-base text-text-tertiary"
+              >
+                ↑
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      className="absolute inset-0 z-30"
+      pointerEvents="box-none"
+    >
+      <View
+        className="absolute top-20 h-[74px] w-[54px] items-center justify-center rounded-l-md border border-r-0 border-border-light bg-surface-primary/80"
+        style={
+          {
+            "right": 0,
+          }
+        }
+      >
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="h-10 w-10 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="right-rail-toggle"
+        >
+          <Text
+            className="text-base text-text-primary"
+          >
+            〉
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;
+
+exports[`ChatShellScreen matches right panel open snapshot 1`] = `
+<RNCSafeAreaView
+  className="flex-1 bg-surface-primary-alt"
+  edges={
+    {
+      "bottom": "additive",
+      "left": "additive",
+      "right": "additive",
+      "top": "additive",
+    }
+  }
+>
+  <View
+    className="flex-1 bg-surface-primary-alt"
+  >
+    <View
+      className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation pl-1"
+    >
+      <View
+        accessibilityLabel="Open sidebar"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="menu-toggle"
+      >
+        <Text
+          className="text-xl text-text-primary"
+        >
+          ☰
+        </Text>
+      </View>
+      <View
+        className="flex flex-1 flex-row items-center justify-center gap-2 overflow-hidden px-2"
+      >
+        <Text
+          className="min-w-0 flex-shrink text-center text-sm text-text-primary"
+          numberOfLines={1}
+        >
+          Testing: Initiating Dialogue
+        </Text>
+        <View
+          className="rounded-full border border-border-light bg-surface-secondary px-2 py-0.5"
+        >
+          <Text
+            className="text-xxs font-medium uppercase tracking-wide text-text-secondary"
+          >
+            v2.14.25
+          </Text>
+        </View>
+      </View>
+      <View
+        accessibilityLabel="New chat"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="new-chat-button"
+      >
+        <Text
+          className="text-xl text-text-primary"
+        >
+          ✎
+        </Text>
+      </View>
+    </View>
+    <View
+      className="flex flex-row items-center gap-2 px-4 pt-2"
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="pt-2 text-sm font-medium text-text-primary"
+        >
+          ◻ 
+          Model
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 rounded-xl border border-border-light bg-brand-purple-soft px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="pt-2 text-sm font-semibold text-brand-purple"
+        >
+          ⌁ $5
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 w-10 items-center justify-center rounded-xl border bg-surface-primary border-border-light"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="temporary-toggle"
+      >
+        <Text
+          className="text-base text-text-primary"
+        >
+          ◌
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="text-base text-text-primary"
+        >
+          ⇪
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+      >
+        <Text
+          className="text-base text-text-primary"
+        >
+          ⌑
+        </Text>
+      </View>
+    </View>
+    <View
+      className="flex-1 items-center justify-center px-4 pb-16"
+    >
+      <View
+        className="mb-4 h-14 w-14 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+      >
+        <Text
+          className="text-2xl text-text-primary"
+        >
+          ⚙
+        </Text>
+      </View>
+      <Text
+        className="text-center text-2xl font-medium text-text-primary"
+        testID="greeting-text"
+      >
+        Good afternoon, Erin Tomorri
+      </Text>
+    </View>
+    <View
+      className="bg-surface-primary-alt px-2 pb-2"
+    >
+      <View
+        className="rounded-3xl border bg-surface-chat px-4 pb-2 pt-3 border-border-light"
+      >
+        <TextInput
+          className="min-h-9 text-base text-text-primary"
+          multiline={true}
+          onChangeText={[Function]}
+          placeholder="Message input"
+          placeholderTextColor="#595959"
+          testID="composer-input"
+          value=""
+        />
+        <View
+          className="mt-2 flex flex-row items-center justify-between"
+        >
+          <View
+            className="flex flex-row items-center gap-2"
+          >
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            >
+              <Text
+                className="text-base text-text-primary"
+              >
+                ◖
+              </Text>
+            </View>
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 rounded-full border border-border-light bg-surface-primary px-3"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            >
+              <Text
+                className="pt-1 text-xs font-semibold text-text-primary"
+              >
+                ◍ 
+                Memory
+              </Text>
+            </View>
+          </View>
+          <View
+            className="flex flex-row items-center gap-2"
+          >
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            >
+              <Text
+                className="text-base text-text-primary"
+              >
+                ◉
+              </Text>
+            </View>
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": true,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 w-8 items-center justify-center rounded-full bg-surface-hover"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              testID="composer-send-button"
+            >
+              <Text
+                className="text-base text-text-tertiary"
+              >
+                ↑
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+    <View
+      className="absolute inset-0 z-30"
+      pointerEvents="box-none"
+    >
+      <View
+        className="absolute top-20 h-[74px] w-[54px] items-center justify-center rounded-l-md border border-r-0 border-border-light bg-surface-primary/80"
+        style={
+          {
+            "right": "86%",
+          }
+        }
+      >
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="h-10 w-10 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="right-rail-toggle"
+        >
+          <Text
+            className="text-base text-text-primary"
+          >
+            〈
+          </Text>
+        </View>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="absolute inset-0"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "backgroundColor": "rgba(7,7,7,0.4)",
+          }
+        }
+        testID="right-panel-overlay"
+      />
+      <View
+        className="ml-[14%] h-full border-l border-border-light bg-surface-primary-alt p-4"
+        testID="right-panel"
+      >
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-ring-primary bg-surface-secondary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="panel-action-agents"
+        >
+          <Text
+            className="text-sm font-semibold text-text-primary"
+          >
+            Persona Builder
+          </Text>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="panel-action-prompts"
+        >
+          <Text
+            className="text-sm font-semibold text-text-primary"
+          >
+            Prompts
+          </Text>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="panel-action-chat-assistant-prompt"
+        >
+          <Text
+            className="text-sm font-semibold text-text-primary"
+          >
+            Chat assistant prompt
+          </Text>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="panel-action-memories"
+        >
+          <Text
+            className="text-sm font-semibold text-text-primary"
+          >
+            Memories
+          </Text>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="panel-action-files"
+        >
+          <Text
+            className="text-sm font-semibold text-text-primary"
+          >
+            Attach Files
+          </Text>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="panel-action-bookmarks"
+        >
+          <Text
+            className="text-sm font-semibold text-text-primary"
+          >
+            Bookmarks
+          </Text>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="panel-action-mcp-builder"
+        >
+          <Text
+            className="text-sm font-semibold text-text-primary"
+          >
+            MCP Settings
+          </Text>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="panel-action-hide-panel"
+        >
+          <Text
+            className="text-sm font-semibold text-text-primary"
+          >
+            Hide Panel
+          </Text>
+        </View>
+        <View
+          className="mt-2 rounded-2xl border border-border-light bg-surface-secondary p-4"
+        >
+          <Text
+            className="text-xs font-bold text-text-primary"
+          >
+            Built on Backboard.io
+          </Text>
+          <Text
+            className="mt-2 text-lg font-semibold text-text-primary"
+          >
+            Enterprise workspace setup
+          </Text>
+          <Text
+            className="mt-2 text-xs leading-5 text-text-secondary"
+          >
+            Get custom guardrails, team controls, and a setup tailored to your company.
+          </Text>
+          <Text
+            className="mt-1 text-xs leading-5 text-text-secondary"
+          >
+            Our team can help you integrate Backboard.io into your AI stack.
+          </Text>
+          <View
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            className="mt-3 min-h-11 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+            collapsable={false}
+            focusable={true}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+          >
+            <Text
+              className="text-sm font-bold text-text-primary"
+            >
+              Get started! ↗
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</RNCSafeAreaView>
+`;

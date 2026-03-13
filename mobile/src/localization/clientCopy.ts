@@ -1,0 +1,47 @@
+export const clientCopy = {
+  com_nav_close_sidebar: 'Close sidebar',
+  com_nav_open_sidebar: 'Open sidebar',
+  com_nav_search_placeholder: 'Search messages',
+  com_nav_setting_mcp: 'MCP Settings',
+  com_folder_folders: 'Folders',
+  com_sidepanel_agent_builder: 'Persona Builder',
+  com_sidepanel_attach_files: 'Attach Files',
+  com_sidepanel_chat_assistant_prompt: 'Chat assistant prompt',
+  com_sidepanel_conversation_tags: 'Bookmarks',
+  com_sidepanel_hide_panel: 'Hide Panel',
+  com_ui_chats: 'Chats',
+  com_ui_date_april: 'April',
+  com_ui_date_august: 'August',
+  com_ui_date_december: 'December',
+  com_ui_date_february: 'February',
+  com_ui_date_january: 'January',
+  com_ui_date_july: 'July',
+  com_ui_date_june: 'June',
+  com_ui_date_march: 'March',
+  com_ui_date_may: 'May',
+  com_ui_date_november: 'November',
+  com_ui_date_october: 'October',
+  com_ui_date_previous_30_days: 'Previous 30 days',
+  com_ui_date_previous_7_days: 'Previous 7 days',
+  com_ui_date_september: 'September',
+  com_ui_date_today: 'Today',
+  com_ui_date_yesterday: 'Yesterday',
+  com_ui_good_afternoon: 'Good afternoon',
+  com_ui_good_evening: 'Good evening',
+  com_ui_good_morning: 'Good morning',
+  com_ui_late_night: 'Happy late night',
+  com_ui_memories: 'Memories',
+  com_ui_memory: 'Memory',
+  com_ui_message_input: 'Message input',
+  com_ui_model: 'Model',
+  com_ui_new_chat: 'New chat',
+  com_ui_prompts: 'Prompts',
+  com_ui_temporary: 'Temporary Chat',
+  com_ui_weekend_morning: 'Happy weekend',
+} as const;
+
+export type ClientCopyKey = keyof typeof clientCopy;
+
+export function t(key: ClientCopyKey): string {
+  return clientCopy[key];
+}

@@ -13,7 +13,11 @@
     "build:packages": "npx turbo run build --filter=librechat-data-provider --filter=@librechat/data-schemas --filter=@librechat/client",
     "build:client": "npx turbo run build --filter=@librechat/frontend",
     "build": "npx turbo run build",
-    "dev": "npm run frontend"
+    "dev": "npm run frontend",
+    "mobile": "npm run start --prefix mobile",
+    "mobile:ios": "npm run ios --prefix mobile",
+    "mobile:android": "npm run android --prefix mobile",
+    "mobile:test": "npm run test --prefix mobile"
   },
   "devDependencies": {
     "rimraf": "^6.1.3",

@@ -39,6 +39,17 @@ For enterprise CTA warm-lead routing, set `CLOSER_NOTES_WARM_LEAD_ASSISTANT_ID` 
 
 Logs stream to `/tmp/nash-api.log` and `/tmp/nash-frontend.log`.
 
+## Mobile MVP (Expo)
+
+The `mobile` folder contains a UI-first Expo app that mirrors the mobile-web shell (header, chat landing, left drawer, right controls panel, and composer) with local mock state only.
+
+```bash
+npm run mobile            # start Expo dev server
+npm run mobile:ios        # open iOS simulator/device
+npm run mobile:android    # open Android emulator/device
+npm run mobile:test       # run React Native tests + snapshots
+```
+
 ## Architecture
 
 ```
@@ -108,6 +119,8 @@ nash2.0/
 ├── client/                 # React frontend
 │   ├── src/                #   App source
 │   └── dist/               #   Production build
+├── mobile/                 # Expo mobile MVP (UI-first)
+│   └── src/                #   Chat shell, mock services, tests
 ├── packages/               # Shared monorepo packages
 ├── scripts/                # Smoke tests
 ├── terraform/              # AWS infrastructure
