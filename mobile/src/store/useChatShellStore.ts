@@ -14,11 +14,15 @@ type ChatShellAction =
   | { type: 'toggle_side_panel' }
   | { type: 'close_side_panel' }
   | { type: 'set_temporary'; value: boolean }
+  | { type: 'set_cerebras_access'; value: boolean }
   | { type: 'set_search_query'; value: string }
   | { type: 'toggle_chats_expanded' }
   | { type: 'select_conversation'; conversationId: string }
   | { type: 'set_active_panel'; actionId: SideNavActionId }
   | { type: 'set_composer_text'; value: string }
+  | { type: 'send_message_start'; text: string }
+  | { type: 'send_message_complete'; text: string }
+  | { type: 'send_message_failed'; text: string }
   | { type: 'new_chat_reset'; composerText: string; isTemporary: boolean };
 
 function reducer(state: ChatShellStoreState, action: ChatShellAction): ChatShellStoreState {
@@ -45,6 +49,8 @@ function reducer(state: ChatShellStoreState, action: ChatShellAction): ChatShell
       return { ...state, sidePanelVisible: false };
     case 'set_temporary':
       return { ...state, isTemporary: action.value };
+    case 'set_cerebras_access':
+      return { ...state, hasCerebrasAccess: action.value };
     case 'set_search_query':
       return { ...state, searchQuery: action.value };
     case 'toggle_chats_expanded':
@@ -59,6 +65,46 @@ function reducer(state: ChatShellStoreState, action: ChatShellAction): ChatShell
       };
     case 'set_composer_text':
       return { ...state, composerText: action.value };
+    case 'send_message_start':
+      return {
+        ...state,
+        composerText: '',
+        messages: [
+          ...state.messages,
+          {
+            id: `msg_${state.messages.length + 1}`,
+            role: 'user',
+            text: action.text,
+          },
+        ],
+        isReplying: true,
+      };
+    case 'send_message_complete':
+      return {
+        ...state,
+        messages: [
+          ...state.messages,
+          {
+            id: `msg_${state.messages.length + 1}`,
+            role: 'assistant',
+            text: action.text,
+          },
+        ],
+        isReplying: false,
+      };
+    case 'send_message_failed':
+      return {
+        ...state,
+        messages: [
+          ...state.messages,
+          {
+            id: `msg_${state.messages.length + 1}`,
+            role: 'assistant',
+            text: action.text,
+          },
+        ],
+        isReplying: false,
+      };
     case 'new_chat_reset':
       return {
         ...state,
@@ -66,6 +112,8 @@ function reducer(state: ChatShellStoreState, action: ChatShellAction): ChatShell
         composerText: action.composerText,
         isTemporary: action.isTemporary,
         navVisible: false,
+        messages: [],
+        isReplying: false,
       };
     default:
       return state;
@@ -89,11 +137,14 @@ export function useChatShellStore({
     navVisible: false,
     sidePanelVisible: false,
     isTemporary: snapshot.initialTemporaryMode,
+    hasCerebrasAccess: true,
     searchQuery: '',
     isChatsExpanded: true,
-    selectedConversationId: snapshot.conversations[0]?.conversationId ?? null,
-    activePanel: snapshot.sideNavActions[0]?.id ?? null,
+    selectedConversationId: null,
+    activePanel: null,
     composerText: snapshot.initialDraft,
+    messages: [],
+    isReplying: false,
     ...initialState,
   });
 
@@ -147,12 +198,37 @@ export function useChatShellStore({
       toggleSidePanel: () => dispatch({ type: 'toggle_side_panel' }),
       closeSidePanel: () => dispatch({ type: 'close_side_panel' }),
       setTemporary: (value: boolean) => dispatch({ type: 'set_temporary', value }),
+      setCerebrasAccess: (value: boolean) => dispatch({ type: 'set_cerebras_access', value }),
       setSearchQuery: (value: string) => dispatch({ type: 'set_search_query', value }),
       toggleChatsExpanded: () => dispatch({ type: 'toggle_chats_expanded' }),
       selectConversation: (conversationId: string) =>
         dispatch({ type: 'select_conversation', conversationId }),
       setActivePanel: (actionId: SideNavActionId) => dispatch({ type: 'set_active_panel', actionId }),
       setComposerText: (value: string) => dispatch({ type: 'set_composer_text', value }),
+      sendMessage: async () => {
+        if (state.isReplying) {
+          return;
+        }
+
+        const text = state.composerText.trim();
+        if (!text) {
+          return;
+        }
+
+        dispatch({ type: 'send_message_start', text });
+
+        try {
+          const reply = await service.replyAsNash(text, {
+            provider: state.hasCerebrasAccess ? 'cerebras' : 'gpt',
+          });
+          dispatch({ type: 'send_message_complete', text: reply });
+        } catch {
+          dispatch({
+            type: 'send_message_failed',
+            text: 'Nash could not respond right now. Please try again.',
+          });
+        }
+      },
       startNewChat: () => {
         const reset = service.resetDraft();
         dispatch({ type: 'new_chat_reset', ...reset });

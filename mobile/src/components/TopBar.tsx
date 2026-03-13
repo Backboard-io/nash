@@ -1,3 +1,4 @@
+import { Menu, SquarePen } from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
 
 import { t } from '../localization/clientCopy';
@@ -11,15 +12,17 @@ interface TopBarProps {
 }
 
 export function TopBar({ title, versionLabel, navVisible, onToggleNav, onNewChat }: TopBarProps) {
+  const normalizedVersion = versionLabel.toUpperCase();
+
   return (
-    <View className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation pl-1">
+    <View className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation px-1">
       <Pressable
         onPress={onToggleNav}
-        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-xl"
         accessibilityLabel={navVisible ? t('com_nav_close_sidebar') : t('com_nav_open_sidebar')}
         testID="menu-toggle"
       >
-        <Text className="text-xl text-text-primary">☰</Text>
+        <Menu color="#212121" size={20} strokeWidth={2} />
       </Pressable>
 
       <View className="flex flex-1 flex-row items-center justify-center gap-2 overflow-hidden px-2">
@@ -28,18 +31,18 @@ export function TopBar({ title, versionLabel, navVisible, onToggleNav, onNewChat
         </Text>
         <View className="rounded-full border border-border-light bg-surface-secondary px-2 py-0.5">
           <Text className="text-xxs font-medium uppercase tracking-wide text-text-secondary">
-            {versionLabel}
+            {normalizedVersion}
           </Text>
         </View>
       </View>
 
       <Pressable
         onPress={onNewChat}
-        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-xl"
         accessibilityLabel={t('com_ui_new_chat')}
         testID="new-chat-button"
       >
-        <Text className="text-xl text-text-primary">✎</Text>
+        <SquarePen color="#212121" size={20} strokeWidth={2} />
       </Pressable>
     </View>
   );

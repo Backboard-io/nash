@@ -1,3 +1,17 @@
+import {
+  ArrowRightToLine,
+  ArrowUpRight,
+  Blocks,
+  Bookmark,
+  ChevronLeft,
+  ChevronRight,
+  Database,
+  MessageSquare,
+  MessageSquareQuote,
+  Paperclip,
+  Sparkles,
+  Building2,
+} from 'lucide-react-native';
 import { Pressable, Text, View } from 'react-native';
 
 import { t } from '../localization/clientCopy';
@@ -8,15 +22,42 @@ interface RightPanelProps {
   visible: boolean;
   actions: SideNavAction[];
   activePanel: SideNavActionId | null;
+  topInset?: number;
   onToggleVisible: () => void;
   onClose: () => void;
   onSelectAction: (actionId: SideNavActionId) => void;
+}
+
+function ActionIcon({ id, color = '#212121' }: { id: SideNavActionId; color?: string }) {
+  if (id === 'agents') {
+    return <Blocks color={color} size={16} strokeWidth={2} />;
+  }
+  if (id === 'prompts') {
+    return <MessageSquareQuote color={color} size={16} strokeWidth={2} />;
+  }
+  if (id === 'chat-assistant-prompt') {
+    return <MessageSquare color={color} size={16} strokeWidth={2} />;
+  }
+  if (id === 'memories') {
+    return <Database color={color} size={16} strokeWidth={2} />;
+  }
+  if (id === 'files') {
+    return <Paperclip color={color} size={16} strokeWidth={2} />;
+  }
+  if (id === 'bookmarks') {
+    return <Bookmark color={color} size={16} strokeWidth={2} />;
+  }
+  if (id === 'mcp-builder') {
+    return <Sparkles color={color} size={16} strokeWidth={2} />;
+  }
+  return <ArrowRightToLine color={color} size={16} strokeWidth={2} />;
 }
 
 export function RightPanel({
   visible,
   actions,
   activePanel,
+  topInset = 0,
   onToggleVisible,
   onClose,
   onSelectAction,
@@ -24,11 +65,19 @@ export function RightPanel({
   return (
     <View className="absolute inset-0 z-30" pointerEvents="box-none">
       <View
-        className="absolute top-20 h-[74px] w-[54px] items-center justify-center rounded-l-md border border-r-0 border-border-light bg-surface-primary/80"
-        style={{ right: visible ? '86%' : 0 }}
+        className="absolute top-1/2 h-16 w-6 items-center justify-center"
+        style={{ marginTop: -32, right: visible ? '84%' : 2 }}
       >
-        <Pressable className="h-10 w-10 items-center justify-center rounded-full border border-border-light bg-surface-primary" onPress={onToggleVisible} testID="right-rail-toggle">
-          <Text className="text-base text-text-primary">{visible ? '〈' : '〉'}</Text>
+        <Pressable
+          className="h-16 w-6 items-center justify-center"
+          onPress={onToggleVisible}
+          testID="right-rail-toggle"
+        >
+          {visible ? (
+            <ChevronRight color="#b2b2b6" size={18} strokeWidth={3} />
+          ) : (
+            <ChevronLeft color="#b2b2b6" size={18} strokeWidth={3} />
+          )}
         </Pressable>
       </View>
 
@@ -40,34 +89,44 @@ export function RightPanel({
             onPress={onClose}
             testID="right-panel-overlay"
           />
-          <View className="ml-[14%] h-full border-l border-border-light bg-surface-primary-alt p-4" testID="right-panel">
+          <View
+            className="absolute bottom-0 right-0 top-0 w-[84%] border-l border-border-light bg-surface-primary-alt px-4 pb-4"
+            style={{ paddingTop: topInset + 16 }}
+            testID="right-panel"
+          >
             {actions.map((action) => {
-              const isActive = activePanel === action.id;
               return (
                 <Pressable
                   key={action.id}
                   onPress={() => onSelectAction(action.id)}
-                  className={`mb-2 min-h-11 justify-center rounded-xl border px-4 ${
-                    isActive ? 'border-ring-primary bg-surface-secondary' : 'border-border-light bg-surface-primary'
-                  }`}
+                  className="mb-2 min-h-11 flex-row items-center rounded-xl border border-border-light bg-surface-primary px-4"
                   testID={`panel-action-${action.id}`}
                 >
-                  <Text className="text-sm font-semibold text-text-primary">{t(action.titleKey)}</Text>
+                  <ActionIcon id={action.id} color="#212121" />
+                  <Text className="ml-3 text-base font-semibold text-text-primary">
+                    {t(action.titleKey)}
+                  </Text>
                 </Pressable>
               );
             })}
 
             <View className="mt-2 rounded-2xl border border-border-light bg-surface-secondary p-4">
-              <Text className="text-xs font-bold text-text-primary">Built on Backboard.io</Text>
-              <Text className="mt-2 text-lg font-semibold text-text-primary">Enterprise workspace setup</Text>
+              <View className="flex-row items-center gap-2">
+                <Building2 color="#212121" size={14} strokeWidth={2} />
+                <Text className="text-xs font-bold text-text-primary">Built on Backboard.io</Text>
+              </View>
+              <Text className="mt-3 text-base font-semibold text-text-primary">
+                Enterprise workspace setup
+              </Text>
               <Text className="mt-2 text-xs leading-5 text-text-secondary">
                 Get custom guardrails, team controls, and a setup tailored to your company.
               </Text>
               <Text className="mt-1 text-xs leading-5 text-text-secondary">
                 Our team can help you integrate Backboard.io into your AI stack.
               </Text>
-              <Pressable className="mt-3 min-h-11 items-center justify-center rounded-xl border border-border-light bg-surface-primary">
-                <Text className="text-sm font-bold text-text-primary">Get started! ↗</Text>
+              <Pressable className="mt-3 min-h-11 flex-row items-center justify-center rounded-xl border border-border-light bg-surface-primary">
+                <Text className="text-sm font-bold text-text-primary">Get started!</Text>
+                <ArrowUpRight color="#212121" size={14} strokeWidth={2} />
               </Pressable>
             </View>
           </View>

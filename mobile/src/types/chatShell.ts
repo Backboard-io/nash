@@ -38,6 +38,12 @@ export interface GreetingResult {
   text: string;
 }
 
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  text: string;
+}
+
 export interface ChatShellSnapshot {
   versionLabel: string;
   profile: UserProfile;
@@ -51,11 +57,14 @@ export interface ChatShellStoreState {
   navVisible: boolean;
   sidePanelVisible: boolean;
   isTemporary: boolean;
+  hasCerebrasAccess: boolean;
   searchQuery: string;
   isChatsExpanded: boolean;
   selectedConversationId: string | null;
   activePanel: SideNavActionId | null;
   composerText: string;
+  messages: ChatMessage[];
+  isReplying: boolean;
 }
 
 export interface ChatShellService {
@@ -63,4 +72,10 @@ export interface ChatShellService {
   getGreeting(date: Date, userName?: string): GreetingResult;
   groupConversationsByDate(conversations: ConversationItem[], now?: Date): GroupedConversations;
   resetDraft(): { composerText: string; isTemporary: boolean };
+  replyAsNash(
+    input: string,
+    options?: {
+      provider?: 'cerebras' | 'gpt';
+    },
+  ): Promise<string>;
 }

@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body,
+#root {
+  background-color: #ffffff;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/Inter-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  src: url('./assets/fonts/Inter-SemiBold.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./assets/fonts/Inter-Bold.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'RobotoMono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/roboto-mono-latin-400-normal.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'RobotoMono';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./assets/fonts/roboto-mono-latin-700-normal.woff2') format('woff2');
+  font-display: swap;
+}

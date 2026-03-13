@@ -10,7 +10,7 @@ module.exports = {
         'text-secondary': '#424242',
         'text-tertiary': '#595959',
         'surface-primary': '#ffffff',
-        'surface-primary-alt': '#f7f7f8',
+        'surface-primary-alt': '#ffffff',
         'surface-secondary': '#f7f7f8',
         'surface-tertiary': '#ececec',
         'surface-hover': '#e3e3e3',
@@ -28,6 +28,10 @@ module.exports = {
         md: '12px',
         lg: '16px',
         xl: '24px',
+      },
+      fontFamily: {
+        sans: ['Inter'],
+        mono: ['RobotoMono'],
       },
       fontSize: {
         xxs: '10px',

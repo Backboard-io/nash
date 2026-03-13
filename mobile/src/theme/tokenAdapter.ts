@@ -5,7 +5,7 @@ export const tokenAdapter = {
     textSecondary: '#424242',
     textTertiary: '#595959',
     surfacePrimary: '#ffffff',
-    surfacePrimaryAlt: '#f7f7f8',
+    surfacePrimaryAlt: '#ffffff',
     surfaceSecondary: '#f7f7f8',
     surfaceTertiary: '#ececec',
     surfaceHover: '#e3e3e3',

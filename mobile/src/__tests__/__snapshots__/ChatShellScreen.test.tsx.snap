@@ -1,22 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
-<RNCSafeAreaView
-  className="flex-1 bg-surface-primary-alt"
-  edges={
+<View
+  className="flex-1 bg-presentation"
+  style={
     {
-      "bottom": "additive",
-      "left": "additive",
-      "right": "additive",
-      "top": "additive",
+      "backgroundColor": "#ffffff",
     }
   }
 >
   <View
-    className="flex-1 bg-surface-primary-alt"
+    className="flex-1 bg-presentation"
+    style={
+      {
+        "backgroundColor": "#ffffff",
+        "paddingTop": 0,
+      }
+    }
   >
     <View
-      className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation pl-1"
+      className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation px-1"
     >
       <View
         accessibilityLabel="Close sidebar"
@@ -38,7 +41,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-xl"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -51,13 +54,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
         testID="menu-toggle"
-      >
-        <Text
-          className="text-xl text-text-primary"
-        >
-          ☰
-        </Text>
-      </View>
+      />
       <View
         className="flex flex-1 flex-row items-center justify-center gap-2 overflow-hidden px-2"
       >
@@ -65,7 +62,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
           className="min-w-0 flex-shrink text-center text-sm text-text-primary"
           numberOfLines={1}
         >
-          Testing: Initiating Dialogue
+          New Chat
         </Text>
         <View
           className="rounded-full border border-border-light bg-surface-secondary px-2 py-0.5"
@@ -73,12 +70,12 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
           <Text
             className="text-xxs font-medium uppercase tracking-wide text-text-secondary"
           >
-            v2.14.25
+            V2.14.25
           </Text>
         </View>
       </View>
       <View
-        accessibilityLabel="New chat"
+        accessibilityLabel="New Chat"
         accessibilityState={
           {
             "busy": undefined,
@@ -97,7 +94,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-xl"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -110,16 +107,10 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
         testID="new-chat-button"
-      >
-        <Text
-          className="text-xl text-text-primary"
-        >
-          ✎
-        </Text>
-      </View>
+      />
     </View>
     <View
-      className="flex flex-row items-center gap-2 px-4 pt-2"
+      className="flex flex-row items-center gap-2 px-3 pt-2"
     >
       <View
         accessibilityState={
@@ -140,7 +131,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="h-10 rounded-xl border border-border-light bg-surface-primary px-4"
+        className="h-10 min-w-[112px] max-w-[160px] flex-row items-center justify-center gap-2 rounded-xl border border-border-light bg-surface-primary px-3 py-2"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -152,11 +143,11 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
+        testID="model-trigger"
       >
         <Text
-          className="pt-2 text-sm font-medium text-text-primary"
+          className="text-sm font-semibold text-text-primary"
         >
-          ◻ 
           Model
         </Text>
       </View>
@@ -179,7 +170,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="h-10 rounded-xl border border-border-light bg-brand-purple-soft px-4"
+        className="h-10 flex-row items-center justify-center gap-2 rounded-xl border border-border-light bg-brand-purple-soft px-3"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -192,11 +183,15 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
       >
-        <Text
-          className="pt-2 text-sm font-semibold text-brand-purple"
+        <View
+          className="rounded-full bg-[#eee3ff] px-2 py-0.5"
         >
-          ⌁ $5
-        </Text>
+          <Text
+            className="text-xs font-semibold text-brand-purple"
+          >
+            $5
+          </Text>
+        </View>
       </View>
       <View
         accessibilityState={
@@ -230,13 +225,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
         testID="temporary-toggle"
-      >
-        <Text
-          className="text-base text-text-primary"
-        >
-          ◌
-        </Text>
-      </View>
+      />
       <View
         accessibilityState={
           {
@@ -268,13 +257,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
-      >
-        <Text
-          className="text-base text-text-primary"
-        >
-          ⇪
-        </Text>
-      </View>
+      />
       <View
         accessibilityState={
           {
@@ -294,7 +277,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-hover"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -306,44 +289,54 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
-      >
-        <Text
-          className="text-base text-text-primary"
-        >
-          ⌑
-        </Text>
-      </View>
+        testID="cerebras-access-toggle"
+      />
     </View>
     <View
-      className="flex-1 items-center justify-center px-4 pb-16"
+      className="flex-1 items-center justify-center px-4 pb-14"
     >
       <View
-        className="mb-4 h-14 w-14 items-center justify-center rounded-full border border-border-light bg-surface-primary"
-      >
-        <Text
-          className="text-2xl text-text-primary"
-        >
-          ⚙
-        </Text>
-      </View>
+        className="mb-4 h-11 w-11 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+      />
       <Text
-        className="text-center text-2xl font-medium text-text-primary"
+        className="text-center text-2xl font-semibold text-text-primary"
         testID="greeting-text"
       >
         Good afternoon, Erin Tomorri
       </Text>
+      <View
+        className="mt-20 w-full items-center"
+      >
+        <View
+          className="h-px w-72 rounded-full bg-border-light/70"
+          style={
+            {
+              "transform": [
+                {
+                  "rotate": "-4deg",
+                },
+              ],
+            }
+          }
+        />
+      </View>
     </View>
     <View
-      className="bg-surface-primary-alt px-2 pb-2"
+      className="bg-surface-primary-alt px-0"
+      style={
+        {
+          "paddingBottom": 0,
+        }
+      }
     >
       <View
-        className="rounded-3xl border bg-surface-chat px-4 pb-2 pt-3 border-border-light"
+        className="rounded-t-[24px] border border-b-0 bg-surface-chat px-4 pb-2 pt-3 border-border-light"
       >
         <TextInput
           className="min-h-9 text-base text-text-primary"
           multiline={true}
           onChangeText={[Function]}
-          placeholder="Message input"
+          placeholder="Message Cerebras"
           placeholderTextColor="#595959"
           testID="composer-input"
           value=""
@@ -373,7 +366,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              className="h-9 w-9 items-center justify-center rounded-full"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -385,13 +378,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
               onResponderTerminate={[Function]}
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
-            >
-              <Text
-                className="text-base text-text-primary"
-              >
-                ◖
-              </Text>
-            </View>
+            />
             <View
               accessibilityState={
                 {
@@ -411,7 +398,39 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 rounded-full border border-border-light bg-surface-primary px-3"
+              className="h-9 w-9 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            />
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 flex-row items-center rounded-full border border-border-light bg-surface-primary px-3"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -425,9 +444,8 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
               onStartShouldSetResponder={[Function]}
             >
               <Text
-                className="pt-1 text-xs font-semibold text-text-primary"
+                className="ml-1 text-xs font-semibold text-text-secondary"
               >
-                ◍ 
                 Memory
               </Text>
             </View>
@@ -454,7 +472,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              className="h-9 w-9 items-center justify-center rounded-full"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -466,13 +484,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
               onResponderTerminate={[Function]}
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
-            >
-              <Text
-                className="text-base text-text-primary"
-              >
-                ◉
-              </Text>
-            </View>
+            />
             <View
               accessibilityState={
                 {
@@ -492,7 +504,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 w-8 items-center justify-center rounded-full bg-surface-hover"
+              className="h-9 w-9 items-center justify-center rounded-full bg-surface-hover"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -505,119 +517,239 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
               testID="composer-send-button"
-            >
-              <Text
-                className="text-base text-text-tertiary"
-              >
-                ↑
-              </Text>
-            </View>
+            />
           </View>
         </View>
       </View>
     </View>
+  </View>
+  <View
+    className="absolute inset-0 z-20 flex-row"
+    pointerEvents="box-none"
+  >
     <View
-      className="absolute inset-0 z-20 flex-row"
-      pointerEvents="box-none"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      className="absolute inset-0 bg-overlay-mask"
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      testID="left-drawer-overlay"
+    />
+    <View
+      className="h-full w-[82%] border-r border-border-light bg-surface-primary-alt px-4 pb-4"
+      style={
+        {
+          "paddingTop": 12,
+        }
+      }
+      testID="left-drawer"
     >
       <View
-        accessibilityState={
-          {
-            "busy": undefined,
-            "checked": undefined,
-            "disabled": undefined,
-            "expanded": undefined,
-            "selected": undefined,
-          }
-        }
-        accessibilityValue={
-          {
-            "max": undefined,
-            "min": undefined,
-            "now": undefined,
-            "text": undefined,
-          }
-        }
-        accessible={true}
-        className="absolute inset-0 bg-overlay-mask"
-        collapsable={false}
-        focusable={true}
-        onBlur={[Function]}
-        onClick={[Function]}
-        onFocus={[Function]}
-        onResponderGrant={[Function]}
-        onResponderMove={[Function]}
-        onResponderRelease={[Function]}
-        onResponderTerminate={[Function]}
-        onResponderTerminationRequest={[Function]}
-        onStartShouldSetResponder={[Function]}
-        testID="left-drawer-overlay"
-      />
-      <View
-        className="h-full w-[82%] border-r border-border-light bg-surface-primary-alt px-4 pb-4 pt-4"
-        testID="left-drawer"
+        className="mb-2 flex-row items-center justify-between"
       >
         <View
-          className="mb-4 flex-row items-center justify-between"
-        >
-          <Text
-            className="text-xl text-text-primary"
-          >
-            ☰
-          </Text>
-          <Text
-            className="text-xl text-text-primary"
-          >
-            ⌖
-          </Text>
-          <Text
-            className="text-xl text-text-primary"
-          >
-            ✎
-          </Text>
-        </View>
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="h-10 w-10 items-center justify-center rounded-xl"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+        />
         <View
-          className="rounded-lg border border-border-light bg-surface-primary px-3 py-2"
-        >
-          <TextInput
-            className="text-sm text-text-primary"
-            onChangeText={[Function]}
-            placeholder="Search messages"
-            placeholderTextColor="#595959"
-            testID="drawer-search-input"
-            value=""
-          />
-        </View>
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="h-10 w-10 items-center justify-center rounded-xl"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+        />
         <View
-          className="mt-4"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          className="h-10 w-10 items-center justify-center rounded-xl bg-surface-hover"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+        />
+      </View>
+      <View
+        className="mt-1 flex-row items-center gap-2 px-1 py-2"
+      >
+        <TextInput
+          className="flex-1 text-base text-text-primary"
+          onChangeText={[Function]}
+          placeholder="Search messages"
+          placeholderTextColor="#595959"
+          testID="drawer-search-input"
+          value=""
+        />
+      </View>
+      <View
+        className="mt-3 flex-row items-center gap-2 px-1"
+      >
+        <Text
+          className="text-base font-medium text-text-primary"
         >
-          <Text
-            className="text-base font-medium text-text-primary"
-          >
-            ◫ Persona Marketplace
-          </Text>
-        </View>
+          Persona Marketplace
+        </Text>
+      </View>
+      <View
+        className="mt-8 flex-row items-center justify-between"
+      >
+        <Text
+          className="text-xs font-bold uppercase tracking-wider text-text-tertiary"
+        >
+          Folders
+        </Text>
+      </View>
+      <View
+        className="mt-5 flex-row items-center justify-between"
+      >
+        <Text
+          className="text-base font-bold text-text-primary"
+        >
+          Chats
+        </Text>
         <View
-          className="mt-5 flex-row items-center justify-between"
-        >
-          <Text
-            className="text-xs font-bold uppercase tracking-wider text-text-tertiary"
-          >
-            Folders
-          </Text>
-          <Text
-            className="text-lg text-text-tertiary"
-          >
-            +
-          </Text>
-        </View>
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          testID="toggle-chats-expanded"
+        />
+      </View>
+      <View
+        className="mt-2 flex-1"
+      >
         <View
-          className="mt-3 flex-row items-center justify-between"
+          className="mb-3"
         >
           <Text
-            className="text-base font-bold text-text-primary"
+            className="mb-1 text-xs text-text-tertiary"
           >
-            Chats
+            Yesterday
           </Text>
           <View
             accessibilityState={
@@ -638,6 +770,7 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
               }
             }
             accessible={true}
+            className="rounded-md px-2 py-2 "
             collapsable={false}
             focusable={true}
             onBlur={[Function]}
@@ -649,269 +782,224 @@ exports[`ChatShellScreen matches left drawer open snapshot 1`] = `
             onResponderTerminate={[Function]}
             onResponderTerminationRequest={[Function]}
             onStartShouldSetResponder={[Function]}
-            testID="toggle-chats-expanded"
+            testID="conversation-item-conv_1"
           >
-            <Text
-              className="text-sm text-text-tertiary"
-            >
-              ⌃
-            </Text>
-          </View>
-        </View>
-        <View
-          className="mt-2 flex-1"
-        >
-          <View
-            className="mb-3"
-          >
-            <Text
-              className="mb-1 text-xs text-text-tertiary"
-            >
-              Yesterday
-            </Text>
             <View
-              accessibilityState={
-                {
-                  "busy": undefined,
-                  "checked": undefined,
-                  "disabled": undefined,
-                  "expanded": undefined,
-                  "selected": undefined,
-                }
-              }
-              accessibilityValue={
-                {
-                  "max": undefined,
-                  "min": undefined,
-                  "now": undefined,
-                  "text": undefined,
-                }
-              }
-              accessible={true}
-              className="rounded-md px-2 py-2 bg-surface-hover"
-              collapsable={false}
-              focusable={true}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              testID="conversation-item-conv_1"
+              className="flex-row items-center gap-2"
             >
               <Text
                 className="text-sm text-text-primary"
               >
-                ⚙ 
                 Testing: Initiating Dialogue
               </Text>
             </View>
           </View>
-          <View
-            className="mb-3"
+        </View>
+        <View
+          className="mb-3"
+        >
+          <Text
+            className="mb-1 text-xs text-text-tertiary"
           >
-            <Text
-              className="mb-1 text-xs text-text-tertiary"
-            >
-              Previous 7 days
-            </Text>
+            Previous 7 days
+          </Text>
+          <View
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            className="rounded-md px-2 py-2 "
+            collapsable={false}
+            focusable={true}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            testID="conversation-item-conv_2"
+          >
             <View
-              accessibilityState={
-                {
-                  "busy": undefined,
-                  "checked": undefined,
-                  "disabled": undefined,
-                  "expanded": undefined,
-                  "selected": undefined,
-                }
-              }
-              accessibilityValue={
-                {
-                  "max": undefined,
-                  "min": undefined,
-                  "now": undefined,
-                  "text": undefined,
-                }
-              }
-              accessible={true}
-              className="rounded-md px-2 py-2 "
-              collapsable={false}
-              focusable={true}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              testID="conversation-item-conv_2"
+              className="flex-row items-center gap-2"
             >
               <Text
                 className="text-sm text-text-primary"
               >
-                ⚙ 
                 Persona ideation checklist
               </Text>
             </View>
           </View>
-          <View
-            className="mb-3"
+        </View>
+        <View
+          className="mb-3"
+        >
+          <Text
+            className="mb-1 text-xs text-text-tertiary"
           >
-            <Text
-              className="mb-1 text-xs text-text-tertiary"
-            >
-              Previous 30 days
-            </Text>
+            Previous 30 days
+          </Text>
+          <View
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            className="rounded-md px-2 py-2 "
+            collapsable={false}
+            focusable={true}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            testID="conversation-item-conv_3"
+          >
             <View
-              accessibilityState={
-                {
-                  "busy": undefined,
-                  "checked": undefined,
-                  "disabled": undefined,
-                  "expanded": undefined,
-                  "selected": undefined,
-                }
-              }
-              accessibilityValue={
-                {
-                  "max": undefined,
-                  "min": undefined,
-                  "now": undefined,
-                  "text": undefined,
-                }
-              }
-              accessible={true}
-              className="rounded-md px-2 py-2 "
-              collapsable={false}
-              focusable={true}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onResponderGrant={[Function]}
-              onResponderMove={[Function]}
-              onResponderRelease={[Function]}
-              onResponderTerminate={[Function]}
-              onResponderTerminationRequest={[Function]}
-              onStartShouldSetResponder={[Function]}
-              testID="conversation-item-conv_3"
+              className="flex-row items-center gap-2"
             >
               <Text
                 className="text-sm text-text-primary"
               >
-                ⚙ 
                 Backboard setup notes
               </Text>
             </View>
           </View>
         </View>
-        <View
-          className="mt-2 flex-row items-center border-t border-border-light pt-3"
-        >
-          <View
-            className="h-9 w-9 items-center justify-center rounded-full bg-[#8c7521]"
-          >
-            <Text
-              className="text-xs font-bold text-white"
-            >
-              ET
-            </Text>
-          </View>
-          <Text
-            className="ml-2 flex-1 text-sm text-text-primary"
-          >
-            Erin Tomorri
-          </Text>
-          <View
-            className="rounded-full border border-border-light px-2 py-0.5"
-          >
-            <Text
-              className="text-xxs font-bold text-text-tertiary"
-            >
-              FREE
-            </Text>
-          </View>
-        </View>
       </View>
-    </View>
-    <View
-      className="absolute inset-0 z-30"
-      pointerEvents="box-none"
-    >
       <View
-        className="absolute top-20 h-[74px] w-[54px] items-center justify-center rounded-l-md border border-r-0 border-border-light bg-surface-primary/80"
-        style={
-          {
-            "right": 0,
-          }
-        }
+        className="mt-auto flex-row items-center pt-3"
       >
         <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="h-10 w-10 items-center justify-center rounded-full border border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="right-rail-toggle"
+          className="h-9 w-9 items-center justify-center rounded-full bg-[#8c7521]"
         >
           <Text
-            className="text-base text-text-primary"
+            className="text-xs font-bold text-white"
           >
-            〉
+            ET
+          </Text>
+        </View>
+        <Text
+          className="ml-2 flex-1 text-base text-text-primary"
+        >
+          Erin Tomorri
+        </Text>
+        <View
+          className="rounded-full bg-surface-secondary px-2 py-0.5"
+        >
+          <Text
+            className="text-xxs font-bold text-text-tertiary"
+          >
+            FREE
           </Text>
         </View>
       </View>
     </View>
   </View>
-</RNCSafeAreaView>
+  <View
+    className="absolute inset-0 z-30"
+    pointerEvents="box-none"
+  >
+    <View
+      className="absolute top-1/2 h-16 w-6 items-center justify-center"
+      style={
+        {
+          "marginTop": -32,
+          "right": 2,
+        }
+      }
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-16 w-6 items-center justify-center"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="right-rail-toggle"
+      />
+    </View>
+  </View>
+</View>
 `;
 
 exports[`ChatShellScreen matches main chat snapshot 1`] = `
-<RNCSafeAreaView
-  className="flex-1 bg-surface-primary-alt"
-  edges={
+<View
+  className="flex-1 bg-presentation"
+  style={
     {
-      "bottom": "additive",
-      "left": "additive",
-      "right": "additive",
-      "top": "additive",
+      "backgroundColor": "#ffffff",
     }
   }
 >
   <View
-    className="flex-1 bg-surface-primary-alt"
+    className="flex-1 bg-presentation"
+    style={
+      {
+        "backgroundColor": "#ffffff",
+        "paddingTop": 0,
+      }
+    }
   >
     <View
-      className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation pl-1"
+      className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation px-1"
     >
       <View
         accessibilityLabel="Open sidebar"
@@ -933,7 +1021,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
           }
         }
         accessible={true}
-        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-xl"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -946,13 +1034,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
         testID="menu-toggle"
-      >
-        <Text
-          className="text-xl text-text-primary"
-        >
-          ☰
-        </Text>
-      </View>
+      />
       <View
         className="flex flex-1 flex-row items-center justify-center gap-2 overflow-hidden px-2"
       >
@@ -960,7 +1042,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
           className="min-w-0 flex-shrink text-center text-sm text-text-primary"
           numberOfLines={1}
         >
-          Testing: Initiating Dialogue
+          New Chat
         </Text>
         <View
           className="rounded-full border border-border-light bg-surface-secondary px-2 py-0.5"
@@ -968,12 +1050,12 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
           <Text
             className="text-xxs font-medium uppercase tracking-wide text-text-secondary"
           >
-            v2.14.25
+            V2.14.25
           </Text>
         </View>
       </View>
       <View
-        accessibilityLabel="New chat"
+        accessibilityLabel="New Chat"
         accessibilityState={
           {
             "busy": undefined,
@@ -992,7 +1074,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
           }
         }
         accessible={true}
-        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-xl"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -1005,16 +1087,10 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
         testID="new-chat-button"
-      >
-        <Text
-          className="text-xl text-text-primary"
-        >
-          ✎
-        </Text>
-      </View>
+      />
     </View>
     <View
-      className="flex flex-row items-center gap-2 px-4 pt-2"
+      className="flex flex-row items-center gap-2 px-3 pt-2"
     >
       <View
         accessibilityState={
@@ -1035,7 +1111,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
           }
         }
         accessible={true}
-        className="h-10 rounded-xl border border-border-light bg-surface-primary px-4"
+        className="h-10 min-w-[112px] max-w-[160px] flex-row items-center justify-center gap-2 rounded-xl border border-border-light bg-surface-primary px-3 py-2"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -1047,11 +1123,11 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
+        testID="model-trigger"
       >
         <Text
-          className="pt-2 text-sm font-medium text-text-primary"
+          className="text-sm font-semibold text-text-primary"
         >
-          ◻ 
           Model
         </Text>
       </View>
@@ -1074,7 +1150,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
           }
         }
         accessible={true}
-        className="h-10 rounded-xl border border-border-light bg-brand-purple-soft px-4"
+        className="h-10 flex-row items-center justify-center gap-2 rounded-xl border border-border-light bg-brand-purple-soft px-3"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -1087,11 +1163,15 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
       >
-        <Text
-          className="pt-2 text-sm font-semibold text-brand-purple"
+        <View
+          className="rounded-full bg-[#eee3ff] px-2 py-0.5"
         >
-          ⌁ $5
-        </Text>
+          <Text
+            className="text-xs font-semibold text-brand-purple"
+          >
+            $5
+          </Text>
+        </View>
       </View>
       <View
         accessibilityState={
@@ -1125,13 +1205,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
         testID="temporary-toggle"
-      >
-        <Text
-          className="text-base text-text-primary"
-        >
-          ◌
-        </Text>
-      </View>
+      />
       <View
         accessibilityState={
           {
@@ -1163,13 +1237,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
-      >
-        <Text
-          className="text-base text-text-primary"
-        >
-          ⇪
-        </Text>
-      </View>
+      />
       <View
         accessibilityState={
           {
@@ -1189,7 +1257,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
           }
         }
         accessible={true}
-        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-hover"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -1201,44 +1269,54 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
-      >
-        <Text
-          className="text-base text-text-primary"
-        >
-          ⌑
-        </Text>
-      </View>
+        testID="cerebras-access-toggle"
+      />
     </View>
     <View
-      className="flex-1 items-center justify-center px-4 pb-16"
+      className="flex-1 items-center justify-center px-4 pb-14"
     >
       <View
-        className="mb-4 h-14 w-14 items-center justify-center rounded-full border border-border-light bg-surface-primary"
-      >
-        <Text
-          className="text-2xl text-text-primary"
-        >
-          ⚙
-        </Text>
-      </View>
+        className="mb-4 h-11 w-11 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+      />
       <Text
-        className="text-center text-2xl font-medium text-text-primary"
+        className="text-center text-2xl font-semibold text-text-primary"
         testID="greeting-text"
       >
         Good afternoon, Erin Tomorri
       </Text>
+      <View
+        className="mt-20 w-full items-center"
+      >
+        <View
+          className="h-px w-72 rounded-full bg-border-light/70"
+          style={
+            {
+              "transform": [
+                {
+                  "rotate": "-4deg",
+                },
+              ],
+            }
+          }
+        />
+      </View>
     </View>
     <View
-      className="bg-surface-primary-alt px-2 pb-2"
+      className="bg-surface-primary-alt px-0"
+      style={
+        {
+          "paddingBottom": 0,
+        }
+      }
     >
       <View
-        className="rounded-3xl border bg-surface-chat px-4 pb-2 pt-3 border-border-light"
+        className="rounded-t-[24px] border border-b-0 bg-surface-chat px-4 pb-2 pt-3 border-border-light"
       >
         <TextInput
           className="min-h-9 text-base text-text-primary"
           multiline={true}
           onChangeText={[Function]}
-          placeholder="Message input"
+          placeholder="Message Cerebras"
           placeholderTextColor="#595959"
           testID="composer-input"
           value=""
@@ -1268,7 +1346,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              className="h-9 w-9 items-center justify-center rounded-full"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -1280,13 +1358,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
               onResponderTerminate={[Function]}
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
-            >
-              <Text
-                className="text-base text-text-primary"
-              >
-                ◖
-              </Text>
-            </View>
+            />
             <View
               accessibilityState={
                 {
@@ -1306,7 +1378,39 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 rounded-full border border-border-light bg-surface-primary px-3"
+              className="h-9 w-9 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            />
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 flex-row items-center rounded-full border border-border-light bg-surface-primary px-3"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -1320,9 +1424,8 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
               onStartShouldSetResponder={[Function]}
             >
               <Text
-                className="pt-1 text-xs font-semibold text-text-primary"
+                className="ml-1 text-xs font-semibold text-text-secondary"
               >
-                ◍ 
                 Memory
               </Text>
             </View>
@@ -1349,7 +1452,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              className="h-9 w-9 items-center justify-center rounded-full"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -1361,13 +1464,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
               onResponderTerminate={[Function]}
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
-            >
-              <Text
-                className="text-base text-text-primary"
-              >
-                ◉
-              </Text>
-            </View>
+            />
             <View
               accessibilityState={
                 {
@@ -1387,7 +1484,7 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 w-8 items-center justify-center rounded-full bg-surface-hover"
+              className="h-9 w-9 items-center justify-center rounded-full bg-surface-hover"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -1400,91 +1497,83 @@ exports[`ChatShellScreen matches main chat snapshot 1`] = `
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
               testID="composer-send-button"
-            >
-              <Text
-                className="text-base text-text-tertiary"
-              >
-                ↑
-              </Text>
-            </View>
+            />
           </View>
-        </View>
-      </View>
-    </View>
-    <View
-      className="absolute inset-0 z-30"
-      pointerEvents="box-none"
-    >
-      <View
-        className="absolute top-20 h-[74px] w-[54px] items-center justify-center rounded-l-md border border-r-0 border-border-light bg-surface-primary/80"
-        style={
-          {
-            "right": 0,
-          }
-        }
-      >
-        <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="h-10 w-10 items-center justify-center rounded-full border border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="right-rail-toggle"
-        >
-          <Text
-            className="text-base text-text-primary"
-          >
-            〉
-          </Text>
         </View>
       </View>
     </View>
   </View>
-</RNCSafeAreaView>
+  <View
+    className="absolute inset-0 z-30"
+    pointerEvents="box-none"
+  >
+    <View
+      className="absolute top-1/2 h-16 w-6 items-center justify-center"
+      style={
+        {
+          "marginTop": -32,
+          "right": 2,
+        }
+      }
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-16 w-6 items-center justify-center"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="right-rail-toggle"
+      />
+    </View>
+  </View>
+</View>
 `;
 
 exports[`ChatShellScreen matches right panel open snapshot 1`] = `
-<RNCSafeAreaView
-  className="flex-1 bg-surface-primary-alt"
-  edges={
+<View
+  className="flex-1 bg-presentation"
+  style={
     {
-      "bottom": "additive",
-      "left": "additive",
-      "right": "additive",
-      "top": "additive",
+      "backgroundColor": "#ffffff",
     }
   }
 >
   <View
-    className="flex-1 bg-surface-primary-alt"
+    className="flex-1 bg-presentation"
+    style={
+      {
+        "backgroundColor": "#ffffff",
+        "paddingTop": 0,
+      }
+    }
   >
     <View
-      className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation pl-1"
+      className="z-10 flex min-h-[40px] flex-row items-center justify-center bg-presentation px-1"
     >
       <View
         accessibilityLabel="Open sidebar"
@@ -1506,7 +1595,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-xl"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -1519,13 +1608,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
         testID="menu-toggle"
-      >
-        <Text
-          className="text-xl text-text-primary"
-        >
-          ☰
-        </Text>
-      </View>
+      />
       <View
         className="flex flex-1 flex-row items-center justify-center gap-2 overflow-hidden px-2"
       >
@@ -1533,7 +1616,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
           className="min-w-0 flex-shrink text-center text-sm text-text-primary"
           numberOfLines={1}
         >
-          Testing: Initiating Dialogue
+          New Chat
         </Text>
         <View
           className="rounded-full border border-border-light bg-surface-secondary px-2 py-0.5"
@@ -1541,12 +1624,12 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
           <Text
             className="text-xxs font-medium uppercase tracking-wide text-text-secondary"
           >
-            v2.14.25
+            V2.14.25
           </Text>
         </View>
       </View>
       <View
-        accessibilityLabel="New chat"
+        accessibilityLabel="New Chat"
         accessibilityState={
           {
             "busy": undefined,
@@ -1565,7 +1648,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-full"
+        className="m-1 inline-flex h-10 w-10 items-center justify-center rounded-xl"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -1578,16 +1661,10 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
         testID="new-chat-button"
-      >
-        <Text
-          className="text-xl text-text-primary"
-        >
-          ✎
-        </Text>
-      </View>
+      />
     </View>
     <View
-      className="flex flex-row items-center gap-2 px-4 pt-2"
+      className="flex flex-row items-center gap-2 px-3 pt-2"
     >
       <View
         accessibilityState={
@@ -1608,7 +1685,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="h-10 rounded-xl border border-border-light bg-surface-primary px-4"
+        className="h-10 min-w-[112px] max-w-[160px] flex-row items-center justify-center gap-2 rounded-xl border border-border-light bg-surface-primary px-3 py-2"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -1620,11 +1697,11 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
+        testID="model-trigger"
       >
         <Text
-          className="pt-2 text-sm font-medium text-text-primary"
+          className="text-sm font-semibold text-text-primary"
         >
-          ◻ 
           Model
         </Text>
       </View>
@@ -1647,7 +1724,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="h-10 rounded-xl border border-border-light bg-brand-purple-soft px-4"
+        className="h-10 flex-row items-center justify-center gap-2 rounded-xl border border-border-light bg-brand-purple-soft px-3"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -1660,11 +1737,15 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
       >
-        <Text
-          className="pt-2 text-sm font-semibold text-brand-purple"
+        <View
+          className="rounded-full bg-[#eee3ff] px-2 py-0.5"
         >
-          ⌁ $5
-        </Text>
+          <Text
+            className="text-xs font-semibold text-brand-purple"
+          >
+            $5
+          </Text>
+        </View>
       </View>
       <View
         accessibilityState={
@@ -1698,13 +1779,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
         testID="temporary-toggle"
-      >
-        <Text
-          className="text-base text-text-primary"
-        >
-          ◌
-        </Text>
-      </View>
+      />
       <View
         accessibilityState={
           {
@@ -1736,13 +1811,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
-      >
-        <Text
-          className="text-base text-text-primary"
-        >
-          ⇪
-        </Text>
-      </View>
+      />
       <View
         accessibilityState={
           {
@@ -1762,7 +1831,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+        className="h-10 w-10 items-center justify-center rounded-xl border border-border-light bg-surface-hover"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -1774,44 +1843,54 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
-      >
-        <Text
-          className="text-base text-text-primary"
-        >
-          ⌑
-        </Text>
-      </View>
+        testID="cerebras-access-toggle"
+      />
     </View>
     <View
-      className="flex-1 items-center justify-center px-4 pb-16"
+      className="flex-1 items-center justify-center px-4 pb-14"
     >
       <View
-        className="mb-4 h-14 w-14 items-center justify-center rounded-full border border-border-light bg-surface-primary"
-      >
-        <Text
-          className="text-2xl text-text-primary"
-        >
-          ⚙
-        </Text>
-      </View>
+        className="mb-4 h-11 w-11 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+      />
       <Text
-        className="text-center text-2xl font-medium text-text-primary"
+        className="text-center text-2xl font-semibold text-text-primary"
         testID="greeting-text"
       >
         Good afternoon, Erin Tomorri
       </Text>
+      <View
+        className="mt-20 w-full items-center"
+      >
+        <View
+          className="h-px w-72 rounded-full bg-border-light/70"
+          style={
+            {
+              "transform": [
+                {
+                  "rotate": "-4deg",
+                },
+              ],
+            }
+          }
+        />
+      </View>
     </View>
     <View
-      className="bg-surface-primary-alt px-2 pb-2"
+      className="bg-surface-primary-alt px-0"
+      style={
+        {
+          "paddingBottom": 0,
+        }
+      }
     >
       <View
-        className="rounded-3xl border bg-surface-chat px-4 pb-2 pt-3 border-border-light"
+        className="rounded-t-[24px] border border-b-0 bg-surface-chat px-4 pb-2 pt-3 border-border-light"
       >
         <TextInput
           className="min-h-9 text-base text-text-primary"
           multiline={true}
           onChangeText={[Function]}
-          placeholder="Message input"
+          placeholder="Message Cerebras"
           placeholderTextColor="#595959"
           testID="composer-input"
           value=""
@@ -1841,7 +1920,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              className="h-9 w-9 items-center justify-center rounded-full"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -1853,13 +1932,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
               onResponderTerminate={[Function]}
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
-            >
-              <Text
-                className="text-base text-text-primary"
-              >
-                ◖
-              </Text>
-            </View>
+            />
             <View
               accessibilityState={
                 {
@@ -1879,7 +1952,39 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 rounded-full border border-border-light bg-surface-primary px-3"
+              className="h-9 w-9 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+            />
+            <View
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              className="h-8 flex-row items-center rounded-full border border-border-light bg-surface-primary px-3"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -1893,9 +1998,8 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
               onStartShouldSetResponder={[Function]}
             >
               <Text
-                className="pt-1 text-xs font-semibold text-text-primary"
+                className="ml-1 text-xs font-semibold text-text-secondary"
               >
-                ◍ 
                 Memory
               </Text>
             </View>
@@ -1922,7 +2026,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 w-8 items-center justify-center rounded-full border border-border-light bg-surface-primary"
+              className="h-9 w-9 items-center justify-center rounded-full"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -1934,13 +2038,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
               onResponderTerminate={[Function]}
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
-            >
-              <Text
-                className="text-base text-text-primary"
-              >
-                ◉
-              </Text>
-            </View>
+            />
             <View
               accessibilityState={
                 {
@@ -1960,7 +2058,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
                 }
               }
               accessible={true}
-              className="h-8 w-8 items-center justify-center rounded-full bg-surface-hover"
+              className="h-9 w-9 items-center justify-center rounded-full bg-surface-hover"
               collapsable={false}
               focusable={true}
               onBlur={[Function]}
@@ -1973,68 +2071,144 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
               onResponderTerminationRequest={[Function]}
               onStartShouldSetResponder={[Function]}
               testID="composer-send-button"
-            >
-              <Text
-                className="text-base text-text-tertiary"
-              >
-                ↑
-              </Text>
-            </View>
+            />
           </View>
         </View>
       </View>
     </View>
+  </View>
+  <View
+    className="absolute inset-0 z-30"
+    pointerEvents="box-none"
+  >
     <View
-      className="absolute inset-0 z-30"
-      pointerEvents="box-none"
+      className="absolute top-1/2 h-16 w-6 items-center justify-center"
+      style={
+        {
+          "marginTop": -32,
+          "right": "84%",
+        }
+      }
     >
       <View
-        className="absolute top-20 h-[74px] w-[54px] items-center justify-center rounded-l-md border border-r-0 border-border-light bg-surface-primary/80"
-        style={
+        accessibilityState={
           {
-            "right": "86%",
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
           }
         }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="h-16 w-6 items-center justify-center"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="right-rail-toggle"
+      />
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      className="absolute inset-0"
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "backgroundColor": "rgba(7,7,7,0.4)",
+        }
+      }
+      testID="right-panel-overlay"
+    />
+    <View
+      className="absolute bottom-0 right-0 top-0 w-[84%] border-l border-border-light bg-surface-primary-alt px-4 pb-4"
+      style={
+        {
+          "paddingTop": 16,
+        }
+      }
+      testID="right-panel"
+    >
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="mb-2 min-h-11 flex-row items-center rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="panel-action-agents"
       >
-        <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="h-10 w-10 items-center justify-center rounded-full border border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="right-rail-toggle"
+        <Text
+          className="ml-3 text-base font-semibold text-text-primary"
         >
-          <Text
-            className="text-base text-text-primary"
-          >
-            〈
-          </Text>
-        </View>
+          Persona Builder
+        </Text>
       </View>
       <View
         accessibilityState={
@@ -2055,7 +2229,7 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
           }
         }
         accessible={true}
-        className="absolute inset-0"
+        className="mb-2 min-h-11 flex-row items-center rounded-xl border border-border-light bg-surface-primary px-4"
         collapsable={false}
         focusable={true}
         onBlur={[Function]}
@@ -2067,393 +2241,315 @@ exports[`ChatShellScreen matches right panel open snapshot 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
-        style={
+        testID="panel-action-prompts"
+      >
+        <Text
+          className="ml-3 text-base font-semibold text-text-primary"
+        >
+          Prompts
+        </Text>
+      </View>
+      <View
+        accessibilityState={
           {
-            "backgroundColor": "rgba(7,7,7,0.4)",
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
           }
         }
-        testID="right-panel-overlay"
-      />
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="mb-2 min-h-11 flex-row items-center rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="panel-action-chat-assistant-prompt"
+      >
+        <Text
+          className="ml-3 text-base font-semibold text-text-primary"
+        >
+          Chat assistant prompt
+        </Text>
+      </View>
       <View
-        className="ml-[14%] h-full border-l border-border-light bg-surface-primary-alt p-4"
-        testID="right-panel"
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="mb-2 min-h-11 flex-row items-center rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="panel-action-memories"
+      >
+        <Text
+          className="ml-3 text-base font-semibold text-text-primary"
+        >
+          Memories
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="mb-2 min-h-11 flex-row items-center rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="panel-action-files"
+      >
+        <Text
+          className="ml-3 text-base font-semibold text-text-primary"
+        >
+          Attach Files
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="mb-2 min-h-11 flex-row items-center rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="panel-action-bookmarks"
+      >
+        <Text
+          className="ml-3 text-base font-semibold text-text-primary"
+        >
+          Bookmarks
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="mb-2 min-h-11 flex-row items-center rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="panel-action-mcp-builder"
+      >
+        <Text
+          className="ml-3 text-base font-semibold text-text-primary"
+        >
+          MCP Settings
+        </Text>
+      </View>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        className="mb-2 min-h-11 flex-row items-center rounded-xl border border-border-light bg-surface-primary px-4"
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        testID="panel-action-hide-panel"
+      >
+        <Text
+          className="ml-3 text-base font-semibold text-text-primary"
+        >
+          Hide Panel
+        </Text>
+      </View>
+      <View
+        className="mt-2 rounded-2xl border border-border-light bg-surface-secondary p-4"
       >
         <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-ring-primary bg-surface-secondary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="panel-action-agents"
-        >
-          <Text
-            className="text-sm font-semibold text-text-primary"
-          >
-            Persona Builder
-          </Text>
-        </View>
-        <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="panel-action-prompts"
-        >
-          <Text
-            className="text-sm font-semibold text-text-primary"
-          >
-            Prompts
-          </Text>
-        </View>
-        <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="panel-action-chat-assistant-prompt"
-        >
-          <Text
-            className="text-sm font-semibold text-text-primary"
-          >
-            Chat assistant prompt
-          </Text>
-        </View>
-        <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="panel-action-memories"
-        >
-          <Text
-            className="text-sm font-semibold text-text-primary"
-          >
-            Memories
-          </Text>
-        </View>
-        <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="panel-action-files"
-        >
-          <Text
-            className="text-sm font-semibold text-text-primary"
-          >
-            Attach Files
-          </Text>
-        </View>
-        <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="panel-action-bookmarks"
-        >
-          <Text
-            className="text-sm font-semibold text-text-primary"
-          >
-            Bookmarks
-          </Text>
-        </View>
-        <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="panel-action-mcp-builder"
-        >
-          <Text
-            className="text-sm font-semibold text-text-primary"
-          >
-            MCP Settings
-          </Text>
-        </View>
-        <View
-          accessibilityState={
-            {
-              "busy": undefined,
-              "checked": undefined,
-              "disabled": undefined,
-              "expanded": undefined,
-              "selected": undefined,
-            }
-          }
-          accessibilityValue={
-            {
-              "max": undefined,
-              "min": undefined,
-              "now": undefined,
-              "text": undefined,
-            }
-          }
-          accessible={true}
-          className="mb-2 min-h-11 justify-center rounded-xl border px-4 border-border-light bg-surface-primary"
-          collapsable={false}
-          focusable={true}
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onResponderGrant={[Function]}
-          onResponderMove={[Function]}
-          onResponderRelease={[Function]}
-          onResponderTerminate={[Function]}
-          onResponderTerminationRequest={[Function]}
-          onStartShouldSetResponder={[Function]}
-          testID="panel-action-hide-panel"
-        >
-          <Text
-            className="text-sm font-semibold text-text-primary"
-          >
-            Hide Panel
-          </Text>
-        </View>
-        <View
-          className="mt-2 rounded-2xl border border-border-light bg-surface-secondary p-4"
+          className="flex-row items-center gap-2"
         >
           <Text
             className="text-xs font-bold text-text-primary"
           >
             Built on Backboard.io
           </Text>
-          <Text
-            className="mt-2 text-lg font-semibold text-text-primary"
-          >
-            Enterprise workspace setup
-          </Text>
-          <Text
-            className="mt-2 text-xs leading-5 text-text-secondary"
-          >
-            Get custom guardrails, team controls, and a setup tailored to your company.
-          </Text>
-          <Text
-            className="mt-1 text-xs leading-5 text-text-secondary"
-          >
-            Our team can help you integrate Backboard.io into your AI stack.
-          </Text>
-          <View
-            accessibilityState={
-              {
-                "busy": undefined,
-                "checked": undefined,
-                "disabled": undefined,
-                "expanded": undefined,
-                "selected": undefined,
-              }
+        </View>
+        <Text
+          className="mt-3 text-base font-semibold text-text-primary"
+        >
+          Enterprise workspace setup
+        </Text>
+        <Text
+          className="mt-2 text-xs leading-5 text-text-secondary"
+        >
+          Get custom guardrails, team controls, and a setup tailored to your company.
+        </Text>
+        <Text
+          className="mt-1 text-xs leading-5 text-text-secondary"
+        >
+          Our team can help you integrate Backboard.io into your AI stack.
+        </Text>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
             }
-            accessibilityValue={
-              {
-                "max": undefined,
-                "min": undefined,
-                "now": undefined,
-                "text": undefined,
-              }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
             }
-            accessible={true}
-            className="mt-3 min-h-11 items-center justify-center rounded-xl border border-border-light bg-surface-primary"
-            collapsable={false}
-            focusable={true}
-            onBlur={[Function]}
-            onClick={[Function]}
-            onFocus={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
+          }
+          accessible={true}
+          className="mt-3 min-h-11 flex-row items-center justify-center rounded-xl border border-border-light bg-surface-primary"
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+        >
+          <Text
+            className="text-sm font-bold text-text-primary"
           >
-            <Text
-              className="text-sm font-bold text-text-primary"
-            >
-              Get started! ↗
-            </Text>
-          </View>
+            Get started!
+          </Text>
         </View>
       </View>
     </View>
   </View>
-</RNCSafeAreaView>
+</View>
 `;

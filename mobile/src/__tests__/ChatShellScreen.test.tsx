@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react-native';
+import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ChatShellScreen } from '../screens/ChatShellScreen';
@@ -95,6 +95,28 @@ describe('ChatShellScreen', () => {
     const screen = renderScreen(<ChatShellScreen />);
     fireEvent.press(screen.getByTestId('menu-toggle'));
     expect(screen.getByPlaceholderText('Search messages')).toBeOnTheScreen();
+  });
+
+  it('toggles Cerebras access and switches composer placeholder copy', () => {
+    const screen = renderScreen(<ChatShellScreen />);
+
+    expect(screen.getByPlaceholderText('Message Cerebras')).toBeOnTheScreen();
+
+    fireEvent.press(screen.getByTestId('cerebras-access-toggle'));
+    expect(screen.getByPlaceholderText('Message GPT')).toBeOnTheScreen();
+  });
+
+  it('sends user input and renders a Nash response', async () => {
+    const screen = renderScreen(<ChatShellScreen />);
+
+    fireEvent.changeText(screen.getByTestId('composer-input'), 'test');
+    fireEvent.press(screen.getByTestId('composer-send-button'));
+
+    expect(screen.getByText('test')).toBeOnTheScreen();
+
+    await waitFor(() => {
+      expect(screen.getByText(/Something went wrong/i)).toBeOnTheScreen();
+    });
   });
 
   it('matches main chat snapshot', () => {

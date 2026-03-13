@@ -234,4 +234,26 @@ export const chatShellService: ChatShellService = {
       isTemporary: false,
     };
   },
+  async replyAsNash(input: string, options) {
+    const normalized = input.trim();
+    const provider = options?.provider ?? 'gpt';
+
+    if (!normalized) {
+      return 'Share a bit more detail and I can help.';
+    }
+
+    if (provider === 'cerebras') {
+      return `Something went wrong. Here's the specific error message we encountered: "<!doctype html>\n<html lang=en>\n<title>500 Internal Server Error</title>\n<h1>Internal Server Error</h1>\n<p>The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.</p>\n"`;
+    }
+
+    if (/(^|\s)(hi|hello|hey)(\s|$)/i.test(normalized)) {
+      return 'Hey Erin, Nash here. What do you want to build next?';
+    }
+
+    if (/cerebras/i.test(normalized)) {
+      return 'Cerebras is enabled. Send your prompt and I can route it there.';
+    }
+
+    return `Nash: got it — "${normalized}". Want me to turn this into an action plan?`;
+  },
 };
