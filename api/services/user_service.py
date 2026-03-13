@@ -6,6 +6,7 @@ The per-user Backboard assistant ID (bbAssistantId) is stored directly
 on the user record, not in separate mapping entries.
 """
 import json
+import threading
 import time
 from datetime import datetime, timezone
 
@@ -20,6 +21,11 @@ from api.services.async_runner import run_async
 _USER_CACHE_TTL_SEC = 300
 # (email -> (loaded_at_monotonic, user_dict))
 _user_cache: dict[str, tuple[float, dict]] = {}
+
+# Serialise Backboard user loads: only one thread fetches at a time.
+# All concurrent callers wait on the lock then read from the populated cache.
+_user_load_lock = threading.Lock()
+_last_full_load: float = 0.0
 
 USER_TYPES = {"user", "librechat_user"}
 
@@ -105,28 +111,47 @@ def _cache_user(u: dict, loaded_at: float | None = None) -> None:
     _user_cache[email] = (loaded_at if loaded_at is not None else time.monotonic(), u)
 
 
+def _refresh_user_cache() -> None:
+    """Load all users from Backboard with double-checked locking.
+
+    Only one thread performs the Backboard fetch; concurrent callers wait on
+    the lock and then read from the already-populated cache.  Without this,
+    a cache expiry causes a stampede: N threads each submit
+    _load_users_from_backboard() to the shared async event loop, the queue
+    builds up, and the 30-second run_async timeout fires on every route.
+    """
+    global _last_full_load
+    now = time.monotonic()
+    if (now - _last_full_load) < _USER_CACHE_TTL_SEC:
+        return
+    with _user_load_lock:
+        now = time.monotonic()
+        if (now - _last_full_load) < _USER_CACHE_TTL_SEC:
+            return
+        users = run_async(_load_users_from_backboard())
+        loaded_at = time.monotonic()
+        for u in users:
+            _cache_user(u, loaded_at=loaded_at)
+        _last_full_load = loaded_at
+
+
 def find_user_by_email(email: str) -> dict | None:
     entry = _user_cache.get(email)
     if _is_cache_entry_fresh(entry):
         return entry[1]
-    users = run_async(_load_users_from_backboard())
-    now = time.monotonic()
-    for u in users:
-        _cache_user(u, loaded_at=now)
+    _refresh_user_cache()
     entry = _user_cache.get(email)
     return entry[1] if entry else None
 
 
 def find_user_by_id(user_id: str) -> dict | None:
-    now = time.monotonic()
     for entry in _user_cache.values():
         if _is_cache_entry_fresh(entry) and entry[1].get("id") == user_id:
             return entry[1]
-    users = run_async(_load_users_from_backboard())
-    for u in users:
-        _cache_user(u, loaded_at=now)
-        if u.get("id") == user_id:
-            return u
+    _refresh_user_cache()
+    for entry in _user_cache.values():
+        if entry[1].get("id") == user_id:
+            return entry[1]
     return None
 
 

@@ -1,5 +1,11 @@
 [
     {
+        "body": "**Hotfix release — user cache stampede fix**\n\n- **User cache double-checked lock:** `find_user_by_id` / `find_user_by_email` now serialise Backboard user loads with a `threading.Lock`. When the 5-minute cache expires, only one thread fetches from Backboard; all concurrent callers wait on the lock then read from the warm cache. Previously N concurrent requests each submitted `_load_users_from_backboard()` to the shared event loop simultaneously, causing queue buildup and 30-second `TimeoutError` on every authenticated route.\n- **Stampede smoke test:** New `scripts/smoke-user-cache-stampede.sh` fires 20 concurrent requests across `/api/init`, `/api/convos`, `/api/balance`, and `/api/billing/subscription` to detect and validate cache-stampede resilience.",
+        "publishedAt": "2026-03-13T21:00:00Z",
+        "tagName": "v2.14.26",
+        "title": "v2.14.26"
+    },
+    {
         "body": "**Hotfix release — worker thread exhaustion fix**\n\n- **`run_async` default timeout (30s):** Every Backboard API call now has a 30-second backstop. Previously the default was no timeout, so a stalled Backboard response held a Flask worker thread indefinitely. With enough concurrent requests the entire worker pool could drain, making the server unresponsive while the health check still passed. Explicit overrides (`/api/init` at 12s, health check at 2s, MCP tool loop at 120s) are unaffected.",
         "publishedAt": "2026-03-13T16:00:00Z",
         "tagName": "v2.14.25",
