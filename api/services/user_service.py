@@ -129,10 +129,11 @@ def _refresh_user_cache() -> None:
         if (now - _last_full_load) < _USER_CACHE_TTL_SEC:
             return
         users = run_async(_load_users_from_backboard())
-        loaded_at = time.monotonic()
-        for u in users:
-            _cache_user(u, loaded_at=loaded_at)
-        _last_full_load = loaded_at
+        if users:
+            loaded_at = time.monotonic()
+            for u in users:
+                _cache_user(u, loaded_at=loaded_at)
+            _last_full_load = loaded_at
 
 
 def find_user_by_email(email: str) -> dict | None:

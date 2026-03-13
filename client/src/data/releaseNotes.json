@@ -1,5 +1,11 @@
 [
     {
+        "body": "**Hotfix release — empty user cache guard**\n\n- **Empty Backboard response no longer poisons user cache:** If `_load_users_from_backboard()` succeeds but returns an empty list (Backboard degraded, not timed out), `_last_full_load` is now only updated when the result is non-empty. Previously an empty result would stamp the 5-minute TTL, locking all users out — every `find_user_by_id` returned None, routes raised `ValueError: User X not found`, and Google OAuth could re-create existing accounts (wiping plan and threads).",
+        "publishedAt": "2026-03-13T22:00:00Z",
+        "tagName": "v2.14.27",
+        "title": "v2.14.27"
+    },
+    {
         "body": "**Hotfix release — user cache stampede fix**\n\n- **User cache double-checked lock:** `find_user_by_id` / `find_user_by_email` now serialise Backboard user loads with a `threading.Lock`. When the 5-minute cache expires, only one thread fetches from Backboard; all concurrent callers wait on the lock then read from the warm cache. Previously N concurrent requests each submitted `_load_users_from_backboard()` to the shared event loop simultaneously, causing queue buildup and 30-second `TimeoutError` on every authenticated route.\n- **Stampede smoke test:** New `scripts/smoke-user-cache-stampede.sh` fires 20 concurrent requests across `/api/init`, `/api/convos`, `/api/balance`, and `/api/billing/subscription` to detect and validate cache-stampede resilience.",
         "publishedAt": "2026-03-13T21:00:00Z",
         "tagName": "v2.14.26",
