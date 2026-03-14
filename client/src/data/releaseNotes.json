@@ -1,5 +1,11 @@
 [
     {
+        "body": "**Hotfix release — Workbox precache fix**\n\n- **Service worker navigate fallback:** Removed `index.html` from Workbox `globIgnores` so it is precached. The SW was calling `createHandlerBoundToURL('index.html')` for SPA fallback but that URL was excluded from the precache manifest, causing `non-precached-url` at activation and broken navigation/second message sends.",
+        "publishedAt": "2026-03-14T00:00:00Z",
+        "tagName": "v2.14.28",
+        "title": "v2.14.28"
+    },
+    {
         "body": "**Hotfix release — empty user cache guard**\n\n- **Empty Backboard response no longer poisons user cache:** If `_load_users_from_backboard()` succeeds but returns an empty list (Backboard degraded, not timed out), `_last_full_load` is now only updated when the result is non-empty. Previously an empty result would stamp the 5-minute TTL, locking all users out — every `find_user_by_id` returned None, routes raised `ValueError: User X not found`, and Google OAuth could re-create existing accounts (wiping plan and threads).",
         "publishedAt": "2026-03-13T22:00:00Z",
         "tagName": "v2.14.27",
